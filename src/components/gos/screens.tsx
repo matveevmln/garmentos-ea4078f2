@@ -415,25 +415,26 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
       />
 
       {/* 1. Идентичность */}
-      <Card className="flex flex-wrap items-center gap-x-6 gap-y-3">
+      <section className="flex flex-wrap items-center gap-x-8 gap-y-4 rounded-[6px] bg-sidebar px-4 py-4 text-sidebar-foreground md:px-5">
         <div className="flex items-center gap-3">
-          <span className="num inline-flex h-9 items-center rounded-[6px] border border-border bg-muted/50 px-2.5 text-[16px] font-semibold">
+          <span className="num inline-flex h-9 items-center rounded-[4px] border border-sidebar-border bg-sidebar-accent px-2.5 text-[16px] font-semibold text-sidebar-foreground">
             #{p.id}
           </span>
           <div>
-            <div className="text-[16px] font-semibold leading-tight">{p.model}</div>
-            <div className="text-[12px] text-muted-foreground">{p.workshop}</div>
+            <div className="editorial text-[17px] leading-tight">{p.model}</div>
+            <div className="text-[12px] text-sidebar-foreground/60">{p.workshop}</div>
           </div>
         </div>
-        <div className="h-8 w-px bg-border max-md:hidden" />
+        <div className="h-8 w-px bg-sidebar-border max-md:hidden" />
         <div>
-          <SectionLabel>Количество</SectionLabel>
+          <div className="eyebrow text-sidebar-foreground/50">Количество</div>
           <div className="num mt-1 text-[14px] font-medium">{formatQty(p.qty)} изделий</div>
         </div>
-        <div className="ml-auto">
-          <StatusBadge status={p.status} />
+        <div className="ml-auto inline-flex items-center gap-2 rounded-[4px] border border-sidebar-border bg-sidebar-accent px-2.5 py-1.5 text-[12px] font-medium">
+          <span className="h-1.5 w-1.5 rounded-full bg-sidebar-primary" />
+          {p.status}
         </div>
-      </Card>
+      </section>
 
       {/* 2. Деньги */}
       <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
