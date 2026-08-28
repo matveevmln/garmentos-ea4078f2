@@ -26,7 +26,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-[6px] border border-border bg-card",
+        "surface-card rounded-[6px]",
         padded && "p-4 md:p-5",
         className,
       )}
@@ -48,10 +48,11 @@ export function CardHeader({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("flex items-baseline justify-between gap-3", className)}>
-      <div className="flex items-baseline gap-2.5">
-        <h2 className="editorial text-[14px]">{title}</h2>
-        {hint ? <span className="num text-[11px] text-muted-foreground">{hint}</span> : null}
+    <div className={cn("flex items-center justify-between gap-3", className)}>
+      <div className="flex min-w-0 items-baseline gap-2.5">
+        <span className="h-[9px] w-[2px] shrink-0 self-center bg-primary" />
+        <h2 className="editorial truncate text-[14px]">{title}</h2>
+        {hint ? <span className="num shrink-0 text-[11px] text-muted-foreground">{hint}</span> : null}
       </div>
       {action}
     </div>
@@ -61,6 +62,7 @@ export function CardHeader({
 export function SectionLabel({ children }: { children: ReactNode }) {
   return <div className="eyebrow">{children}</div>;
 }
+
 
 /* ---------- Button ---------- */
 
@@ -87,15 +89,16 @@ export function Button({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        "relative inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
         size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3.5 text-[13px]",
         variant === "primary" &&
-          "bg-foreground text-background hover:bg-foreground/88",
+          "bg-foreground text-background shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_75%,transparent)] hover:bg-foreground/88",
         variant === "secondary" &&
-          "border border-input bg-card text-foreground hover:border-foreground/25 hover:bg-muted",
+          "border border-input bg-card text-foreground hover:border-primary/35 hover:bg-muted",
         variant === "ghost" && "text-muted-foreground hover:bg-muted hover:text-foreground",
         className,
       )}
+
     >
       {icon}
       {children}
@@ -177,7 +180,7 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-[4px] border px-1.5 py-[3px] text-[11px] font-medium whitespace-nowrap",
+        "inline-flex items-center gap-1.5 rounded-[3px] border px-1.5 py-[3px] text-[10px] font-semibold uppercase tracking-[0.08em] whitespace-nowrap",
         toneStyles[t],
         className,
       )}
@@ -186,6 +189,7 @@ export function StatusBadge({
       {status}
     </span>
   );
+
 }
 
 export function VersionBadge({ label }: { label: string }) {
@@ -245,19 +249,21 @@ export function PageHeader({
   actions?: ReactNode | undefined;
 }) {
   return (
-    <header className="mb-4 flex flex-col gap-2 md:mb-5">
+    <header className="mb-5 md:mb-7">
       {breadcrumbs}
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="editorial text-[22px] md:text-[32px]">{title}</h1>
+      <div className="mt-2 flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
+        <div className="min-w-0">
+          <h1 className="editorial text-[26px] md:text-[38px]">{title}</h1>
           {subtitle ? (
-            <p className="mt-1.5 max-w-[68ch] text-[13px] leading-[1.5] text-muted-foreground">{subtitle}</p>
+            <p className="mt-2 max-w-[68ch] text-[13px] leading-[1.55] text-muted-foreground">{subtitle}</p>
           ) : null}
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
       </div>
+      <span className="block h-[2px] w-11 bg-primary" />
     </header>
   );
+
 }
 
 /* ---------- Search & filters ---------- */
@@ -329,17 +335,24 @@ export function MetricStrip({
   return (
     <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[6px] border border-border bg-border lg:grid-cols-4">
       {items.map((m, i) => (
-        <div key={m.label} className="relative bg-card px-4 pb-3.5 pt-4">
+        <div
+          key={m.label}
+          className="group relative bg-card px-4 pb-4 pt-4 transition-colors hover:bg-[color-mix(in_oklab,var(--primary)_3%,var(--card))]"
+        >
           <span
             className={cn(
-              "absolute left-0 top-0 h-[2px] w-8",
+              "absolute left-0 top-0 h-[2px] transition-all duration-300",
+              "w-8 group-hover:w-full",
               m.tone === "danger" ? "bg-danger" : m.tone === "warning" ? "bg-warning" : i === 0 ? "bg-primary" : "bg-border",
             )}
           />
-          <div className="eyebrow text-[10px]">{m.label}</div>
+          <div className="flex items-baseline justify-between gap-2">
+            <div className="eyebrow text-[10px]">{m.label}</div>
+            <div className="micro opacity-45">{String(i + 1).padStart(2, "0")}</div>
+          </div>
           <div
             className={cn(
-              "num mt-2 text-[30px] leading-none font-semibold tracking-[-0.02em]",
+              "num mt-3 text-[34px] leading-none font-semibold tracking-[-0.035em] md:text-[40px]",
               m.tone === "danger" && "text-danger",
               m.tone === "warning" && "text-warning",
             )}
@@ -350,6 +363,7 @@ export function MetricStrip({
       ))}
     </div>
   );
+
 }
 
 /* ---------- Attention ---------- */
@@ -411,16 +425,16 @@ export function DataTable({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-[6px] border border-border bg-card", className)}>
+    <div className={cn("surface-card overflow-hidden rounded-[6px]", className)}>
       <table className="w-full border-collapse text-[13px]">
         <thead>
-          <tr className="border-b border-border bg-muted/40">
+          <tr className="border-b border-border bg-[color-mix(in_oklab,var(--foreground)_3%,var(--card))]">
             {columns.map((c) => (
               <th
                 key={c.key}
                 style={c.width ? { width: c.width } : undefined}
                 className={cn(
-                  "h-9 px-3 text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground",
+                  "micro h-10 px-3 font-medium text-muted-foreground",
                   c.align === "right" ? "text-right" : "text-left",
                 )}
               >
@@ -429,10 +443,13 @@ export function DataTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border">{children}</tbody>
+        <tbody className="divide-y divide-border [&>tr]:transition-colors [&>tr:hover]:bg-[color-mix(in_oklab,var(--primary)_4%,var(--card))]">
+          {children}
+        </tbody>
       </table>
     </div>
   );
+
 }
 
 export function Td({
