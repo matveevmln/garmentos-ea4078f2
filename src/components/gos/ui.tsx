@@ -49,9 +49,9 @@ export function CardHeader({
 }) {
   return (
     <div className={cn("flex items-baseline justify-between gap-3", className)}>
-      <div className="flex items-baseline gap-2">
-        <h2 className="text-[13px] font-semibold tracking-[-0.005em]">{title}</h2>
-        {hint ? <span className="text-[11px] text-muted-foreground">{hint}</span> : null}
+      <div className="flex items-baseline gap-2.5">
+        <h2 className="editorial text-[14px]">{title}</h2>
+        {hint ? <span className="num text-[11px] text-muted-foreground">{hint}</span> : null}
       </div>
       {action}
     </div>
@@ -59,11 +59,7 @@ export function CardHeader({
 }
 
 export function SectionLabel({ children }: { children: ReactNode }) {
-  return (
-    <div className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
-      {children}
-    </div>
-  );
+  return <div className="eyebrow">{children}</div>;
 }
 
 /* ---------- Button ---------- */
