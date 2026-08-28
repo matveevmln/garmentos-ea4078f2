@@ -269,7 +269,7 @@ export function AppShell({
 
         </header>
 
-        <main className="flex-1 px-3 py-4 pb-24 md:px-6 md:py-6 md:pb-8">{children}</main>
+        <main className="mx-auto w-full max-w-[1440px] flex-1 px-3 py-5 pb-24 md:px-8 md:py-8 md:pb-10">{children}</main>
       </div>
 
       {/* Mobile bottom navigation */}
