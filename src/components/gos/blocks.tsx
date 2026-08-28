@@ -122,7 +122,7 @@ export function CostBreakdown({
             </span>
             <span className="num text-right text-[12px] text-muted-foreground lg:text-left">{r.unit}</span>
             <span className="num order-4 text-right text-[13px] lg:order-none">{r.total}</span>
-            <span className="num order-5 hidden text-right text-[12px] text-muted-foreground lg:order-none md:block">
+            <span className="num order-5 hidden text-right text-[12px] text-muted-foreground lg:order-none lg:block">
               {r.share}%
             </span>
           </li>
