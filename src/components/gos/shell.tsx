@@ -110,7 +110,7 @@ function NavGroup({
                   mobile ? "min-h-[48px] py-3 text-[15px]" : "py-2.5 text-[13.5px]",
                   collapsed && "justify-center px-0",
                   isActive
-                    ? "bg-[color-mix(in_oklab,var(--sidebar-primary)_14%,var(--sidebar))] font-medium text-sidebar-foreground"
+                    ? "nav-active font-medium text-sidebar-foreground"
                     : "text-sidebar-foreground/60 hover:bg-sidebar-accent/70 hover:text-sidebar-foreground",
                 )}
               >
