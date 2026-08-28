@@ -259,10 +259,15 @@ export function AppShell({
     backdrop.style.opacity = "1";
   };
 
-  const applyDrag = (x: number) => {
+  const applyDrag = (x: number, width: number) => {
     const panel = panelRef.current;
+    const backdrop = backdropRef.current;
     if (!panel) return;
     panel.style.transform = `translate3d(${x}px,0,0)`;
+    if (backdrop) {
+      const progress = Math.max(0, Math.min(1, (x + width) / width));
+      backdrop.style.opacity = String(progress);
+    }
   };
 
   const clearDrag = () => {
