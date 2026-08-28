@@ -241,7 +241,7 @@ export function AppShell({
           >
             <IconPanel size={16} />
           </IconButton>
-          <span className="truncate text-[13px] font-semibold">{topbarTitle}</span>
+          <span className="editorial truncate text-[13px] tracking-[-0.015em]">{topbarTitle}</span>
           <span className="ml-auto flex items-center gap-2 text-[11px] text-muted-foreground">
             <button
               type="button"
@@ -256,7 +256,7 @@ export function AppShell({
               <IconStates size={14} />
               Состояния
             </button>
-            <span className="num hidden rounded-[4px] border border-border bg-muted/50 px-1.5 py-[3px] md:inline-flex">
+            <span className="num hidden rounded-[4px] border border-border bg-muted/50 px-1.5 py-[3px] tracking-[0.04em] md:inline-flex">
               Прототип · демо-данные
             </span>
           </span>
@@ -267,7 +267,7 @@ export function AppShell({
       </div>
 
       {/* Mobile bottom navigation */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card/97 backdrop-blur md:hidden">
         {MOBILE_NAV.map((it) => {
           const Icon = it.icon;
           const isActive = active === it.key || (it.key === "batches" && active === "passport");
@@ -277,10 +277,16 @@ export function AppShell({
               type="button"
               onClick={() => go(it.key)}
               className={cn(
-                "flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground",
+                "relative flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] transition-colors",
+                isActive ? "font-semibold text-primary" : "text-muted-foreground",
               )}
             >
+              <span
+                className={cn(
+                  "absolute inset-x-4 top-0 h-[2px] rounded-b-[2px]",
+                  isActive ? "bg-primary" : "bg-transparent",
+                )}
+              />
               <Icon size={18} />
               {it.label}
             </button>
