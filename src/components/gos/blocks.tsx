@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { IconCheck, IconDocument, IconDownload } from "./icons";
+import { IconDocument, IconDownload } from "./icons";
 import { VersionBadge } from "./ui";
 import { PRODUCTION_STAGES, type ProductionStage } from "@/data/garmentos";
 
