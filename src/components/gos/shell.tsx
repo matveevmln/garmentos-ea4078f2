@@ -79,12 +79,12 @@ function NavGroup({
   return (
     <div className={cn("px-2", mobile && "px-3")}>
       {!collapsed ? (
-        <div className="flex items-center gap-2 px-2 pb-2 pt-5">
-          <span className="eyebrow text-[10px] tracking-[0.16em] text-muted-foreground/70">{label}</span>
-          <span className="h-px flex-1 bg-border" />
+        <div className="flex items-center gap-2 px-2.5 pb-2 pt-5">
+          <span className="eyebrow text-[9px] tracking-[0.2em] text-sidebar-foreground/45">{label}</span>
+          <span className="h-px flex-1 bg-sidebar-border/70" />
         </div>
       ) : (
-        <div className="mx-3 my-3 border-t border-border" />
+        <div className="mx-3 my-3 border-t border-sidebar-border/70" />
       )}
       <ul className="space-y-px">
         {items.map((it) => {
@@ -97,21 +97,23 @@ function NavGroup({
                 onClick={() => onNavigate(it.key)}
                 title={it.label}
                 className={cn(
-                  "group relative flex w-full items-center gap-3 rounded-[6px] pl-3 pr-2 text-[13px] transition-colors",
+                  "group relative flex w-full items-center gap-3 rounded-[4px] pl-3 pr-2 text-[13px] transition-colors duration-150",
                   mobile ? "min-h-[48px] py-3 text-[15px]" : "py-[7px]",
                   collapsed && "justify-center px-0",
                   isActive
-                    ? "bg-primary/[0.06] font-semibold tracking-[-0.01em] text-primary"
-                    : "text-muted-foreground hover:bg-foreground/[0.035] hover:text-foreground",
+                    ? "bg-sidebar-accent font-medium tracking-[-0.01em] text-sidebar-accent-foreground"
+                    : "text-sidebar-foreground/62 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
                 )}
               >
                 <span
                   className={cn(
-                    "absolute left-0 top-1 bottom-1 w-[2px] rounded-r-[2px] transition-colors",
-                    isActive ? "bg-primary" : "bg-transparent",
+                    "absolute left-0 top-1.5 bottom-1.5 w-[2px] rounded-r-[2px] transition-colors",
+                    isActive ? "bg-sidebar-primary" : "bg-transparent",
                   )}
                 />
-                <Icon size={mobile ? 18 : 16} />
+                <span className={cn("transition-colors", isActive ? "text-sidebar-primary" : "text-current")}>
+                  <Icon size={mobile ? 18 : 16} />
+                </span>
                 {!collapsed ? <span className="truncate">{it.label}</span> : null}
               </button>
             </li>
@@ -134,22 +136,23 @@ function SidebarBody({
   mobile?: boolean;
 }) {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div
         className={cn(
-          "flex items-center gap-2.5 border-b border-border px-4",
+          "flex items-center gap-2.5 border-b border-sidebar-border/70 px-4",
           mobile ? "h-[64px]" : "h-[52px]",
           collapsed && "justify-center px-0",
         )}
       >
-        <span className="num inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[3px] bg-foreground text-[11px] font-semibold text-background">
+        <span className="num inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[3px] bg-sidebar-primary text-[11px] font-semibold text-sidebar-primary-foreground">
           G
         </span>
         {!collapsed ? (
-          <span className="editorial flex items-baseline text-[14px]">
-            <span>Garment</span>
-            <span className="text-primary">OS</span>
-            <span className="num ml-2 text-[9px] font-medium uppercase tracking-[0.18em] text-muted-foreground/70">
+          <span className="flex flex-col leading-none">
+            <span className="editorial text-[15px] text-sidebar-foreground">
+              Garment<span className="text-sidebar-primary">OS</span>
+            </span>
+            <span className="num mt-1 text-[8px] uppercase tracking-[0.32em] text-sidebar-foreground/40">
               atelier
             </span>
           </span>
@@ -165,15 +168,15 @@ function SidebarBody({
         <NavGroup label="Учёт" items={NAV_OFFICE} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
       </nav>
 
-      <div className={cn("border-t border-border p-3", collapsed && "px-0 text-center")}>
+      <div className={cn("border-t border-sidebar-border/70 p-3", collapsed && "px-0 text-center")}>
         <div className={cn("flex items-center gap-2.5", collapsed && "justify-center")}>
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground">
+          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-sidebar-border bg-sidebar-accent text-sidebar-foreground/70">
             <IconUser size={14} />
           </span>
           {!collapsed ? (
             <span className="min-w-0">
-              <span className="block truncate text-[12px] font-medium">Богдан М.</span>
-              <span className="block truncate text-[11px] text-muted-foreground">ООО «Мода Лав»</span>
+              <span className="block truncate text-[12px] font-medium text-sidebar-foreground">Богдан М.</span>
+              <span className="block truncate text-[11px] text-sidebar-foreground/50">ООО «Мода Лав»</span>
             </span>
           ) : null}
         </div>
@@ -206,7 +209,7 @@ export function AppShell({
       {/* Sidebar — desktop */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-30 hidden border-r border-border bg-[color-mix(in_oklab,var(--card)_92%,var(--background))] transition-[width] duration-200 md:block",
+          "fixed inset-y-0 left-0 z-30 hidden bg-sidebar transition-[width] duration-200 md:block",
           collapsed ? "w-[56px]" : "w-[240px]",
         )}
       >
@@ -216,13 +219,16 @@ export function AppShell({
       {/* Mobile nav drawer */}
       {mobileNavOpen ? (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-foreground/35 backdrop-blur-[2px]" onClick={() => setMobileNavOpen(false)} />
-          <div className="relative flex h-full w-[300px] max-w-[86vw] flex-col border-r border-border bg-card shadow-[0_16px_48px_rgb(0_0_0/0.18)]">
-            <div className="absolute right-2 top-3 z-10">
-              <IconButton label="Закрыть меню" onClick={() => setMobileNavOpen(false)}>
-                <IconClose size={18} />
-              </IconButton>
-            </div>
+          <div className="absolute inset-0 bg-foreground/45 backdrop-blur-[2px]" onClick={() => setMobileNavOpen(false)} />
+          <div className="relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar shadow-[0_16px_48px_rgb(0_0_0/0.28)]">
+            <button
+              type="button"
+              aria-label="Закрыть меню"
+              onClick={() => setMobileNavOpen(false)}
+              className="absolute right-2 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-[4px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            >
+              <IconClose size={18} />
+            </button>
             <SidebarBody active={active} onNavigate={go} collapsed={false} mobile />
           </div>
         </div>
@@ -230,7 +236,7 @@ export function AppShell({
 
       <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[56px]" : "md:pl-[240px]")}>
         {/* TopBar */}
-        <header className="sticky top-0 z-20 flex h-[52px] items-center gap-2 border-b border-border bg-card/95 px-3 backdrop-blur md:px-6">
+        <header className="sticky top-0 z-20 flex h-[52px] items-center gap-2 border-b border-border bg-background/88 px-3 backdrop-blur-md md:px-6">
           <IconButton label="Меню" className="md:hidden" onClick={() => setMobileNavOpen(true)}>
             <IconMenu size={18} />
           </IconButton>
@@ -263,7 +269,7 @@ export function AppShell({
 
         </header>
 
-        <main className="flex-1 px-3 py-4 pb-24 md:px-6 md:py-6 md:pb-8">{children}</main>
+        <main className="mx-auto w-full max-w-[1440px] flex-1 px-3 py-5 pb-24 md:px-8 md:py-8 md:pb-10">{children}</main>
       </div>
 
       {/* Mobile bottom navigation */}

@@ -26,7 +26,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-[8px] border border-border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.04)]",
+        "rounded-[6px] border border-border bg-card",
         padded && "p-4 md:p-5",
         className,
       )}
@@ -87,12 +87,12 @@ export function Button({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-[6px] font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
-        size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3 text-[13px]",
+        "inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3.5 text-[13px]",
         variant === "primary" &&
-          "bg-primary text-primary-foreground hover:bg-primary/90",
+          "bg-foreground text-background hover:bg-foreground/88",
         variant === "secondary" &&
-          "border border-border bg-card text-foreground hover:bg-muted",
+          "border border-input bg-card text-foreground hover:border-foreground/25 hover:bg-muted",
         variant === "ghost" && "text-muted-foreground hover:bg-muted hover:text-foreground",
         className,
       )}
@@ -327,7 +327,7 @@ export function MetricStrip({
   items: { label: string; value: string; tone?: "danger" | "warning" }[];
 }) {
   return (
-    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[8px] border border-border bg-border lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[6px] border border-border bg-border lg:grid-cols-4">
       {items.map((m, i) => (
         <div key={m.label} className="relative bg-card px-4 pb-3.5 pt-4">
           <span
@@ -411,7 +411,7 @@ export function DataTable({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-[8px] border border-border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.04)]", className)}>
+    <div className={cn("overflow-hidden rounded-[6px] border border-border bg-card", className)}>
       <table className="w-full border-collapse text-[13px]">
         <thead>
           <tr className="border-b border-border bg-muted/40">
@@ -468,7 +468,7 @@ export function MobileListItem({
     <button
       type="button"
       onClick={onClick}
-      className="w-full rounded-[8px] border border-border bg-card p-3.5 text-left shadow-[0_1px_2px_rgb(0_0_0/0.04)] transition-colors active:bg-muted/50"
+      className="w-full rounded-[6px] border border-border bg-card p-3.5 text-left transition-colors active:bg-muted/50"
     >
       {children}
     </button>
@@ -490,7 +490,7 @@ export function Accordion({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="rounded-[8px] border border-border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
+    <div className="rounded-[6px] border border-border bg-card">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -570,11 +570,11 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-[8px] border border-dashed border-border bg-card/60 text-center",
+        "flex flex-col items-center justify-center rounded-[6px] border border-dashed border-border bg-card/60 text-center",
         compact ? "px-5 py-10" : "px-6 py-16",
       )}
     >
-      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[8px] border border-border bg-muted/50 text-muted-foreground">
+      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[6px] border border-border bg-muted/50 text-muted-foreground">
         {icon ?? <IconInbox size={18} />}
       </span>
       <h3 className="text-[14px] font-semibold">{title}</h3>
@@ -590,7 +590,7 @@ export function LoadingState() {
   return (
     <div className="space-y-2.5" aria-busy="true">
       <div className="h-9 w-1/3 animate-pulse rounded-[6px] bg-muted" />
-      <div className="rounded-[8px] border border-border bg-card p-3">
+      <div className="rounded-[6px] border border-border bg-card p-3">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="flex items-center gap-3 border-b border-border py-3 last:border-0">
             <div className="h-3 w-10 animate-pulse rounded-[4px] bg-muted" />
@@ -606,8 +606,8 @@ export function LoadingState() {
 
 export function ErrorState({ onRetry }: { onRetry?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[8px] border border-danger/20 bg-danger/[0.03] px-6 py-12 text-center">
-      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[8px] border border-danger/20 bg-danger/[0.08] text-danger">
+    <div className="flex flex-col items-center justify-center rounded-[6px] border border-danger/20 bg-danger/[0.03] px-6 py-12 text-center">
+      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[6px] border border-danger/20 bg-danger/[0.08] text-danger">
         <IconAlert size={18} />
       </span>
       <h3 className="text-[14px] font-semibold">Не удалось загрузить данные</h3>
@@ -625,8 +625,8 @@ export function ErrorState({ onRetry }: { onRetry?: () => void }) {
 
 export function AccessDeniedState() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[8px] border border-border bg-card px-6 py-12 text-center">
-      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[8px] border border-border bg-muted/60 text-muted-foreground">
+    <div className="flex flex-col items-center justify-center rounded-[6px] border border-border bg-card px-6 py-12 text-center">
+      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[6px] border border-border bg-muted/60 text-muted-foreground">
         <IconLock size={18} />
       </span>
       <h3 className="text-[14px] font-semibold">Нет прав доступа</h3>
