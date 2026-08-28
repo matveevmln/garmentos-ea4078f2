@@ -253,6 +253,7 @@ export function AppShell({
     layer.style.pointerEvents = "auto";
     layer.style.visibility = "visible";
     panel.style.transition = "none";
+    panel.style.translate = "0";
     backdrop.style.transition = "none";
     backdrop.style.opacity = "1";
   };
@@ -270,6 +271,7 @@ export function AppShell({
     if (panel) {
       panel.style.transition = "";
       panel.style.transform = "";
+      panel.style.translate = "";
     }
     if (backdrop) {
       backdrop.style.transition = "";
@@ -347,6 +349,7 @@ export function AppShell({
       const layer = layerRef.current;
       if (panel) {
         panel.style.transition = "transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1)";
+        panel.style.translate = "0";
         panel.style.transform = open ? "translate3d(0,0,0)" : `translate3d(${-g.width}px,0,0)`;
       }
       if (backdrop) {
