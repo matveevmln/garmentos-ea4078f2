@@ -440,8 +440,9 @@ export function DataTable({
                 key={c.key}
                 style={c.width ? { width: c.width } : undefined}
                 className={cn(
-                  "h-11 px-4 text-[12px] font-normal text-muted-foreground",
+                  "h-11 px-4 text-[11.5px] font-medium uppercase tracking-[0.06em] text-muted-foreground",
                   c.align === "right" ? "text-right" : "text-left",
+
                 )}
               >
                 {c.label}
