@@ -63,9 +63,12 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
 
       <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
         <div className="space-y-4">
-          <Card padded={false}>
-            <div className="px-4 pt-4 md:px-5">
-              <CardHeader title="Требует внимания" hint="2 позиции" />
+          <Card padded={false} className="overflow-hidden">
+            <div className="flex items-center justify-between gap-3 bg-sidebar px-4 py-3.5 text-sidebar-foreground md:px-5">
+              <div className="flex items-baseline gap-2.5">
+                <h2 className="font-display text-[14px] font-semibold tracking-[-0.01em]">Требует внимания</h2>
+                <span className="text-[12px] text-sidebar-foreground/50">2 позиции</span>
+              </div>
             </div>
             <div className="px-4 md:px-5">
               <AttentionList
@@ -75,7 +78,7 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
             </div>
           </Card>
 
-          <Card padded={false}>
+          <Card padded={false} className="overflow-hidden">
             <div className="flex items-baseline justify-between px-4 pt-4 md:px-5">
               <CardHeader title="Партии в работе" hint="4" />
             </div>
@@ -83,7 +86,18 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
             {/* desktop / tablet */}
             <div className="mt-3 hidden md:block">
               <table className="w-full border-collapse text-[13px]">
+                <thead>
+                  <tr className="border-t border-border text-left text-[12px] text-muted-foreground">
+                    <th className="h-10 px-4 font-normal">№</th>
+                    <th className="h-10 px-4 font-normal">Модель</th>
+                    <th className="h-10 px-4 font-normal">Цех</th>
+                    <th className="h-10 px-4 text-right font-normal">Кол-во</th>
+                    <th className="h-10 px-4 text-right font-normal">Срок</th>
+                    <th className="h-10 px-4 text-right font-normal">Статус</th>
+                  </tr>
+                </thead>
                 <tbody className="divide-y divide-border border-t border-border">
+
                   {inWork.map((b) => (
                     <tr
                       key={b.id}
@@ -93,17 +107,18 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
                       <Td className="w-[68px]">
                         <span className="num font-medium">#{b.id}</span>
                       </Td>
-                      <Td>{b.model}</Td>
-                      <Td className="text-muted-foreground">{b.workshop}</Td>
-                      <Td align="right" className="num w-[110px] text-muted-foreground">
+                      <Td className="whitespace-nowrap">{b.model}</Td>
+                      <Td className="whitespace-nowrap text-muted-foreground">{b.workshop}</Td>
+                      <Td align="right" className="num w-[104px] whitespace-nowrap text-muted-foreground">
                         {formatQty(b.qty)} шт
                       </Td>
-                      <Td align="right" className="num w-[130px] text-muted-foreground">
+                      <Td align="right" className="num w-[132px] whitespace-nowrap text-muted-foreground">
                         {b.due ? `до ${b.due}` : "—"}
                       </Td>
-                      <Td align="right" className="w-[180px]">
+                      <Td align="right" className="w-[172px]">
                         <StatusBadge status={b.status} />
                       </Td>
+
                     </tr>
                   ))}
                 </tbody>
@@ -350,7 +365,7 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
           {p.colors.map((c) => (
             <div key={c.name}>
               <SectionLabel>{c.name}</SectionLabel>
-              <div className="mt-2 grid grid-cols-3 gap-px overflow-hidden rounded-[6px] border border-border bg-border">
+              <div className="mt-2 grid grid-cols-3 gap-px overflow-hidden rounded-[10px] border border-border bg-border">
                 {c.sizes.map((s, i) => (
                   <div key={s} className="bg-card px-3 py-2.5 text-center">
                     <div className="num text-[11px] text-muted-foreground">{s}</div>
@@ -415,7 +430,7 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
       />
 
       {/* 1. Идентичность */}
-      <section className="flex flex-wrap items-center gap-x-8 gap-y-4 rounded-[6px] bg-sidebar px-4 py-4 text-sidebar-foreground md:px-5">
+      <section className="flex flex-wrap items-center gap-x-8 gap-y-4 rounded-[10px] bg-sidebar px-4 py-4 text-sidebar-foreground md:px-5">
         <div className="flex items-center gap-3">
           <span className="num inline-flex h-9 items-center rounded-[4px] border border-sidebar-border bg-sidebar-accent px-2.5 text-[16px] font-semibold text-sidebar-foreground">
             #{p.id}
@@ -475,7 +490,7 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
         <Card className="border-warning/30 bg-warning/[0.03]">
           <CardHeader title="Требует внимания" hint="1 позиция" />
           <div className="mt-3 flex items-start gap-3">
-            <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] bg-warning/[0.1] text-warning">
+            <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] bg-warning/[0.1] text-warning">
               <IconAlert size={15} />
             </span>
             <div className="min-w-0 flex-1">
@@ -540,9 +555,9 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
             value={p.attention.amount}
             sub={`${p.money.restShare} · ${p.money.restDue}`}
             tone="warning"
-            className="rounded-[6px] border border-border"
+            className="rounded-[10px] border border-border"
           />
-          <div className="divide-y divide-border rounded-[6px] border border-border px-3">
+          <div className="divide-y divide-border rounded-[10px] border border-border px-3">
             <div className="flex items-center justify-between py-2.5 text-[13px]">
               <span className="text-muted-foreground">Сумма партии</span>
               <span className="num">{p.money.total}</span>
@@ -556,7 +571,7 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
               <span className="num font-medium">{p.money.rest}</span>
             </div>
           </div>
-          <div className="divide-y divide-border rounded-[6px] border border-border px-3">
+          <div className="divide-y divide-border rounded-[10px] border border-border px-3">
             {p.documents.map((d) => (
               <DocumentRow key={d.title} title={d.title} version={d.version} format={d.format} date={d.date} />
             ))}

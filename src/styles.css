@@ -69,55 +69,56 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0.625rem;
 
-  /* Бумага ателье — тёплая костяная основа */
-  --background: oklch(0.972 0.006 84);
-  --surface: oklch(0.995 0.003 84);
-  --card: oklch(0.995 0.003 84);
-  --card-foreground: oklch(0.2 0.012 62);
-  --popover: oklch(0.995 0.003 84);
-  --popover-foreground: oklch(0.2 0.012 62);
+  /* Светлая рабочая поверхность: тёплый нейтральный off-white */
+  --background: oklch(0.978 0.002 80);
+  --surface: oklch(1 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.006 60);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.006 60);
 
-  /* Чернила */
-  --foreground: oklch(0.2 0.012 62);
-  --muted: oklch(0.952 0.007 84);
-  --muted-foreground: oklch(0.505 0.014 66);
+  /* Текст */
+  --foreground: oklch(0.21 0.006 60);
+  --muted: oklch(0.966 0.002 80);
+  --muted-foreground: oklch(0.555 0.008 66);
 
-  /* Акцент — медь ателье */
-  --primary: oklch(0.53 0.132 43);
-  --primary-foreground: oklch(0.985 0.004 84);
-  --secondary: oklch(0.952 0.007 84);
-  --secondary-foreground: oklch(0.2 0.012 62);
-  --accent: oklch(0.955 0.014 60);
-  --accent-foreground: oklch(0.34 0.09 45);
+  /* Акцент — тёплая охра/медь */
+  --primary: oklch(0.62 0.135 52);
+  --primary-foreground: oklch(0.99 0.002 80);
+  --secondary: oklch(0.966 0.002 80);
+  --secondary-foreground: oklch(0.21 0.006 60);
+  --accent: oklch(0.962 0.012 60);
+  --accent-foreground: oklch(0.4 0.1 48);
 
-  --destructive: oklch(0.51 0.17 27);
-  --destructive-foreground: oklch(0.985 0.004 84);
-  --success: oklch(0.5 0.085 155);
-  --warning: oklch(0.63 0.11 72);
-  --danger: oklch(0.51 0.17 27);
+  --destructive: oklch(0.55 0.19 27);
+  --destructive-foreground: oklch(0.99 0.002 80);
+  --success: oklch(0.53 0.1 155);
+  --warning: oklch(0.66 0.12 66);
+  --danger: oklch(0.55 0.19 27);
 
-  --border: oklch(0.9 0.008 78);
-  --input: oklch(0.885 0.009 78);
-  --ring: oklch(0.53 0.132 43);
+  --border: oklch(0.925 0.002 80);
+  --input: oklch(0.91 0.003 80);
+  --ring: oklch(0.62 0.135 52);
 
-  --chart-1: oklch(0.53 0.132 43);
-  --chart-2: oklch(0.5 0.085 155);
-  --chart-3: oklch(0.63 0.11 72);
+  --chart-1: oklch(0.62 0.135 52);
+  --chart-2: oklch(0.53 0.1 155);
+  --chart-3: oklch(0.66 0.12 66);
   --chart-4: oklch(0.45 0.05 250);
-  --chart-5: oklch(0.65 0.02 78);
+  --chart-5: oklch(0.68 0.015 80);
 
-  /* Рельс — тёмные чернила */
-  --sidebar: oklch(0.215 0.014 62);
-  --sidebar-foreground: oklch(0.92 0.008 80);
-  --sidebar-primary: oklch(0.66 0.13 47);
-  --sidebar-primary-foreground: oklch(0.17 0.012 62);
-  --sidebar-accent: oklch(0.27 0.014 62);
-  --sidebar-accent-foreground: oklch(0.97 0.005 80);
-  --sidebar-border: oklch(0.31 0.012 62);
-  --sidebar-ring: oklch(0.66 0.13 47);
+  /* Рельс — почти чёрный, нейтрально-тёплый */
+  --sidebar: oklch(0.175 0.004 60);
+  --sidebar-foreground: oklch(0.93 0.004 80);
+  --sidebar-primary: oklch(0.72 0.135 60);
+  --sidebar-primary-foreground: oklch(0.17 0.006 60);
+  --sidebar-accent: oklch(0.245 0.008 60);
+  --sidebar-accent-foreground: oklch(0.98 0.003 80);
+  --sidebar-border: oklch(0.28 0.005 60);
+  --sidebar-ring: oklch(0.72 0.135 60);
 }
+
 
 .dark {
   --background: oklch(0.129 0.042 264.695);
@@ -161,23 +162,12 @@
 
   body {
     background-color: var(--color-background);
-    /* Тканое полотно ателье: две едва различимые нити под контентом */
-    background-image:
-      repeating-linear-gradient(
-        90deg,
-        color-mix(in oklab, var(--foreground) 3.5%, transparent) 0 1px,
-        transparent 1px 96px
-      ),
-      repeating-linear-gradient(
-        0deg,
-        color-mix(in oklab, var(--foreground) 2.2%, transparent) 0 1px,
-        transparent 1px 96px
-      );
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-size: 13px;
     -webkit-font-smoothing: antialiased;
   }
+
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
@@ -237,12 +227,13 @@
   }
 }
 
-/* Поверхность карточки: граница + едва заметная глубина */
+/* Поверхность карточки: тонкая граница + мягкая глубина */
 @utility surface-card {
   background: var(--card);
   border: 1px solid var(--border);
   box-shadow:
-    0 1px 0 color-mix(in oklab, var(--foreground) 4%, transparent),
-    0 1px 2px color-mix(in oklab, var(--foreground) 3%, transparent);
+    0 1px 2px color-mix(in oklab, var(--foreground) 4%, transparent),
+    0 1px 1px color-mix(in oklab, var(--foreground) 2%, transparent);
 }
+
 
