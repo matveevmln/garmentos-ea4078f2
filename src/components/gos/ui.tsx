@@ -627,7 +627,7 @@ export function MobileListItem({
     <button
       type="button"
       onClick={onClick}
-      className="interactive focus-ring elev-1 min-h-[56px] w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/25 active:bg-muted/50"
+      className="interactive focus-ring elev-1 min-h-[56px] w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/30 hover:elev-2 active:bg-muted/50"
     >
       {children}
     </button>
@@ -705,7 +705,7 @@ export function Drawer({
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="anim-sheet elev-4 relative flex max-h-[85vh] w-full flex-col rounded-t-[14px] border border-border bg-card sm:anim-panel sm:h-full sm:max-h-none sm:w-[420px] sm:rounded-none sm:rounded-l-[10px]">
+      <div className="anim-sheet glass-panel relative flex max-h-[85vh] w-full flex-col rounded-t-[14px] sm:anim-panel sm:h-full sm:max-h-none sm:w-[420px] sm:rounded-none sm:rounded-l-[10px]">
         <span className="mx-auto mt-2 block h-1 w-9 rounded-full bg-border sm:hidden" aria-hidden="true" />
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h3 className="text-[13px] font-semibold">{title}</h3>

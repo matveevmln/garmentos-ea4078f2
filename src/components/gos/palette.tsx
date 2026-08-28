@@ -81,7 +81,7 @@ export function CommandPalette({
       <div
         role="dialog"
         aria-label="Быстрый переход"
-        className="anim-dialog elev-overlay relative w-full max-w-[560px] overflow-hidden rounded-[12px] border border-border bg-popover"
+        className="anim-dialog glass-panel relative w-full max-w-[560px] overflow-hidden rounded-[12px]"
       >
         <div className="flex items-center gap-2.5 border-b border-border px-4">
           <IconSearch size={16} className="shrink-0 text-muted-foreground" />
