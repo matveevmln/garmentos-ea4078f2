@@ -49,9 +49,9 @@ export function CardHeader({
 }) {
   return (
     <div className={cn("flex items-baseline justify-between gap-3", className)}>
-      <div className="flex items-baseline gap-2">
-        <h2 className="text-[13px] font-semibold tracking-[-0.005em]">{title}</h2>
-        {hint ? <span className="text-[11px] text-muted-foreground">{hint}</span> : null}
+      <div className="flex items-baseline gap-2.5">
+        <h2 className="editorial text-[14px]">{title}</h2>
+        {hint ? <span className="num text-[11px] text-muted-foreground">{hint}</span> : null}
       </div>
       {action}
     </div>
@@ -59,11 +59,7 @@ export function CardHeader({
 }
 
 export function SectionLabel({ children }: { children: ReactNode }) {
-  return (
-    <div className="text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
-      {children}
-    </div>
-  );
+  return <div className="eyebrow">{children}</div>;
 }
 
 /* ---------- Button ---------- */
@@ -253,9 +249,9 @@ export function PageHeader({
       {breadcrumbs}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-[20px] leading-tight md:text-[28px]">{title}</h1>
+          <h1 className="editorial text-[22px] md:text-[32px]">{title}</h1>
           {subtitle ? (
-            <p className="mt-1 text-[13px] text-muted-foreground">{subtitle}</p>
+            <p className="mt-1.5 max-w-[68ch] text-[13px] leading-[1.5] text-muted-foreground">{subtitle}</p>
           ) : null}
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
@@ -331,15 +327,19 @@ export function MetricStrip({
   items: { label: string; value: string; tone?: "danger" | "warning" }[];
 }) {
   return (
-    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[8px] border border-border bg-border shadow-[0_1px_2px_rgb(0_0_0/0.04)] lg:grid-cols-4">
-      {items.map((m) => (
-        <div key={m.label} className="bg-card px-4 py-3.5">
-          <div className="text-[11px] uppercase tracking-[0.06em] text-muted-foreground">
-            {m.label}
-          </div>
+    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[8px] border border-border bg-border lg:grid-cols-4">
+      {items.map((m, i) => (
+        <div key={m.label} className="relative bg-card px-4 pb-3.5 pt-4">
+          <span
+            className={cn(
+              "absolute left-0 top-0 h-[2px] w-8",
+              m.tone === "danger" ? "bg-danger" : m.tone === "warning" ? "bg-warning" : i === 0 ? "bg-primary" : "bg-border",
+            )}
+          />
+          <div className="eyebrow text-[10px]">{m.label}</div>
           <div
             className={cn(
-              "num mt-1.5 text-[28px] leading-none font-semibold",
+              "num mt-2 text-[30px] leading-none font-semibold tracking-[-0.02em]",
               m.tone === "danger" && "text-danger",
               m.tone === "warning" && "text-warning",
             )}

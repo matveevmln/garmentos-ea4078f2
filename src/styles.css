@@ -161,10 +161,33 @@
     font-weight: 600;
     letter-spacing: -0.01em;
   }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 18%, transparent);
+  }
 }
 
 @utility num {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
+}
+
+/* Editorial-заголовок: Inter Tight, плотный трекинг, оптический вес */
+@utility editorial {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.05;
+}
+
+/* Надзаголовок секции */
+@utility eyebrow {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted-foreground);
 }

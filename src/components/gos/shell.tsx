@@ -67,23 +67,26 @@ function NavGroup({
   active,
   onNavigate,
   collapsed,
+  mobile = false,
 }: {
   label: string;
   items: NavItem[];
   active: ScreenKey;
   onNavigate: (k: ScreenKey) => void;
   collapsed: boolean;
+  mobile?: boolean;
 }) {
   return (
-    <div className="px-2">
+    <div className={cn("px-2", mobile && "px-3")}>
       {!collapsed ? (
-        <div className="px-2 pb-1.5 pt-4 text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground/80">
-          {label}
+        <div className="flex items-center gap-2 px-2 pb-2 pt-5">
+          <span className="eyebrow text-[10px] tracking-[0.16em] text-muted-foreground/70">{label}</span>
+          <span className="h-px flex-1 bg-border" />
         </div>
       ) : (
-        <div className="my-3 border-t border-border" />
+        <div className="mx-3 my-3 border-t border-border" />
       )}
-      <ul className="space-y-0.5">
+      <ul className="space-y-px">
         {items.map((it) => {
           const isActive = active === it.key || (it.key === "batches" && active === "passport");
           const Icon = it.icon;
@@ -94,17 +97,21 @@ function NavGroup({
                 onClick={() => onNavigate(it.key)}
                 title={it.label}
                 className={cn(
-                  "group relative flex w-full items-center gap-2.5 rounded-[6px] px-2 py-2 text-[13px] transition-colors",
+                  "group relative flex w-full items-center gap-3 rounded-[6px] pl-3 pr-2 text-[13px] transition-colors",
+                  mobile ? "min-h-[48px] py-3 text-[15px]" : "py-[7px]",
                   collapsed && "justify-center px-0",
                   isActive
-                    ? "bg-primary/[0.08] font-medium text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    ? "bg-primary/[0.06] font-semibold tracking-[-0.01em] text-primary"
+                    : "text-muted-foreground hover:bg-foreground/[0.035] hover:text-foreground",
                 )}
               >
-                {isActive ? (
-                  <span className="absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-r bg-primary" />
-                ) : null}
-                <Icon size={16} />
+                <span
+                  className={cn(
+                    "absolute left-0 top-1 bottom-1 w-[2px] rounded-r-[2px] transition-colors",
+                    isActive ? "bg-primary" : "bg-transparent",
+                  )}
+                />
+                <Icon size={mobile ? 18 : 16} />
                 {!collapsed ? <span className="truncate">{it.label}</span> : null}
               </button>
             </li>
@@ -119,34 +126,43 @@ function SidebarBody({
   active,
   onNavigate,
   collapsed,
+  mobile = false,
 }: {
   active: ScreenKey;
   onNavigate: (k: ScreenKey) => void;
   collapsed: boolean;
+  mobile?: boolean;
 }) {
   return (
     <div className="flex h-full flex-col">
       <div
         className={cn(
-          "flex h-[52px] items-center gap-2.5 border-b border-border px-4",
+          "flex items-center gap-2.5 border-b border-border px-4",
+          mobile ? "h-[64px]" : "h-[52px]",
           collapsed && "justify-center px-0",
         )}
       >
-        <span className="num inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[4px] bg-foreground text-[11px] font-semibold text-background">
+        <span className="num inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[3px] bg-foreground text-[11px] font-semibold text-background">
           G
         </span>
         {!collapsed ? (
-          <span className="text-[13px] font-semibold tracking-[-0.01em]">GarmentOS</span>
+          <span className="editorial flex items-baseline text-[14px]">
+            <span>Garment</span>
+            <span className="text-primary">OS</span>
+            <span className="num ml-2 text-[9px] font-medium uppercase tracking-[0.18em] text-muted-foreground/70">
+              atelier
+            </span>
+          </span>
         ) : null}
       </div>
 
+
       <nav className="flex-1 overflow-y-auto pb-4">
-        <div className="pt-2">
-          <NavGroup label="Производство" items={NAV_PRIMARY} active={active} onNavigate={onNavigate} collapsed={collapsed} />
+        <div className="pt-1">
+          <NavGroup label="Производство" items={NAV_PRIMARY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
         </div>
-        <NavGroup label="Снабжение" items={NAV_SUPPLY} active={active} onNavigate={onNavigate} collapsed={collapsed} />
-        <NavGroup label="Учёт" items={NAV_OFFICE} active={active} onNavigate={onNavigate} collapsed={collapsed} />
-        
+        <NavGroup label="Снабжение" items={NAV_SUPPLY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
+        <NavGroup label="Учёт" items={NAV_OFFICE} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
       </nav>
 
       <div className={cn("border-t border-border p-3", collapsed && "px-0 text-center")}>
@@ -190,7 +206,7 @@ export function AppShell({
       {/* Sidebar — desktop */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-30 hidden border-r border-border bg-card transition-[width] duration-200 md:block",
+          "fixed inset-y-0 left-0 z-30 hidden border-r border-border bg-[color-mix(in_oklab,var(--card)_92%,var(--background))] transition-[width] duration-200 md:block",
           collapsed ? "w-[56px]" : "w-[240px]",
         )}
       >
@@ -200,14 +216,14 @@ export function AppShell({
       {/* Mobile nav drawer */}
       {mobileNavOpen ? (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-foreground/25" onClick={() => setMobileNavOpen(false)} />
-          <div className="relative h-full w-[264px] border-r border-border bg-card shadow-[0_16px_48px_rgb(0_0_0/0.18)]">
-            <div className="absolute right-2 top-2">
+          <div className="absolute inset-0 bg-foreground/35 backdrop-blur-[2px]" onClick={() => setMobileNavOpen(false)} />
+          <div className="relative flex h-full w-[300px] max-w-[86vw] flex-col border-r border-border bg-card shadow-[0_16px_48px_rgb(0_0_0/0.18)]">
+            <div className="absolute right-2 top-3 z-10">
               <IconButton label="Закрыть меню" onClick={() => setMobileNavOpen(false)}>
-                <IconClose size={16} />
+                <IconClose size={18} />
               </IconButton>
             </div>
-            <SidebarBody active={active} onNavigate={go} collapsed={false} />
+            <SidebarBody active={active} onNavigate={go} collapsed={false} mobile />
           </div>
         </div>
       ) : null}
@@ -225,7 +241,7 @@ export function AppShell({
           >
             <IconPanel size={16} />
           </IconButton>
-          <span className="truncate text-[13px] font-semibold">{topbarTitle}</span>
+          <span className="editorial truncate text-[13px] tracking-[-0.015em]">{topbarTitle}</span>
           <span className="ml-auto flex items-center gap-2 text-[11px] text-muted-foreground">
             <button
               type="button"
@@ -240,7 +256,7 @@ export function AppShell({
               <IconStates size={14} />
               Состояния
             </button>
-            <span className="num hidden rounded-[4px] border border-border bg-muted/50 px-1.5 py-[3px] md:inline-flex">
+            <span className="num hidden rounded-[4px] border border-border bg-muted/50 px-1.5 py-[3px] tracking-[0.04em] md:inline-flex">
               Прототип · демо-данные
             </span>
           </span>
@@ -251,7 +267,7 @@ export function AppShell({
       </div>
 
       {/* Mobile bottom navigation */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card/97 backdrop-blur md:hidden">
         {MOBILE_NAV.map((it) => {
           const Icon = it.icon;
           const isActive = active === it.key || (it.key === "batches" && active === "passport");
@@ -261,10 +277,16 @@ export function AppShell({
               type="button"
               onClick={() => go(it.key)}
               className={cn(
-                "flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground",
+                "relative flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] transition-colors",
+                isActive ? "font-semibold text-primary" : "text-muted-foreground",
               )}
             >
+              <span
+                className={cn(
+                  "absolute inset-x-4 top-0 h-[2px] rounded-b-[2px]",
+                  isActive ? "bg-primary" : "bg-transparent",
+                )}
+              />
               <Icon size={18} />
               {it.label}
             </button>

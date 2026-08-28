@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { IconCheck, IconDocument, IconDownload } from "./icons";
+import { IconDocument, IconDownload } from "./icons";
 import { VersionBadge } from "./ui";
 import { PRODUCTION_STAGES, type ProductionStage } from "@/data/garmentos";
 
@@ -20,10 +20,10 @@ export function MoneyBlock({
 }) {
   return (
     <div className={cn("px-4 py-3.5", className)}>
-      <div className="text-[11px] uppercase tracking-[0.06em] text-muted-foreground">{label}</div>
+      <div className="eyebrow text-[10px]">{label}</div>
       <div
         className={cn(
-          "num mt-1.5 text-[20px] font-semibold leading-none",
+          "num mt-2 text-[22px] font-semibold leading-none tracking-[-0.02em]",
           tone === "warning" && "text-warning",
           tone === "muted" && "text-muted-foreground",
         )}
@@ -35,45 +35,63 @@ export function MoneyBlock({
   );
 }
 
-/* ---------- ProductionStepper ---------- */
+/* ---------- ProductionStepper — производственная шкала ---------- */
 
 export function ProductionStepper({ current }: { current: ProductionStage }) {
   const idx = PRODUCTION_STAGES.indexOf(current);
   return (
-    <ol className="flex flex-col gap-0 md:flex-row md:items-stretch md:gap-0">
+    <ol className="flex flex-col md:flex-row md:items-stretch">
       {PRODUCTION_STAGES.map((stage, i) => {
         const state = i < idx ? "done" : i === idx ? "current" : "next";
         return (
-          <li key={stage} className="flex flex-1 items-start gap-2.5 py-2 md:flex-col md:gap-2 md:py-0">
-            <div className="flex items-center md:w-full">
-              <span
-                className={cn(
-                  "inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px]",
-                  state === "done" && "border-success/30 bg-success/[0.1] text-success",
-                  state === "current" && "border-primary bg-primary text-primary-foreground",
-                  state === "next" && "border-border bg-card text-muted-foreground",
-                )}
-              >
-                {state === "done" ? <IconCheck size={12} /> : <span className="num">{i + 1}</span>}
-              </span>
-              <span
-                className={cn(
-                  "ml-2 hidden h-[2px] flex-1 rounded md:block",
-                  i === PRODUCTION_STAGES.length - 1 && "md:hidden",
-                  i < idx ? "bg-success/40" : i === idx ? "bg-primary/30" : "bg-border",
-                )}
-              />
-            </div>
-            <div className="min-w-0 md:pr-4">
+          <li
+            key={stage}
+            className={cn(
+              "relative flex flex-1 items-start gap-3 py-2.5 md:flex-col md:gap-0 md:py-0 md:pr-4",
+            )}
+          >
+            {/* ось: вертикальная на мобильном, горизонтальная на desktop */}
+            <span
+              className={cn(
+                "absolute left-[5px] top-6 h-[calc(100%-12px)] w-px md:left-0 md:top-[5px] md:h-px md:w-full",
+                i === PRODUCTION_STAGES.length - 1 && "hidden",
+                i < idx ? "bg-primary/45" : "bg-border",
+              )}
+            />
+            <span
+              className={cn(
+                "relative z-10 mt-[3px] shrink-0 md:mt-0",
+                state === "current"
+                  ? "h-[11px] w-[11px] -translate-x-px bg-primary md:-translate-x-0 md:-translate-y-[3px]"
+                  : "h-[11px] w-[11px]",
+              )}
+            >
+              {state === "done" ? (
+                <span className="block h-full w-full rounded-full border border-primary/50 bg-primary/[0.18]" />
+              ) : state === "current" ? (
+                <span className="block h-full w-full rounded-[2px] bg-primary ring-4 ring-primary/[0.14]" />
+              ) : (
+                <span className="block h-full w-full rounded-full border border-border bg-card" />
+              )}
+            </span>
+
+            <div className="min-w-0 md:mt-3">
+              <div className="num text-[10px] tracking-[0.14em] text-muted-foreground/70">
+                {String(i + 1).padStart(2, "0")}
+              </div>
               <div
                 className={cn(
-                  "text-[13px] leading-tight",
-                  state === "current" ? "font-semibold text-foreground" : "text-muted-foreground",
+                  "mt-1 text-[13px] leading-tight",
+                  state === "current"
+                    ? "font-semibold tracking-[-0.01em] text-primary"
+                    : state === "done"
+                      ? "text-foreground"
+                      : "text-muted-foreground",
                 )}
               >
                 {stage}
               </div>
-              <div className="mt-0.5 text-[11px] text-muted-foreground">
+              <div className="mt-1 text-[11px] text-muted-foreground/80">
                 {state === "done" ? "пройден" : state === "current" ? "текущий" : "следующий"}
               </div>
             </div>
@@ -184,15 +202,10 @@ export function Timeline({
 export function ModelMark({ code }: { code: string }) {
   const parts = code.split("-");
   return (
-    <div className="relative flex h-[88px] items-center justify-center overflow-hidden rounded-[6px] border border-border bg-muted/30">
-      <div
-        className="absolute inset-0 opacity-[0.5]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(135deg, var(--color-border) 0 1px, transparent 1px 9px)",
-        }}
-      />
-      <div className="relative flex flex-col items-center">
+    <div className="relative flex h-[88px] items-center justify-center overflow-hidden rounded-[6px] border border-border bg-muted/25">
+      <span className="absolute left-0 top-0 h-[2px] w-10 bg-primary/60" />
+      <span className="absolute inset-x-3 top-1/2 h-px bg-border" />
+      <div className="relative flex flex-col items-center bg-[color-mix(in_oklab,var(--muted)_25%,var(--card))] px-3">
         <span className="num text-[20px] font-semibold tracking-[0.06em]">{parts[0]}</span>
         <span className="num mt-1 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           {parts[1] ?? ""}
