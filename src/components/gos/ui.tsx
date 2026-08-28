@@ -27,7 +27,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "surface-card surface-grad rounded-[10px] transition-shadow duration-200",
+        "surface-card surface-grad rounded-[12px] transition-[box-shadow,border-color] duration-200 hover:elev-2",
         padded && "p-4 md:p-5",
         className,
       )}
@@ -51,7 +51,7 @@ export function CardHeader({
   return (
     <div className={cn("flex items-center justify-between gap-3", className)}>
       <div className="flex min-w-0 items-baseline gap-2.5">
-        <h2 className="t-section truncate">{title}</h2>
+        <h2 className="t-section truncate text-[16px]">{title}</h2>
         {hint ? <span className="t-meta shrink-0">{hint}</span> : null}
 
       </div>
