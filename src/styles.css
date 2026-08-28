@@ -313,3 +313,177 @@
 }
 
 
+
+/* ====== Глубина: уровни поверхностей ====== */
+
+@utility elev-1 {
+  box-shadow:
+    0 1px 2px color-mix(in oklab, var(--foreground) 5%, transparent),
+    0 1px 1px color-mix(in oklab, var(--foreground) 3%, transparent);
+}
+
+@utility elev-2 {
+  box-shadow:
+    0 2px 4px color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 8px 20px -8px color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+
+@utility elev-3 {
+  box-shadow:
+    0 4px 10px color-mix(in oklab, var(--foreground) 8%, transparent),
+    0 18px 42px -12px color-mix(in oklab, var(--foreground) 20%, transparent);
+}
+
+@utility elev-4 {
+  box-shadow:
+    0 8px 18px color-mix(in oklab, var(--foreground) 10%, transparent),
+    0 32px 64px -16px color-mix(in oklab, var(--foreground) 26%, transparent);
+}
+
+/* Едва заметный градиент материала поверхности */
+@utility surface-grad {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--foreground) 1.2%, transparent) 0%,
+    transparent 42%
+  );
+}
+
+/* Интерактивность: мягкий hover + внятный press */
+@utility interactive {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 140ms ease;
+
+  &:active {
+    transform: translateY(0.5px);
+  }
+}
+
+/* ====== Движение ====== */
+
+@keyframes gos-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gos-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes gos-sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gos-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gos-panel-in-left {
+  from { transform: translateX(-18px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@keyframes gos-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes gos-shimmer {
+  from { background-position: 180% 0; }
+  to { background-position: -80% 0; }
+}
+
+@utility anim-content {
+  animation: gos-content-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@utility anim-overlay {
+  animation: gos-overlay-in 180ms ease-out both;
+}
+
+@utility anim-sheet {
+  animation: gos-sheet-up 240ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@utility anim-panel {
+  animation: gos-panel-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@utility anim-panel-left {
+  animation: gos-panel-in-left 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@utility anim-pop {
+  animation: gos-pop-in 150ms ease-out both;
+}
+
+/* Сдержанный skeleton shimmer */
+@utility skeleton {
+  background-color: var(--muted);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--foreground) 4%, transparent) 45%,
+    transparent 90%
+  );
+  background-size: 180% 100%;
+  animation: gos-shimmer 1.6s linear infinite;
+}
+
+/* Плавное раскрытие деталей без фиксированной высоты */
+@utility collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  & > * {
+    overflow: hidden;
+    min-height: 0;
+  }
+}
+
+@utility collapsible-open {
+  grid-template-rows: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
