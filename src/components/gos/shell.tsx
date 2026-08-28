@@ -146,7 +146,7 @@ function SidebarBody({
         </div>
         <NavGroup label="Снабжение" items={NAV_SUPPLY} active={active} onNavigate={onNavigate} collapsed={collapsed} />
         <NavGroup label="Учёт" items={NAV_OFFICE} active={active} onNavigate={onNavigate} collapsed={collapsed} />
-        <NavGroup label="Прототип" items={[{ key: "states", label: "Состояния", icon: IconStates }]} active={active} onNavigate={onNavigate} collapsed={collapsed} />
+        
       </nav>
 
       <div className={cn("border-t border-border p-3", collapsed && "px-0 text-center")}>
