@@ -26,7 +26,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-[6px] border border-border bg-card",
+        "surface-card rounded-[6px]",
         padded && "p-4 md:p-5",
         className,
       )}
@@ -48,10 +48,11 @@ export function CardHeader({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("flex items-baseline justify-between gap-3", className)}>
-      <div className="flex items-baseline gap-2.5">
-        <h2 className="editorial text-[14px]">{title}</h2>
-        {hint ? <span className="num text-[11px] text-muted-foreground">{hint}</span> : null}
+    <div className={cn("flex items-center justify-between gap-3", className)}>
+      <div className="flex min-w-0 items-baseline gap-2.5">
+        <span className="h-[9px] w-[2px] shrink-0 self-center bg-primary" />
+        <h2 className="editorial truncate text-[14px]">{title}</h2>
+        {hint ? <span className="num shrink-0 text-[11px] text-muted-foreground">{hint}</span> : null}
       </div>
       {action}
     </div>
@@ -61,6 +62,7 @@ export function CardHeader({
 export function SectionLabel({ children }: { children: ReactNode }) {
   return <div className="eyebrow">{children}</div>;
 }
+
 
 /* ---------- Button ---------- */
 
