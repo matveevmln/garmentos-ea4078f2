@@ -331,7 +331,10 @@ export function AppShell({
       const g = gesture.current;
       gesture.current = null;
       if (!g || !g.active) return;
-      const open = g.velocity > 0.3 || (g.velocity > -0.3 && g.offset > -g.width / 2);
+      const dist = g.offset + g.width; // сколько панели вытянуто
+      const flickOpen = g.velocity > 0.5 && dist > 40;
+      const flickClose = g.velocity < -0.5;
+      const open = flickOpen || (!flickClose && g.offset > -g.width / 2);
       clearDrag();
       setMobileNavOpen(open);
     };
