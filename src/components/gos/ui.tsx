@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import {
   IconAlert,
@@ -7,6 +7,7 @@ import {
   IconClose,
   IconInbox,
   IconLock,
+  IconMore,
   IconRefresh,
   IconSearch,
 } from "./icons";
