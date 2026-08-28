@@ -249,9 +249,9 @@ export function PageHeader({
       {breadcrumbs}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-[20px] leading-tight md:text-[28px]">{title}</h1>
+          <h1 className="editorial text-[22px] md:text-[32px]">{title}</h1>
           {subtitle ? (
-            <p className="mt-1 text-[13px] text-muted-foreground">{subtitle}</p>
+            <p className="mt-1.5 max-w-[68ch] text-[13px] leading-[1.5] text-muted-foreground">{subtitle}</p>
           ) : null}
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
