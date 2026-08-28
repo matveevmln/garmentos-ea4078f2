@@ -865,3 +865,11 @@
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 8%, transparent);
   }
 }
+
+
+/* Фокус внутри тёмного рельса: подложка и цвет от токенов сайдбара */
+[data-rail] {
+  --focus-offset-color: var(--sidebar);
+  --focus-color: color-mix(in oklab, var(--sidebar-primary) 60%, transparent);
+  --focus-halo: color-mix(in oklab, var(--sidebar-primary) 14%, transparent);
+}

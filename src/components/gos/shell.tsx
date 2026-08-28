@@ -120,7 +120,7 @@ function NavGroup({
                     isActive ? "scale-y-100 opacity-100" : "scale-y-50 opacity-0",
                   )}
                 />
-                <span className={cn("transition-colors", isActive ? "text-sidebar-primary" : "text-current")}>
+                <span className={cn("transition-[color,transform] duration-200 group-hover:translate-x-[1px]", isActive ? "text-sidebar-primary" : "text-current")}>
                   <Icon size={mobile ? 18 : 17} />
                 </span>
                 {!collapsed ? <span className="truncate">{it.label}</span> : null}
