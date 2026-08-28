@@ -175,9 +175,10 @@ function SidebarBody({
             <span className="font-display text-[19px] font-semibold tracking-[-0.02em] text-sidebar-foreground">
               GarmentOS
             </span>
-            <span className="mt-1.5 truncate text-[9.5px] uppercase tracking-[0.16em] text-sidebar-foreground/40">
+            <span className="mt-1.5 block text-[9px] uppercase leading-none tracking-[0.1em] text-sidebar-foreground/40">
               производственная система
             </span>
+
 
           </span>
         ) : null}
