@@ -200,7 +200,7 @@ export function ContextMenu({
         <IconMore size={16} />
       </IconButton>
       {open ? (
-        <div className="anim-pop elev-overlay absolute right-0 top-[calc(100%+6px)] z-40 min-w-[210px] overflow-hidden rounded-[10px] border border-border bg-popover py-1">
+        <div className="anim-pop glass-panel absolute right-0 top-[calc(100%+6px)] z-40 min-w-[210px] overflow-hidden rounded-[10px] py-1">
           {items.map((it) => (
             <button
               key={it.label}
@@ -211,7 +211,7 @@ export function ContextMenu({
                 it.onSelect?.();
               }}
               className={cn(
-                "flex w-full items-center px-3 py-2.5 text-left text-[13px] transition-colors duration-150 hover:bg-muted",
+                "focus-ring flex w-full items-center px-3 py-2.5 text-left text-[13px] transition-colors duration-150 hover:bg-primary/[0.07] active:bg-primary/[0.11]",
                 it.disabled && "pointer-events-none opacity-45",
               )}
             >
@@ -383,7 +383,7 @@ export function SearchField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-10 w-full rounded-[10px] border border-border bg-card pl-8 pr-3 text-[13px] outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-ring/20 md:h-9"
+        className="field h-10 w-full rounded-[10px] border border-border bg-card pl-8 pr-3 text-[13px] placeholder:text-muted-foreground md:h-9"
       />
     </div>
   );
@@ -584,7 +584,7 @@ export function DataTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border [&>tr]:cursor-pointer [&>tr]:transition-colors [&>tr]:duration-150 [&>tr:hover]:bg-muted">
+        <tbody className="divide-y divide-border [&>tr]:row-interactive [&>tr]:cursor-pointer">
           {children}
         </tbody>
 
