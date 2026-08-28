@@ -370,27 +370,19 @@
 /* ====== Глубина: уровни поверхностей ====== */
 
 @utility elev-1 {
-  box-shadow:
-    0 1px 2px color-mix(in oklab, var(--foreground) 5%, transparent),
-    0 1px 1px color-mix(in oklab, var(--foreground) 3%, transparent);
+  box-shadow: var(--shadow-1);
 }
 
 @utility elev-2 {
-  box-shadow:
-    0 2px 4px color-mix(in oklab, var(--foreground) 6%, transparent),
-    0 8px 20px -8px color-mix(in oklab, var(--foreground) 12%, transparent);
+  box-shadow: var(--shadow-2);
 }
 
 @utility elev-3 {
-  box-shadow:
-    0 4px 10px color-mix(in oklab, var(--foreground) 8%, transparent),
-    0 18px 42px -12px color-mix(in oklab, var(--foreground) 20%, transparent);
+  box-shadow: var(--shadow-3);
 }
 
 @utility elev-4 {
-  box-shadow:
-    0 8px 18px color-mix(in oklab, var(--foreground) 10%, transparent),
-    0 32px 64px -16px color-mix(in oklab, var(--foreground) 26%, transparent);
+  box-shadow: var(--shadow-4);
 }
 
 /* Едва заметный градиент материала поверхности */
@@ -405,14 +397,14 @@
 /* Интерактивность: мягкий hover + внятный press */
 @utility interactive {
   transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease,
-    box-shadow 180ms ease,
-    transform 140ms ease;
+    background-color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
 
   &:active {
-    transform: translateY(0.5px);
+    transform: translateY(0.5px) scale(0.995);
   }
 }
 
@@ -422,10 +414,56 @@
 
   &:focus-visible {
     box-shadow:
-      0 0 0 2px var(--card),
-      0 0 0 4px color-mix(in oklab, var(--primary) 45%, transparent);
+      0 0 0 var(--focus-width) var(--focus-offset-color),
+      0 0 0 calc(var(--focus-width) + 2px) var(--focus-color),
+      0 0 0 calc(var(--focus-width) + 7px) var(--focus-halo);
+    border-color: color-mix(in oklab, var(--primary) 45%, var(--border));
   }
 }
+
+/* Интерактивная строка таблицы / списка */
+@utility row-interactive {
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+
+  &:hover {
+    background-color: color-mix(in oklab, var(--primary) 4%, var(--muted));
+    box-shadow: inset 2px 0 0 0 color-mix(in oklab, var(--primary) 55%, transparent);
+  }
+
+  &:active {
+    background-color: color-mix(in oklab, var(--primary) 7%, var(--muted));
+  }
+}
+
+/* Поле ввода: единая логика hover / focus */
+@utility field {
+  transition:
+    border-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    background-color var(--dur-2) var(--ease-out);
+
+  &:hover {
+    border-color: color-mix(in oklab, var(--primary) 22%, var(--border));
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border-color: color-mix(in oklab, var(--primary) 55%, var(--border));
+    box-shadow: 0 0 0 4px var(--focus-halo);
+  }
+}
+
+/* Стеклянная плавающая поверхность: popover, палитра, drawer, floating controls */
+@utility glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-overlay);
+}
+
 
 /* Идентификатор: номер партии, артикул, код */
 @utility t-id {
