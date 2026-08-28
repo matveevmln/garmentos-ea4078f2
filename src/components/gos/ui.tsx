@@ -50,8 +50,9 @@ export function CardHeader({
   return (
     <div className={cn("flex items-center justify-between gap-3", className)}>
       <div className="flex min-w-0 items-baseline gap-2.5">
-        <h2 className="truncate font-display text-[14px] font-semibold tracking-[-0.01em]">{title}</h2>
-        {hint ? <span className="shrink-0 text-[12px] text-muted-foreground">{hint}</span> : null}
+        <h2 className="t-section truncate">{title}</h2>
+        {hint ? <span className="t-meta shrink-0">{hint}</span> : null}
+
       </div>
       {action}
     </div>
@@ -254,10 +255,11 @@ export function PageHeader({
       {breadcrumbs}
       <div className="mt-1.5 flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="font-display text-[22px] font-semibold tracking-[-0.02em] md:text-[26px]">{title}</h1>
+          <h1 className="t-page md:text-[31px]">{title}</h1>
           {subtitle ? (
-            <p className="mt-1 max-w-[68ch] text-[13px] leading-[1.5] text-muted-foreground">{subtitle}</p>
+            <p className="t-secondary mt-1.5 max-w-[68ch]">{subtitle}</p>
           ) : null}
+
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
       </div>
@@ -340,16 +342,17 @@ export function MetricStrip({
           key={m.label}
           className="surface-card group flex flex-col rounded-[10px] px-4 py-4 transition-shadow hover:shadow-[0_2px_8px_color-mix(in_oklab,var(--foreground)_7%,transparent)]"
         >
-          <div className="text-[12px] leading-tight text-muted-foreground">{m.label}</div>
+          <div className="t-meta uppercase tracking-[0.06em]">{m.label}</div>
           <div
             className={cn(
-              "num mt-3 text-[30px] leading-none font-semibold tracking-[-0.03em]",
+              "t-figure mt-3.5 text-[32px]",
               m.tone === "danger" && "text-danger",
               m.tone === "warning" && "text-warning",
             )}
           >
             {m.value}
           </div>
+
           <span
             className={cn(
               "mt-4 block h-px w-full",
@@ -397,17 +400,18 @@ export function AttentionList({
               <IconAlert size={14} />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-[13px] font-medium">{it.title}</span>
-              <span className="mt-0.5 block text-[12px] text-muted-foreground">{it.sub}</span>
+              <span className="t-object block">{it.title}</span>
+              <span className="t-meta mt-1 block">{it.sub}</span>
             </span>
             <span
               className={cn(
-                "num shrink-0 text-[13px] font-medium",
+                "t-value shrink-0 text-[13.5px] font-semibold",
                 it.tone === "danger" ? "text-danger" : "text-warning",
               )}
             >
               {it.meta}
             </span>
+
           </button>
         </li>
       ))}
@@ -436,8 +440,9 @@ export function DataTable({
                 key={c.key}
                 style={c.width ? { width: c.width } : undefined}
                 className={cn(
-                  "h-11 px-4 text-[12px] font-normal text-muted-foreground",
+                  "h-11 px-4 text-[11.5px] font-medium uppercase tracking-[0.06em] text-muted-foreground",
                   c.align === "right" ? "text-right" : "text-left",
+
                 )}
               >
                 {c.label}

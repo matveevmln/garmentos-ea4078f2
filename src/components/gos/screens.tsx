@@ -85,17 +85,20 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
 
             {/* desktop / tablet */}
             <div className="mt-3 hidden md:block">
-              <table className="w-full border-collapse text-[13px]">
+              <table className="w-full table-fixed border-collapse text-[13px]">
                 <thead>
-                  <tr className="border-t border-border text-left text-[12px] text-muted-foreground">
-                    <th className="h-10 px-4 font-normal">№</th>
-                    <th className="h-10 px-4 font-normal">Модель</th>
-                    <th className="h-10 px-4 font-normal">Цех</th>
-                    <th className="h-10 px-4 text-right font-normal">Кол-во</th>
-                    <th className="h-10 px-4 text-right font-normal">Срок</th>
-                    <th className="h-10 px-4 text-right font-normal">Статус</th>
+                  <tr className="border-t border-border text-left text-[11.5px] uppercase tracking-[0.06em] text-muted-foreground">
+                    <th className="h-10 w-[60px] pl-4 pr-2 font-medium">№</th>
+                    <th className="h-10 px-2 font-medium">Модель</th>
+                    <th className="h-10 w-[96px] px-2 font-medium">Цех</th>
+                    <th className="h-10 w-[88px] px-2 text-right font-medium">Кол-во</th>
+                    <th className="h-10 w-[116px] px-2 text-right font-medium">Срок</th>
+                    <th className="h-10 w-[152px] pl-2 pr-4 text-right font-medium">Статус</th>
+
+
                   </tr>
                 </thead>
+
                 <tbody className="divide-y divide-border border-t border-border">
 
                   {inWork.map((b) => (
@@ -104,20 +107,23 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
                       onClick={() => onOpenBatch(b.id)}
                       className="cursor-pointer transition-colors hover:bg-muted/40"
                     >
-                      <Td className="w-[68px]">
-                        <span className="num font-medium">#{b.id}</span>
+                      <Td className="!pl-4 !pr-2">
+                        <span className="t-value font-semibold">#{b.id}</span>
                       </Td>
-                      <Td className="whitespace-nowrap">{b.model}</Td>
-                      <Td className="whitespace-nowrap text-muted-foreground">{b.workshop}</Td>
-                      <Td align="right" className="num w-[104px] whitespace-nowrap text-muted-foreground">
+                      <Td className="t-object !px-2 truncate">{b.model}</Td>
+                      <Td className="t-secondary !px-2 truncate">{b.workshop}</Td>
+
+                      <Td align="right" className="t-value !px-2 whitespace-nowrap text-muted-foreground">
                         {formatQty(b.qty)} шт
                       </Td>
-                      <Td align="right" className="num w-[132px] whitespace-nowrap text-muted-foreground">
+                      <Td align="right" className="t-value !px-2 whitespace-nowrap text-muted-foreground">
                         {b.due ? `до ${b.due}` : "—"}
                       </Td>
-                      <Td align="right" className="w-[172px]">
+
+                      <Td align="right" className="!pl-2 !pr-4">
                         <StatusBadge status={b.status} />
                       </Td>
+
 
                     </tr>
                   ))}
