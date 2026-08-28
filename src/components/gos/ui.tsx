@@ -75,7 +75,25 @@ type ButtonProps = {
   className?: string | undefined;
   icon?: ReactNode | undefined;
   type?: "button" | undefined;
+  disabled?: boolean | undefined;
+  loading?: boolean | undefined;
 };
+
+function Spinner({ size = 14 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      className="animate-spin"
+    >
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeOpacity="0.25" strokeWidth="2" />
+      <path d="M14 8a6 6 0 0 0-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export function Button({
   children,
@@ -84,24 +102,30 @@ export function Button({
   onClick,
   className,
   icon,
+  disabled,
+  loading,
 }: ButtonProps) {
+  const inert = disabled || loading;
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={inert ? undefined : onClick}
+      disabled={inert}
+      aria-busy={loading || undefined}
       className={cn(
-        "interactive relative inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        "interactive focus-ring relative inline-flex items-center justify-center gap-1.5 rounded-[6px] font-medium tracking-[-0.005em]",
         size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3.5 text-[13px]",
         variant === "primary" &&
-          "bg-foreground text-background shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_75%,transparent)] hover:bg-foreground/88",
+          "bg-foreground text-background shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_75%,transparent)] hover:bg-foreground/88 active:bg-foreground/95",
         variant === "secondary" &&
-          "border border-input bg-card text-foreground hover:border-primary/35 hover:bg-muted",
+          "border border-input bg-card text-foreground hover:border-primary/35 hover:bg-muted active:bg-muted",
         variant === "ghost" && "text-muted-foreground hover:bg-muted hover:text-foreground",
+        inert && "pointer-events-none opacity-45 shadow-none",
         className,
       )}
 
     >
-      {icon}
+      {loading ? <Spinner size={size === "sm" ? 12 : 14} /> : icon}
       {children}
     </button>
   );
@@ -112,11 +136,13 @@ export function IconButton({
   onClick,
   label,
   className,
+  active,
 }: {
   children: ReactNode;
   onClick?: (() => void) | undefined;
   label: string;
   className?: string | undefined;
+  active?: boolean | undefined;
 }) {
   return (
     <button
@@ -125,7 +151,8 @@ export function IconButton({
       title={label}
       onClick={onClick}
       className={cn(
-        "interactive inline-flex h-9 w-9 items-center justify-center rounded-[8px] border border-transparent text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 outline-none",
+        "interactive focus-ring inline-flex h-11 w-11 items-center justify-center rounded-[8px] border border-transparent text-muted-foreground hover:bg-muted hover:text-foreground active:bg-muted md:h-9 md:w-9",
+        active && "border-primary/25 bg-primary/[0.08] text-primary",
         className,
       )}
     >
@@ -133,6 +160,69 @@ export function IconButton({
     </button>
   );
 }
+
+/* ---------- Контекстное меню «•••» ---------- */
+
+export function ContextMenu({
+  items,
+  label = "Действия",
+  className,
+}: {
+  items: { label: string; onSelect?: () => void; disabled?: boolean }[];
+  label?: string | undefined;
+  className?: string | undefined;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", onDoc);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className={cn("relative", className)}>
+      <IconButton
+        label={label}
+        active={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <IconMore size={16} />
+      </IconButton>
+      {open ? (
+        <div className="anim-pop elev-overlay absolute right-0 top-[calc(100%+6px)] z-40 min-w-[210px] overflow-hidden rounded-[10px] border border-border bg-popover py-1">
+          {items.map((it) => (
+            <button
+              key={it.label}
+              type="button"
+              disabled={it.disabled}
+              onClick={() => {
+                setOpen(false);
+                it.onSelect?.();
+              }}
+              className={cn(
+                "flex w-full items-center px-3 py-2.5 text-left text-[13px] transition-colors duration-150 hover:bg-muted",
+                it.disabled && "pointer-events-none opacity-45",
+              )}
+            >
+              {it.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 
 /* ---------- StatusBadge ---------- */
 
