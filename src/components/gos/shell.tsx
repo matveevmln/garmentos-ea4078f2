@@ -171,7 +171,7 @@ function SidebarBody({
   mobile?: boolean;
 }) {
   return (
-    <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
+    <div className="rail-ambient isolate flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div
         className={cn(
           "flex items-center gap-2.5 px-5",
