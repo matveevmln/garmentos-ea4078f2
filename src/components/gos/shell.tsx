@@ -116,7 +116,7 @@ function NavGroup({
               >
                 <span
                   className={cn(
-                    "absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-sidebar-primary transition-[opacity,transform] duration-200",
+                    "absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-sidebar-primary shadow-[0_0_12px_0_color-mix(in_oklab,var(--sidebar-primary)_70%,transparent)] transition-[opacity,transform] duration-200",
                     isActive ? "scale-y-100 opacity-100" : "scale-y-50 opacity-0",
                   )}
                 />
