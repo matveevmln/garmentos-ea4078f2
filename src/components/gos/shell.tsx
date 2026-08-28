@@ -243,8 +243,9 @@ export function AppShell({
   const backdropRef = useRef<HTMLDivElement | null>(null);
   const PANEL_W = 300;
 
-  // Панель смонтирована всегда: жест не ждёт монтирования и идёт за пальцем.
-  const applyDrag = (x: number, w: number) => {
+  // Панель смонтирована всегда. Подготовка слоя выполняется один раз,
+  // а в горячем touchmove меняется только compositor-friendly transform.
+  const prepareDrag = () => {
     const panel = panelRef.current;
     const backdrop = backdropRef.current;
     const layer = layerRef.current;
@@ -253,8 +254,13 @@ export function AppShell({
     layer.style.visibility = "visible";
     panel.style.transition = "none";
     backdrop.style.transition = "none";
+    backdrop.style.opacity = "1";
+  };
+
+  const applyDrag = (x: number) => {
+    const panel = panelRef.current;
+    if (!panel) return;
     panel.style.transform = `translate3d(${x}px,0,0)`;
-    backdrop.style.opacity = String(Math.max(0, Math.min(1, 1 + x / w)));
   };
 
   const clearDrag = () => {
@@ -301,7 +307,7 @@ export function AppShell({
       const dx = p.clientX - g.startX;
       const dy = p.clientY - g.startY;
       if (!g.active) {
-        if (Math.abs(dx) < 2) return;
+        if (Math.abs(dx) < 1) return;
         if (Math.abs(dy) > Math.abs(dx)) {
           gesture.current = null;
           window.removeEventListener("touchmove", move);
@@ -309,6 +315,7 @@ export function AppShell({
         }
         if (g.from === "edge" && dx <= 0) return;
         g.active = true;
+        prepareDrag();
       }
       if (ev.cancelable) ev.preventDefault();
       const now = performance.now();
@@ -321,7 +328,7 @@ export function AppShell({
           ? Math.min(0, -g.width + Math.max(0, dx))
           : Math.max(-g.width, Math.min(0, dx));
       g.offset = next;
-      applyDrag(next, g.width);
+      applyDrag(next);
     };
 
     const end = () => {
@@ -335,8 +342,23 @@ export function AppShell({
       const flickOpen = g.velocity > 0.5 && dist > 40;
       const flickClose = g.velocity < -0.5;
       const open = flickOpen || (!flickClose && g.offset > -g.width / 2);
-      clearDrag();
+      const panel = panelRef.current;
+      const backdrop = backdropRef.current;
+      const layer = layerRef.current;
+      if (panel) {
+        panel.style.transition = "transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1)";
+        panel.style.transform = open ? "translate3d(0,0,0)" : `translate3d(${-g.width}px,0,0)`;
+      }
+      if (backdrop) {
+        backdrop.style.transition = "opacity 180ms ease-out";
+        backdrop.style.opacity = open ? "1" : "0";
+      }
+      if (layer) {
+        layer.style.pointerEvents = open ? "auto" : "none";
+        layer.style.visibility = "visible";
+      }
       setMobileNavOpen(open);
+      window.setTimeout(clearDrag, 210);
     };
 
     window.addEventListener("touchmove", move, { passive: false });
@@ -407,7 +429,7 @@ export function AppShell({
           ref={panelRef}
           className={cn(
             "elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar transition-transform duration-200 ease-out will-change-transform",
-            mobileNavOpen ? "translate-x-0" : "-translate-x-full",
+            mobileNavOpen ? "[transform:translate3d(0,0,0)]" : "[transform:translate3d(-100%,0,0)]",
           )}
           style={{ touchAction: "pan-y" }}
         >
