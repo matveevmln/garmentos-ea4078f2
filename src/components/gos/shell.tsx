@@ -547,7 +547,7 @@ export function AppShell({
       </div>
 
       {/* Mobile bottom navigation */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card/97 pb-[env(safe-area-inset-bottom)] shadow-[0_-2px_12px_color-mix(in_oklab,var(--foreground)_7%,transparent)] backdrop-blur md:hidden">
+      <nav className="glass-bar fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t pb-[env(safe-area-inset-bottom)] shadow-[0_-2px_18px_color-mix(in_oklab,var(--foreground)_8%,transparent)] md:hidden">
         {MOBILE_NAV.map((it) => {
           const Icon = it.icon;
           const isActive = active === it.key || (it.key === "batches" && active === "passport");
