@@ -341,16 +341,17 @@ export function MetricStrip({
           key={m.label}
           className="surface-card group flex flex-col rounded-[10px] px-4 py-4 transition-shadow hover:shadow-[0_2px_8px_color-mix(in_oklab,var(--foreground)_7%,transparent)]"
         >
-          <div className="text-[12px] leading-tight text-muted-foreground">{m.label}</div>
+          <div className="t-meta uppercase tracking-[0.06em]">{m.label}</div>
           <div
             className={cn(
-              "num mt-3 text-[30px] leading-none font-semibold tracking-[-0.03em]",
+              "t-figure mt-3.5 text-[32px]",
               m.tone === "danger" && "text-danger",
               m.tone === "warning" && "text-warning",
             )}
           >
             {m.value}
           </div>
+
           <span
             className={cn(
               "mt-4 block h-px w-full",
