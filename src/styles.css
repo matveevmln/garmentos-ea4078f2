@@ -118,7 +118,55 @@
   --sidebar-accent-foreground: oklch(0.98 0.003 80);
   --sidebar-border: oklch(0.28 0.005 60);
   --sidebar-ring: oklch(0.72 0.135 60);
+
+  /* ====== Токены: радиусы ====== */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 12px;
+  --r-2xl: 16px;
+  --r-pill: 999px;
+
+  /* ====== Токены: движение ====== */
+  --dur-1: 120ms;   /* мгновенная реакция: press, цвет */
+  --dur-2: 180ms;   /* hover / focus */
+  --dur-3: 240ms;   /* раскрытие, появление */
+  --dur-4: 320ms;   /* панели, drawer */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 0.7, 0.4);
+  --ease-emphasis: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* ====== Токены: тени ====== */
+  --shadow-1:
+    0 1px 2px color-mix(in oklab, var(--foreground) 5%, transparent),
+    0 1px 1px color-mix(in oklab, var(--foreground) 3%, transparent);
+  --shadow-2:
+    0 2px 4px color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 8px 20px -8px color-mix(in oklab, var(--foreground) 12%, transparent);
+  --shadow-3:
+    0 4px 10px color-mix(in oklab, var(--foreground) 8%, transparent),
+    0 18px 42px -12px color-mix(in oklab, var(--foreground) 20%, transparent);
+  --shadow-4:
+    0 8px 18px color-mix(in oklab, var(--foreground) 10%, transparent),
+    0 32px 64px -16px color-mix(in oklab, var(--foreground) 26%, transparent);
+  --shadow-overlay:
+    0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent),
+    0 12px 24px -8px color-mix(in oklab, var(--foreground) 14%, transparent),
+    0 36px 72px -24px color-mix(in oklab, var(--foreground) 28%, transparent);
+
+  /* ====== Токены: фокус ====== */
+  --focus-color: color-mix(in oklab, var(--primary) 48%, transparent);
+  --focus-halo: color-mix(in oklab, var(--primary) 12%, transparent);
+  --focus-offset-color: var(--card);
+  --focus-width: 2px;
+
+  /* ====== Токены: стекло ====== */
+  --glass-bg: color-mix(in oklab, var(--card) 72%, transparent);
+  --glass-border: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --glass-blur: 18px;
 }
+
 
 
 .dark {
@@ -322,27 +370,19 @@
 /* ====== Глубина: уровни поверхностей ====== */
 
 @utility elev-1 {
-  box-shadow:
-    0 1px 2px color-mix(in oklab, var(--foreground) 5%, transparent),
-    0 1px 1px color-mix(in oklab, var(--foreground) 3%, transparent);
+  box-shadow: var(--shadow-1);
 }
 
 @utility elev-2 {
-  box-shadow:
-    0 2px 4px color-mix(in oklab, var(--foreground) 6%, transparent),
-    0 8px 20px -8px color-mix(in oklab, var(--foreground) 12%, transparent);
+  box-shadow: var(--shadow-2);
 }
 
 @utility elev-3 {
-  box-shadow:
-    0 4px 10px color-mix(in oklab, var(--foreground) 8%, transparent),
-    0 18px 42px -12px color-mix(in oklab, var(--foreground) 20%, transparent);
+  box-shadow: var(--shadow-3);
 }
 
 @utility elev-4 {
-  box-shadow:
-    0 8px 18px color-mix(in oklab, var(--foreground) 10%, transparent),
-    0 32px 64px -16px color-mix(in oklab, var(--foreground) 26%, transparent);
+  box-shadow: var(--shadow-4);
 }
 
 /* Едва заметный градиент материала поверхности */
@@ -357,14 +397,14 @@
 /* Интерактивность: мягкий hover + внятный press */
 @utility interactive {
   transition:
-    background-color 180ms ease,
-    border-color 180ms ease,
-    color 180ms ease,
-    box-shadow 180ms ease,
-    transform 140ms ease;
+    background-color var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    transform var(--dur-1) var(--ease-out);
 
   &:active {
-    transform: translateY(0.5px);
+    transform: translateY(0.5px) scale(0.995);
   }
 }
 
@@ -374,10 +414,56 @@
 
   &:focus-visible {
     box-shadow:
-      0 0 0 2px var(--card),
-      0 0 0 4px color-mix(in oklab, var(--primary) 45%, transparent);
+      0 0 0 var(--focus-width) var(--focus-offset-color),
+      0 0 0 calc(var(--focus-width) + 2px) var(--focus-color),
+      0 0 0 calc(var(--focus-width) + 7px) var(--focus-halo);
+    border-color: color-mix(in oklab, var(--primary) 45%, var(--border));
   }
 }
+
+/* Интерактивная строка таблицы / списка */
+@utility row-interactive {
+  transition:
+    background-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out);
+
+  &:hover {
+    background-color: color-mix(in oklab, var(--primary) 4%, var(--muted));
+    box-shadow: inset 2px 0 0 0 color-mix(in oklab, var(--primary) 55%, transparent);
+  }
+
+  &:active {
+    background-color: color-mix(in oklab, var(--primary) 7%, var(--muted));
+  }
+}
+
+/* Поле ввода: единая логика hover / focus */
+@utility field {
+  transition:
+    border-color var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    background-color var(--dur-2) var(--ease-out);
+
+  &:hover {
+    border-color: color-mix(in oklab, var(--primary) 22%, var(--border));
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border-color: color-mix(in oklab, var(--primary) 55%, var(--border));
+    box-shadow: 0 0 0 4px var(--focus-halo);
+  }
+}
+
+/* Стеклянная плавающая поверхность: popover, палитра, drawer, floating controls */
+@utility glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-overlay);
+}
+
 
 /* Идентификатор: номер партии, артикул, код */
 @utility t-id {
@@ -406,10 +492,7 @@
 
 /* Оверлей верхнего уровня: диалоги, палитра команд, popover */
 @utility elev-overlay {
-  box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent),
-    0 12px 24px -8px color-mix(in oklab, var(--foreground) 14%, transparent),
-    0 36px 72px -24px color-mix(in oklab, var(--foreground) 28%, transparent);
+  box-shadow: var(--shadow-overlay);
 }
 
 @keyframes gos-dialog-in {
@@ -418,7 +501,7 @@
 }
 
 @utility anim-dialog {
-  animation: gos-dialog-in 180ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-dialog-in var(--dur-2) var(--ease-out) both;
 }
 
 
@@ -485,27 +568,27 @@
 }
 
 @utility anim-content {
-  animation: gos-content-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-content-in var(--dur-3) var(--ease-out) both;
 }
 
 @utility anim-overlay {
-  animation: gos-overlay-in 180ms ease-out both;
+  animation: gos-overlay-in var(--dur-2) var(--ease-out) both;
 }
 
 @utility anim-sheet {
-  animation: gos-sheet-up 240ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-sheet-up var(--dur-4) var(--ease-out) both;
 }
 
 @utility anim-panel {
-  animation: gos-panel-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-panel-in var(--dur-3) var(--ease-out) both;
 }
 
 @utility anim-panel-left {
-  animation: gos-panel-in-left 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-panel-in-left var(--dur-3) var(--ease-out) both;
 }
 
 @utility anim-pop {
-  animation: gos-pop-in 150ms ease-out both;
+  animation: gos-pop-in var(--dur-2) var(--ease-out) both;
 }
 
 /* Сдержанный skeleton shimmer */
@@ -525,7 +608,7 @@
 @utility collapsible {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: grid-template-rows var(--dur-3) var(--ease-out);
 
   & > * {
     overflow: hidden;
@@ -632,16 +715,18 @@
 /* Подъём карточки при наведении */
 @utility lift {
   transition:
-    transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1),
-    box-shadow 200ms ease,
-    border-color 200ms ease;
+    transform var(--dur-3) var(--ease-out),
+    box-shadow var(--dur-3) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out);
 
   &:hover {
     transform: translateY(-2px);
+    box-shadow: var(--shadow-3);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.997);
+    box-shadow: var(--shadow-1);
   }
 }
 
@@ -726,9 +811,9 @@
 
 /* Стеклянная панель: полупрозрачность + размытие подложки */
 @utility glass-bar {
-  background: color-mix(in oklab, var(--card) 74%, transparent);
-  backdrop-filter: blur(18px) saturate(150%);
-  border-color: color-mix(in oklab, var(--border) 80%, transparent);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  border-color: var(--glass-border);
 }
 
 /* Ambient-свет внутри тёмного рельса */
@@ -771,9 +856,20 @@
 
 /* Мягкий световой ореол интерактивного элемента при наведении */
 @utility hover-halo {
-  transition: box-shadow 200ms ease, border-color 200ms ease, background-color 200ms ease;
+  transition:
+    box-shadow var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    background-color var(--dur-2) var(--ease-out);
 
   &:hover {
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 8%, transparent);
   }
+}
+
+
+/* Фокус внутри тёмного рельса: подложка и цвет от токенов сайдбара */
+[data-rail] {
+  --focus-offset-color: var(--sidebar);
+  --focus-color: color-mix(in oklab, var(--sidebar-primary) 60%, transparent);
+  --focus-halo: color-mix(in oklab, var(--sidebar-primary) 14%, transparent);
 }

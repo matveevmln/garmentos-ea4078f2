@@ -200,7 +200,7 @@ export function ContextMenu({
         <IconMore size={16} />
       </IconButton>
       {open ? (
-        <div className="anim-pop elev-overlay absolute right-0 top-[calc(100%+6px)] z-40 min-w-[210px] overflow-hidden rounded-[10px] border border-border bg-popover py-1">
+        <div className="anim-pop glass-panel absolute right-0 top-[calc(100%+6px)] z-40 min-w-[210px] overflow-hidden rounded-[10px] py-1">
           {items.map((it) => (
             <button
               key={it.label}
@@ -211,7 +211,7 @@ export function ContextMenu({
                 it.onSelect?.();
               }}
               className={cn(
-                "flex w-full items-center px-3 py-2.5 text-left text-[13px] transition-colors duration-150 hover:bg-muted",
+                "focus-ring flex w-full items-center px-3 py-2.5 text-left text-[13px] transition-colors duration-150 hover:bg-primary/[0.07] active:bg-primary/[0.11]",
                 it.disabled && "pointer-events-none opacity-45",
               )}
             >
@@ -383,7 +383,7 @@ export function SearchField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-10 w-full rounded-[10px] border border-border bg-card pl-8 pr-3 text-[13px] outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-ring/20 md:h-9"
+        className="field h-10 w-full rounded-[10px] border border-border bg-card pl-8 pr-3 text-[13px] placeholder:text-muted-foreground md:h-9"
       />
     </div>
   );
@@ -584,7 +584,7 @@ export function DataTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border [&>tr]:cursor-pointer [&>tr]:transition-colors [&>tr]:duration-150 [&>tr:hover]:bg-muted">
+        <tbody className="divide-y divide-border [&>tr]:row-interactive [&>tr]:cursor-pointer">
           {children}
         </tbody>
 
@@ -627,7 +627,7 @@ export function MobileListItem({
     <button
       type="button"
       onClick={onClick}
-      className="interactive focus-ring elev-1 min-h-[56px] w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/25 active:bg-muted/50"
+      className="interactive focus-ring elev-1 min-h-[56px] w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/30 hover:elev-2 active:bg-muted/50"
     >
       {children}
     </button>
@@ -705,7 +705,7 @@ export function Drawer({
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="anim-sheet elev-4 relative flex max-h-[85vh] w-full flex-col rounded-t-[14px] border border-border bg-card sm:anim-panel sm:h-full sm:max-h-none sm:w-[420px] sm:rounded-none sm:rounded-l-[10px]">
+      <div className="anim-sheet glass-panel relative flex max-h-[85vh] w-full flex-col rounded-t-[14px] sm:anim-panel sm:h-full sm:max-h-none sm:w-[420px] sm:rounded-none sm:rounded-l-[10px]">
         <span className="mx-auto mt-2 block h-1 w-9 rounded-full bg-border sm:hidden" aria-hidden="true" />
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h3 className="text-[13px] font-semibold">{title}</h3>

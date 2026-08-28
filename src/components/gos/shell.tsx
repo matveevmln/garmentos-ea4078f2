@@ -120,7 +120,7 @@ function NavGroup({
                     isActive ? "scale-y-100 opacity-100" : "scale-y-50 opacity-0",
                   )}
                 />
-                <span className={cn("transition-colors", isActive ? "text-sidebar-primary" : "text-current")}>
+                <span className={cn("transition-[color,transform] duration-200 group-hover:translate-x-[1px]", isActive ? "text-sidebar-primary" : "text-current")}>
                   <Icon size={mobile ? 18 : 17} />
                 </span>
                 {!collapsed ? <span className="truncate">{it.label}</span> : null}
@@ -171,7 +171,7 @@ function SidebarBody({
   mobile?: boolean;
 }) {
   return (
-    <div className="rail-ambient isolate flex h-full flex-col bg-sidebar text-sidebar-foreground">
+    <div data-rail className="rail-ambient isolate flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div
         className={cn(
           "flex items-center gap-2.5 px-5",
@@ -486,7 +486,7 @@ export function AppShell({
             type="button"
             aria-label="Закрыть меню"
             onClick={closeNav}
-            className="interactive absolute right-2 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-[8px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            className="interactive focus-ring absolute right-2 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-[8px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
           >
             <IconClose size={18} />
           </button>
