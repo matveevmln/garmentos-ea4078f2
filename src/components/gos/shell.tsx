@@ -110,13 +110,13 @@ function NavGroup({
                   mobile ? "min-h-[48px] py-3 text-[15px]" : "py-2.5 text-[13.5px]",
                   collapsed && "justify-center px-0",
                   isActive
-                    ? "bg-[color-mix(in_oklab,var(--sidebar-primary)_14%,var(--sidebar))] font-medium text-sidebar-foreground"
+                    ? "nav-active font-medium text-sidebar-foreground"
                     : "text-sidebar-foreground/60 hover:bg-sidebar-accent/70 hover:text-sidebar-foreground",
                 )}
               >
                 <span
                   className={cn(
-                    "absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-sidebar-primary transition-[opacity,transform] duration-200",
+                    "absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-sidebar-primary shadow-[0_0_12px_0_color-mix(in_oklab,var(--sidebar-primary)_70%,transparent)] transition-[opacity,transform] duration-200",
                     isActive ? "scale-y-100 opacity-100" : "scale-y-50 opacity-0",
                   )}
                 />
@@ -171,7 +171,7 @@ function SidebarBody({
   mobile?: boolean;
 }) {
   return (
-    <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
+    <div className="rail-ambient isolate flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div
         className={cn(
           "flex items-center gap-2.5 px-5",
@@ -438,7 +438,7 @@ export function AppShell({
   };
 
   return (
-    <div className="min-h-screen w-full bg-background text-foreground">
+    <div className="ambient-field isolate min-h-screen w-full bg-background text-foreground">
       {/* Sidebar — desktop */}
       <aside
         className={cn(
@@ -496,7 +496,7 @@ export function AppShell({
 
       <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[64px]" : "md:pl-[260px]")}>
         {/* TopBar */}
-        <header className="sticky top-0 z-20 flex h-[60px] items-center gap-2 border-b border-border bg-card/92 px-3 shadow-[0_1px_0_0_color-mix(in_oklab,var(--foreground)_4%,transparent)] backdrop-blur-md md:px-8">
+        <header className="glass-bar sticky top-0 z-20 flex h-[60px] items-center gap-2 border-b px-3 shadow-[0_1px_0_0_color-mix(in_oklab,var(--foreground)_4%,transparent),0_10px_24px_-22px_color-mix(in_oklab,var(--foreground)_45%,transparent)] md:px-8">
           <IconButton label="Меню" className="md:hidden" onClick={() => setMobileNavOpen((v) => !v)}>
 
             <IconMenu size={18} />
@@ -547,7 +547,7 @@ export function AppShell({
       </div>
 
       {/* Mobile bottom navigation */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card/97 pb-[env(safe-area-inset-bottom)] shadow-[0_-2px_12px_color-mix(in_oklab,var(--foreground)_7%,transparent)] backdrop-blur md:hidden">
+      <nav className="glass-bar fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t pb-[env(safe-area-inset-bottom)] shadow-[0_-2px_18px_color-mix(in_oklab,var(--foreground)_8%,transparent)] md:hidden">
         {MOBILE_NAV.map((it) => {
           const Icon = it.icon;
           const isActive = active === it.key || (it.key === "batches" && active === "passport");
