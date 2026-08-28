@@ -226,11 +226,25 @@ export function AppShell({
             <IconPanel size={16} />
           </IconButton>
           <span className="truncate text-[13px] font-semibold">{topbarTitle}</span>
-          <span className="ml-auto hidden items-center gap-2 text-[11px] text-muted-foreground md:flex">
-            <span className="num rounded-[4px] border border-border bg-muted/50 px-1.5 py-[3px]">
+          <span className="ml-auto flex items-center gap-2 text-[11px] text-muted-foreground">
+            <button
+              type="button"
+              onClick={() => go("states")}
+              className={cn(
+                "inline-flex h-8 items-center gap-1.5 rounded-[6px] border px-2 text-[11px] font-medium transition-colors",
+                active === "states"
+                  ? "border-primary/30 bg-primary/[0.08] text-primary"
+                  : "border-border bg-card text-muted-foreground hover:text-foreground",
+              )}
+            >
+              <IconStates size={14} />
+              Состояния
+            </button>
+            <span className="num hidden rounded-[4px] border border-border bg-muted/50 px-1.5 py-[3px] md:inline-flex">
               Прототип · демо-данные
             </span>
           </span>
+
         </header>
 
         <main className="flex-1 px-3 py-4 pb-24 md:px-6 md:py-6 md:pb-8">{children}</main>
