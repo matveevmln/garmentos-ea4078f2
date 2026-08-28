@@ -87,15 +87,16 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
             <div className="mt-3 hidden md:block">
               <table className="w-full border-collapse text-[13px]">
                 <thead>
-                  <tr className="border-t border-border text-left text-[12px] text-muted-foreground">
-                    <th className="h-10 px-4 font-normal">№</th>
-                    <th className="h-10 px-4 font-normal">Модель</th>
-                    <th className="h-10 px-4 font-normal">Цех</th>
-                    <th className="h-10 px-4 text-right font-normal">Кол-во</th>
-                    <th className="h-10 px-4 text-right font-normal">Срок</th>
-                    <th className="h-10 px-4 text-right font-normal">Статус</th>
+                  <tr className="border-t border-border text-left text-[11.5px] uppercase tracking-[0.06em] text-muted-foreground">
+                    <th className="h-10 px-4 font-medium">№</th>
+                    <th className="h-10 px-4 font-medium">Модель</th>
+                    <th className="h-10 px-4 font-medium">Цех</th>
+                    <th className="h-10 px-4 text-right font-medium">Кол-во</th>
+                    <th className="h-10 px-4 text-right font-medium">Срок</th>
+                    <th className="h-10 px-4 text-right font-medium">Статус</th>
                   </tr>
                 </thead>
+
                 <tbody className="divide-y divide-border border-t border-border">
 
                   {inWork.map((b) => (
