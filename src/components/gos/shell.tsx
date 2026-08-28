@@ -246,58 +246,65 @@ export function AppShell({
     return () => window.clearTimeout(t);
   }, [closing]);
 
-  const panelWidth = () => Math.min(PANEL_W, window.innerWidth * 0.86);
+  const panelWidth = () => panelWidthSafe(PANEL_W);
 
-  const onEdgeStart = (e: React.TouchEvent) => {
+  // Жест ведём на window: зона у края может размонтироваться в процессе свайпа.
+  const startGesture = (e: React.TouchEvent, from: "edge" | "panel") => {
     const t = e.touches[0];
     if (!t) return;
-    gesture.current = { startX: t.clientX, startY: t.clientY, active: false, from: "edge" };
-  };
+    gesture.current = { startX: t.clientX, startY: t.clientY, active: false, from, offset: -panelWidth() };
+    if (from === "panel") gesture.current.offset = 0;
 
-  const onPanelStart = (e: React.TouchEvent) => {
-    const t = e.touches[0];
-    if (!t) return;
-    gesture.current = { startX: t.clientX, startY: t.clientY, active: false, from: "panel" };
-  };
+    const move = (ev: TouchEvent) => {
+      const g = gesture.current;
+      const p = ev.touches[0];
+      if (!g || !p) return;
+      const dx = p.clientX - g.startX;
+      const dy = p.clientY - g.startY;
+      if (!g.active) {
+        if (Math.abs(dy) > Math.abs(dx) || Math.abs(dx) < 8) return;
+        g.active = true;
+        if (g.from === "edge") {
+          setClosing(false);
+          setMobileNavOpen(true);
+        }
+      }
+      if (ev.cancelable) ev.preventDefault();
+      const w = panelWidth();
+      const next =
+        g.from === "edge"
+          ? Math.min(0, -w + Math.max(0, dx))
+          : Math.max(-w, Math.min(0, dx));
+      g.offset = next;
+      setDragX(next);
+    };
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    const g = gesture.current;
-    const t = e.touches[0];
-    if (!g || !t) return;
-    const dx = t.clientX - g.startX;
-    const dy = t.clientY - g.startY;
-    if (!g.active) {
-      if (Math.abs(dy) > Math.abs(dx) || Math.abs(dx) < 8) return;
-      g.active = true;
-      if (g.from === "edge") {
+    const end = () => {
+      window.removeEventListener("touchmove", move);
+      window.removeEventListener("touchend", end);
+      window.removeEventListener("touchcancel", end);
+      const g = gesture.current;
+      gesture.current = null;
+      if (!g || !g.active) {
+        setDragX(null);
+        return;
+      }
+      if (g.offset > -panelWidth() / 2) {
+        setDragX(null);
         setClosing(false);
         setMobileNavOpen(true);
+      } else {
+        closeNav();
       }
-    }
-    const w = panelWidth();
-    if (g.from === "edge") {
-      setDragX(Math.min(0, -w + Math.max(0, dx)));
-    } else {
-      setDragX(Math.max(-w, Math.min(0, dx)));
-    }
+    };
+
+    window.addEventListener("touchmove", move, { passive: false });
+    window.addEventListener("touchend", end);
+    window.addEventListener("touchcancel", end);
   };
 
-  const onTouchEnd = () => {
-    const g = gesture.current;
-    gesture.current = null;
-    if (!g || !g.active) {
-      setDragX(null);
-      return;
-    }
-    const w = panelWidth();
-    const offset = dragX ?? 0;
-    if (offset > -w / 2) {
-      setDragX(null);
-      setMobileNavOpen(true);
-    } else {
-      closeNav();
-    }
-  };
+  const onEdgeStart = (e: React.TouchEvent) => startGesture(e, "edge");
+  const onPanelStart = (e: React.TouchEvent) => startGesture(e, "panel");
 
   const dragging = dragX !== null;
   const progress = dragging ? 1 + dragX / panelWidthSafe(PANEL_W) : 1;
