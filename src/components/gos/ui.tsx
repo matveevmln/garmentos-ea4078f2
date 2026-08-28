@@ -72,7 +72,7 @@ type ButtonProps = {
   children: ReactNode;
   variant?: "primary" | "secondary" | "ghost" | undefined;
   size?: "sm" | "md" | undefined;
-  onClick?: () => void | undefined;
+  onClick?: (() => void) | undefined;
   className?: string | undefined;
   icon?: ReactNode | undefined;
   type?: "button" | undefined;
@@ -114,7 +114,7 @@ export function IconButton({
   className,
 }: {
   children: ReactNode;
-  onClick?: () => void | undefined;
+  onClick?: (() => void) | undefined;
   label: string;
   className?: string | undefined;
 }) {
@@ -359,7 +359,7 @@ export function AttentionList({
   onSelect,
 }: {
   items: { id: string; tone: "danger" | "warning"; title: string; meta: string; sub: string }[];
-  onSelect?: (id: string) => void | undefined;
+  onSelect?: ((id: string) => void) | undefined;
 }) {
   return (
     <ul className="divide-y divide-border">
@@ -461,7 +461,7 @@ export function MobileListItem({
   onClick,
   children,
 }: {
-  onClick?: () => void | undefined;
+  onClick?: (() => void) | undefined;
   children: ReactNode;
 }) {
   return (
