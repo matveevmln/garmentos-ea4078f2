@@ -496,7 +496,7 @@ export function AppShell({
 
       <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[64px]" : "md:pl-[260px]")}>
         {/* TopBar */}
-        <header className="sticky top-0 z-20 flex h-[60px] items-center gap-2 border-b border-border bg-card/92 px-3 shadow-[0_1px_0_0_color-mix(in_oklab,var(--foreground)_4%,transparent)] backdrop-blur-md md:px-8">
+        <header className="glass-bar sticky top-0 z-20 flex h-[60px] items-center gap-2 border-b px-3 shadow-[0_1px_0_0_color-mix(in_oklab,var(--foreground)_4%,transparent),0_10px_24px_-22px_color-mix(in_oklab,var(--foreground)_45%,transparent)] md:px-8">
           <IconButton label="Меню" className="md:hidden" onClick={() => setMobileNavOpen((v) => !v)}>
 
             <IconMenu size={18} />
