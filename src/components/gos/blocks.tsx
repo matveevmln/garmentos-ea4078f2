@@ -115,25 +115,25 @@ export function CostBreakdown({
     <div>
       <ul className="divide-y divide-border">
         {rows.map((r) => (
-          <li key={r.label} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1.5 py-2.5 md:grid-cols-[160px_1fr_110px_120px_44px]">
+          <li key={r.label} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1.5 py-2.5 lg:grid-cols-[minmax(0,150px)_minmax(0,1fr)_100px_110px_44px]">
             <span className="text-[13px] font-medium">{r.label}</span>
-            <span className="order-3 col-span-2 h-1.5 overflow-hidden rounded-full bg-muted md:order-none md:col-span-1">
+            <span className="order-3 col-span-2 h-1.5 overflow-hidden rounded-full bg-muted lg:order-none lg:col-span-1">
               <span className="block h-full rounded-full bg-primary/60" style={{ width: `${r.share}%` }} />
             </span>
-            <span className="num text-right text-[12px] text-muted-foreground md:text-left">{r.unit}</span>
-            <span className="num order-4 text-right text-[13px] md:order-none">{r.total}</span>
-            <span className="num order-5 hidden text-right text-[12px] text-muted-foreground md:order-none md:block">
+            <span className="num text-right text-[12px] text-muted-foreground lg:text-left">{r.unit}</span>
+            <span className="num order-4 text-right text-[13px] lg:order-none">{r.total}</span>
+            <span className="num order-5 hidden text-right text-[12px] text-muted-foreground lg:order-none md:block">
               {r.share}%
             </span>
           </li>
         ))}
       </ul>
-      <div className="mt-1 grid grid-cols-[1fr_auto] items-center gap-4 border-t border-border pt-3 md:grid-cols-[160px_1fr_110px_120px_44px]">
+      <div className="mt-1 grid grid-cols-[1fr_auto] items-center gap-4 border-t border-border pt-3 lg:grid-cols-[minmax(0,150px)_minmax(0,1fr)_100px_110px_44px]">
         <span className="text-[13px] font-semibold">{total.label}</span>
-        <span className="hidden md:block" />
-        <span className="num hidden text-[12px] text-muted-foreground md:block">{total.unit}</span>
+        <span className="hidden lg:block" />
+        <span className="num hidden text-[12px] text-muted-foreground lg:block">{total.unit}</span>
         <span className="num text-right text-[14px] font-semibold">{total.total}</span>
-        <span className="hidden md:block" />
+        <span className="hidden lg:block" />
       </div>
     </div>
   );
