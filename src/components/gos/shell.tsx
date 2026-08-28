@@ -75,15 +75,16 @@ function NavGroup({
   collapsed: boolean;
 }) {
   return (
-    <div className="px-2">
+    <div className={cn("px-2", mobile && "px-3")}>
       {!collapsed ? (
-        <div className="px-2 pb-1.5 pt-4 text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground/80">
-          {label}
+        <div className="flex items-center gap-2 px-2 pb-2 pt-5">
+          <span className="eyebrow text-[10px] tracking-[0.16em] text-muted-foreground/70">{label}</span>
+          <span className="h-px flex-1 bg-border" />
         </div>
       ) : (
-        <div className="my-3 border-t border-border" />
+        <div className="mx-3 my-3 border-t border-border" />
       )}
-      <ul className="space-y-0.5">
+      <ul className="space-y-px">
         {items.map((it) => {
           const isActive = active === it.key || (it.key === "batches" && active === "passport");
           const Icon = it.icon;
@@ -94,17 +95,21 @@ function NavGroup({
                 onClick={() => onNavigate(it.key)}
                 title={it.label}
                 className={cn(
-                  "group relative flex w-full items-center gap-2.5 rounded-[6px] px-2 py-2 text-[13px] transition-colors",
+                  "group relative flex w-full items-center gap-3 rounded-[6px] pl-3 pr-2 text-[13px] transition-colors",
+                  mobile ? "min-h-[48px] py-3 text-[15px]" : "py-[7px]",
                   collapsed && "justify-center px-0",
                   isActive
-                    ? "bg-primary/[0.08] font-medium text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    ? "bg-primary/[0.06] font-semibold tracking-[-0.01em] text-primary"
+                    : "text-muted-foreground hover:bg-foreground/[0.035] hover:text-foreground",
                 )}
               >
-                {isActive ? (
-                  <span className="absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-r bg-primary" />
-                ) : null}
-                <Icon size={16} />
+                <span
+                  className={cn(
+                    "absolute left-0 top-1 bottom-1 w-[2px] rounded-r-[2px] transition-colors",
+                    isActive ? "bg-primary" : "bg-transparent",
+                  )}
+                />
+                <Icon size={mobile ? 18 : 16} />
                 {!collapsed ? <span className="truncate">{it.label}</span> : null}
               </button>
             </li>
@@ -119,26 +124,36 @@ function SidebarBody({
   active,
   onNavigate,
   collapsed,
+  mobile = false,
 }: {
   active: ScreenKey;
   onNavigate: (k: ScreenKey) => void;
   collapsed: boolean;
+  mobile?: boolean;
 }) {
   return (
     <div className="flex h-full flex-col">
       <div
         className={cn(
-          "flex h-[52px] items-center gap-2.5 border-b border-border px-4",
+          "flex items-center gap-2.5 border-b border-border px-4",
+          mobile ? "h-[64px]" : "h-[52px]",
           collapsed && "justify-center px-0",
         )}
       >
-        <span className="num inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[4px] bg-foreground text-[11px] font-semibold text-background">
+        <span className="num inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[3px] bg-foreground text-[11px] font-semibold text-background">
           G
         </span>
         {!collapsed ? (
-          <span className="text-[13px] font-semibold tracking-[-0.01em]">GarmentOS</span>
+          <span className="editorial flex items-baseline text-[14px]">
+            <span>Garment</span>
+            <span className="text-primary">OS</span>
+            <span className="num ml-2 text-[9px] font-medium uppercase tracking-[0.18em] text-muted-foreground/70">
+              atelier
+            </span>
+          </span>
         ) : null}
       </div>
+
 
       <nav className="flex-1 overflow-y-auto pb-4">
         <div className="pt-2">
