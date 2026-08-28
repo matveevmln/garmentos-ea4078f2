@@ -236,7 +236,7 @@ export function AppShell({
 
       <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[56px]" : "md:pl-[240px]")}>
         {/* TopBar */}
-        <header className="sticky top-0 z-20 flex h-[52px] items-center gap-2 border-b border-border bg-card/95 px-3 backdrop-blur md:px-6">
+        <header className="sticky top-0 z-20 flex h-[52px] items-center gap-2 border-b border-border bg-background/88 px-3 backdrop-blur-md md:px-6">
           <IconButton label="Меню" className="md:hidden" onClick={() => setMobileNavOpen(true)}>
             <IconMenu size={18} />
           </IconButton>
