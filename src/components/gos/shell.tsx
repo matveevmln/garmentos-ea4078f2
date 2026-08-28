@@ -229,7 +229,17 @@ export function AppShell({
   const [closing, setClosing] = useState(false);
   // Смещение панели во время жеста: null — жест не активен.
   const [dragX, setDragX] = useState<number | null>(null);
-  const gesture = useRef<{ startX: number; startY: number; active: boolean; from: "edge" | "panel"; offset: number } | null>(null);
+  const gesture = useRef<{
+    startX: number;
+    startY: number;
+    active: boolean;
+    from: "edge" | "panel";
+    offset: number;
+    lastX: number;
+    lastT: number;
+    velocity: number;
+  } | null>(null);
+  const edgeRef = useRef<HTMLDivElement | null>(null);
   const PANEL_W = 300;
 
   const closeNav = useCallback(() => {
@@ -249,15 +259,17 @@ export function AppShell({
   const panelWidth = () => panelWidthSafe(PANEL_W);
 
   // Жест ведём на window: зона у края может размонтироваться в процессе свайпа.
-  const startGesture = (e: React.TouchEvent, from: "edge" | "panel") => {
-    const t = e.touches[0];
-    if (!t) return;
+  const startGesture = useCallback((t: { clientX: number; clientY: number }, from: "edge" | "panel") => {
+    const w = panelWidthSafe(PANEL_W);
     gesture.current = {
       startX: t.clientX,
       startY: t.clientY,
       active: false,
       from,
-      offset: from === "panel" ? 0 : -panelWidth(),
+      offset: from === "panel" ? 0 : -w,
+      lastX: t.clientX,
+      lastT: performance.now(),
+      velocity: 0,
     };
 
     const move = (ev: TouchEvent) => {
@@ -267,15 +279,28 @@ export function AppShell({
       const dx = p.clientX - g.startX;
       const dy = p.clientY - g.startY;
       if (!g.active) {
-        if (Math.abs(dy) > Math.abs(dx) || Math.abs(dx) < 8) return;
+        // Порог минимальный: жест должен подхватываться практически сразу.
+        if (Math.abs(dx) < 3) return;
+        if (Math.abs(dy) > Math.abs(dx)) {
+          // Вертикальный скролл — отдаём странице.
+          gesture.current = null;
+          window.removeEventListener("touchmove", move);
+          return;
+        }
+        if (g.from === "edge" && dx <= 0) return;
         g.active = true;
         if (g.from === "edge") {
           setClosing(false);
           setMobileNavOpen(true);
         }
       }
+      // Перехватываем горизонтальный жест, чтобы браузер не сделал history.back().
       if (ev.cancelable) ev.preventDefault();
-      const w = panelWidth();
+      const now = performance.now();
+      const dt = now - g.lastT;
+      if (dt > 0) g.velocity = (p.clientX - g.lastX) / dt;
+      g.lastX = p.clientX;
+      g.lastT = now;
       const next =
         g.from === "edge"
           ? Math.min(0, -w + Math.max(0, dx))
@@ -294,7 +319,11 @@ export function AppShell({
         setDragX(null);
         return;
       }
-      if (g.offset > -panelWidth() / 2) {
+      const flickOpen = g.velocity > 0.35;
+      const flickClose = g.velocity < -0.35;
+      const passed = g.offset > -w / 2;
+      const open = flickOpen || (!flickClose && passed);
+      if (open) {
         setDragX(null);
         setClosing(false);
         setMobileNavOpen(true);
@@ -306,10 +335,25 @@ export function AppShell({
     window.addEventListener("touchmove", move, { passive: false });
     window.addEventListener("touchend", end);
     window.addEventListener("touchcancel", end);
-  };
+  }, [closeNav]);
 
-  const onEdgeStart = (e: React.TouchEvent) => startGesture(e, "edge");
-  const onPanelStart = (e: React.TouchEvent) => startGesture(e, "panel");
+  // Нативный non-passive listener на edge-зоне: даёт право отменить back-жест.
+  useEffect(() => {
+    const el = edgeRef.current;
+    if (!el) return;
+    const onStart = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      startGesture(t, "edge");
+    };
+    el.addEventListener("touchstart", onStart, { passive: false });
+    return () => el.removeEventListener("touchstart", onStart);
+  }, [startGesture, mobileNavOpen]);
+
+  const onPanelStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    if (t) startGesture(t, "panel");
+  };
 
   const dragging = dragX !== null;
   const progress = dragging ? 1 + dragX / panelWidthSafe(PANEL_W) : 1;
@@ -334,11 +378,13 @@ export function AppShell({
       {/* Зона edge-swipe: открытие меню свайпом от левого края */}
       {!mobileNavOpen ? (
         <div
+          ref={edgeRef}
           aria-hidden="true"
-          onTouchStart={onEdgeStart}
-          className="fixed left-0 top-0 bottom-[56px] z-40 w-5 touch-pan-y md:hidden"
+          style={{ touchAction: "pan-y" }}
+          className="fixed left-0 top-0 bottom-[56px] z-40 w-6 md:hidden"
         />
       ) : null}
+
 
       {/* Mobile nav drawer */}
       {mobileNavOpen ? (

@@ -161,6 +161,10 @@
     border-color: var(--color-border);
   }
 
+  html {
+    overscroll-behavior-x: none;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -169,6 +173,7 @@
     line-height: 1.5;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
+    overscroll-behavior-x: none;
   }
 
 
