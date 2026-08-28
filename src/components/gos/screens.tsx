@@ -85,7 +85,7 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
 
             {/* desktop / tablet */}
             <div className="mt-3 hidden md:block">
-              <table className="w-full border-collapse text-[13px]">
+              <table className="w-full table-fixed border-collapse text-[13px]">
                 <thead>
                   <tr className="border-t border-border text-left text-[11.5px] uppercase tracking-[0.06em] text-muted-foreground">
                     <th className="h-10 px-4 font-medium">№</th>
