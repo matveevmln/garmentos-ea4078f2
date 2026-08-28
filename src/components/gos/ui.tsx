@@ -254,10 +254,11 @@ export function PageHeader({
       {breadcrumbs}
       <div className="mt-1.5 flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="font-display text-[22px] font-semibold tracking-[-0.02em] md:text-[26px]">{title}</h1>
+          <h1 className="t-page md:text-[31px]">{title}</h1>
           {subtitle ? (
-            <p className="mt-1 max-w-[68ch] text-[13px] leading-[1.5] text-muted-foreground">{subtitle}</p>
+            <p className="t-secondary mt-1.5 max-w-[68ch]">{subtitle}</p>
           ) : null}
+
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
       </div>
