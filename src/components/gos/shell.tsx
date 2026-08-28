@@ -77,16 +77,15 @@ function NavGroup({
   mobile?: boolean;
 }) {
   return (
-    <div className={cn("px-2", mobile && "px-3")}>
+    <div className={cn("px-3", mobile && "px-3")}>
       {!collapsed ? (
-        <div className="flex items-center gap-2 px-2.5 pb-2 pt-5">
-          <span className="eyebrow text-[9px] tracking-[0.2em] text-sidebar-foreground/45">{label}</span>
-          <span className="h-px flex-1 bg-sidebar-border/70" />
+        <div className="px-3 pb-2 pt-6 text-[10px] font-medium uppercase tracking-[0.16em] text-sidebar-foreground/40">
+          {label}
         </div>
       ) : (
-        <div className="mx-3 my-3 border-t border-sidebar-border/70" />
+        <div className="mx-3 my-3 border-t border-sidebar-border/60" />
       )}
-      <ul className="space-y-px">
+      <ul className="space-y-0.5">
         {items.map((it) => {
           const isActive = active === it.key || (it.key === "batches" && active === "passport");
           const Icon = it.icon;
@@ -97,22 +96,22 @@ function NavGroup({
                 onClick={() => onNavigate(it.key)}
                 title={it.label}
                 className={cn(
-                  "group relative flex w-full items-center gap-3 rounded-[4px] pl-3 pr-2 text-[13px] transition-colors duration-150",
-                  mobile ? "min-h-[48px] py-3 text-[15px]" : "py-[7px]",
+                  "group relative flex w-full items-center gap-3 rounded-[8px] pl-3 pr-2 transition-colors duration-150",
+                  mobile ? "min-h-[48px] py-3 text-[15px]" : "py-2.5 text-[13.5px]",
                   collapsed && "justify-center px-0",
                   isActive
-                    ? "bg-sidebar-accent font-medium tracking-[-0.01em] text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground/62 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
+                    ? "bg-[color-mix(in_oklab,var(--sidebar-primary)_14%,var(--sidebar))] font-medium text-sidebar-foreground"
+                    : "text-sidebar-foreground/60 hover:bg-sidebar-accent/70 hover:text-sidebar-foreground",
                 )}
               >
                 <span
                   className={cn(
-                    "absolute left-0 top-1.5 bottom-1.5 w-[2px] rounded-r-[2px] transition-colors",
+                    "absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full transition-colors",
                     isActive ? "bg-sidebar-primary" : "bg-transparent",
                   )}
                 />
                 <span className={cn("transition-colors", isActive ? "text-sidebar-primary" : "text-current")}>
-                  <Icon size={mobile ? 18 : 16} />
+                  <Icon size={mobile ? 18 : 17} />
                 </span>
                 {!collapsed ? <span className="truncate">{it.label}</span> : null}
               </button>
@@ -122,9 +121,35 @@ function NavGroup({
       </ul>
     </div>
   );
+
+}
+
+/* Знак GarmentOS: игольное ушко и нить — собственный лаконичный монограм */
+function BrandMark() {
+  return (
+    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] bg-[color-mix(in_oklab,var(--sidebar-primary)_18%,var(--sidebar))]">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path
+          d="M10 2.5v7.2"
+          stroke="var(--sidebar-primary)"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+        <ellipse cx="10" cy="12.1" rx="2.5" ry="3.2" stroke="var(--sidebar-primary)" strokeWidth="1.6" />
+        <path
+          d="M4.2 17.5c1.9-1.5 3.8-1.5 5.8 0"
+          stroke="var(--sidebar-foreground)"
+          strokeOpacity="0.55"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+      </svg>
+    </span>
+  );
 }
 
 function SidebarBody({
+
   active,
   onNavigate,
   collapsed,
@@ -139,50 +164,46 @@ function SidebarBody({
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div
         className={cn(
-          "flex items-center gap-2.5 border-b border-sidebar-border/70 px-4",
-          mobile ? "h-[64px]" : "h-[52px]",
+          "flex items-center gap-2.5 px-5",
+          mobile ? "h-[72px]" : "h-[76px]",
           collapsed && "justify-center px-0",
         )}
       >
-        <span className="num inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[3px] bg-sidebar-primary text-[11px] font-semibold text-sidebar-primary-foreground">
-          G
-        </span>
+        <BrandMark />
         {!collapsed ? (
-          <span className="flex flex-col leading-none">
-            <span className="editorial text-[15px] text-sidebar-foreground">
-              Garment<span className="text-sidebar-primary">OS</span>
+          <span className="flex min-w-0 flex-col leading-none">
+            <span className="font-display text-[19px] font-semibold tracking-[-0.02em] text-sidebar-foreground">
+              GarmentOS
             </span>
-            <span className="num mt-1 text-[8px] uppercase tracking-[0.32em] text-sidebar-foreground/40">
-              atelier
+            <span className="mt-1.5 truncate text-[9.5px] uppercase tracking-[0.16em] text-sidebar-foreground/40">
+              production system
             </span>
           </span>
         ) : null}
       </div>
 
-
       <nav className="flex-1 overflow-y-auto pb-4">
-        <div className="pt-1">
-          <NavGroup label="Производство" items={NAV_PRIMARY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
-        </div>
+        <NavGroup label="Производство" items={NAV_PRIMARY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
         <NavGroup label="Снабжение" items={NAV_SUPPLY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
         <NavGroup label="Учёт" items={NAV_OFFICE} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
       </nav>
 
-      <div className={cn("border-t border-sidebar-border/70 p-3", collapsed && "px-0 text-center")}>
-        <div className={cn("flex items-center gap-2.5", collapsed && "justify-center")}>
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-sidebar-border bg-sidebar-accent text-sidebar-foreground/70">
-            <IconUser size={14} />
+      <div className={cn("border-t border-sidebar-border/60 p-4", collapsed && "px-0 text-center")}>
+        <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
+          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklab,var(--sidebar-primary)_22%,var(--sidebar))] text-[11px] font-semibold tracking-[0.02em] text-sidebar-primary">
+            БМ
           </span>
           {!collapsed ? (
-            <span className="min-w-0">
-              <span className="block truncate text-[12px] font-medium text-sidebar-foreground">Богдан М.</span>
-              <span className="block truncate text-[11px] text-sidebar-foreground/50">ООО «Мода Лав»</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-[13px] font-medium text-sidebar-foreground">Богдан М.</span>
+              <span className="block truncate text-[11.5px] text-sidebar-foreground/45">ООО «Мода Лав»</span>
             </span>
           ) : null}
         </div>
       </div>
     </div>
   );
+
 }
 
 export function AppShell({
@@ -210,7 +231,7 @@ export function AppShell({
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-30 hidden bg-sidebar transition-[width] duration-200 md:block",
-          collapsed ? "w-[56px]" : "w-[240px]",
+          collapsed ? "w-[64px]" : "w-[260px]",
         )}
       >
         <SidebarBody active={active} onNavigate={go} collapsed={collapsed} />
@@ -225,7 +246,7 @@ export function AppShell({
               type="button"
               aria-label="Закрыть меню"
               onClick={() => setMobileNavOpen(false)}
-              className="absolute right-2 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-[4px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+              className="absolute right-2 top-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-[8px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
             >
               <IconClose size={18} />
             </button>
@@ -234,9 +255,9 @@ export function AppShell({
         </div>
       ) : null}
 
-      <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[56px]" : "md:pl-[240px]")}>
+      <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[64px]" : "md:pl-[260px]")}>
         {/* TopBar */}
-        <header className="sticky top-0 z-20 flex h-[52px] items-center gap-2 border-b border-border bg-background/88 px-3 backdrop-blur-md md:px-6">
+        <header className="sticky top-0 z-20 flex h-[60px] items-center gap-2 border-b border-border bg-card/92 px-3 backdrop-blur-md md:px-8">
           <IconButton label="Меню" className="md:hidden" onClick={() => setMobileNavOpen(true)}>
             <IconMenu size={18} />
           </IconButton>
@@ -247,13 +268,13 @@ export function AppShell({
           >
             <IconPanel size={16} />
           </IconButton>
-          <span className="editorial truncate text-[13px] tracking-[-0.015em]">{topbarTitle}</span>
+          <span className="truncate font-display text-[13.5px] font-medium tracking-[-0.01em]">{topbarTitle}</span>
           <span className="ml-auto flex items-center gap-2 text-[11px] text-muted-foreground">
             <button
               type="button"
               onClick={() => go("states")}
               className={cn(
-                "inline-flex h-8 items-center gap-1.5 rounded-[6px] border px-2 text-[11px] font-medium transition-colors",
+                "inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium transition-colors",
                 active === "states"
                   ? "border-primary/30 bg-primary/[0.08] text-primary"
                   : "border-border bg-card text-muted-foreground hover:text-foreground",
@@ -262,14 +283,15 @@ export function AppShell({
               <IconStates size={14} />
               Состояния
             </button>
-            <span className="num hidden rounded-[4px] border border-border bg-muted/50 px-1.5 py-[3px] tracking-[0.04em] md:inline-flex">
+            <span className="hidden rounded-full border border-border bg-muted px-2.5 py-[5px] text-[11px] md:inline-flex">
               Прототип · демо-данные
             </span>
           </span>
 
         </header>
 
-        <main className="mx-auto w-full max-w-[1440px] flex-1 px-3 py-5 pb-24 md:px-8 md:py-8 md:pb-10">{children}</main>
+        <main className="mx-auto w-full max-w-[1440px] flex-1 px-3 py-5 pb-24 md:px-8 md:py-7 md:pb-10">{children}</main>
+
       </div>
 
       {/* Mobile bottom navigation */}

@@ -160,7 +160,7 @@ export function DocumentRow({
       onClick={onOpen}
       className="flex min-h-[44px] w-full items-center gap-3 py-2.5 text-left transition-colors hover:bg-muted/40"
     >
-      <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] border border-border bg-muted/50 text-muted-foreground">
+      <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] border border-border bg-muted/50 text-muted-foreground">
         <IconDocument size={14} />
       </span>
       <span className="min-w-0 flex-1">
@@ -202,7 +202,7 @@ export function Timeline({
 export function ModelMark({ code }: { code: string }) {
   const parts = code.split("-");
   return (
-    <div className="relative flex h-[88px] items-center justify-center overflow-hidden rounded-[6px] border border-border bg-muted/25">
+    <div className="relative flex h-[88px] items-center justify-center overflow-hidden rounded-[10px] border border-border bg-muted/25">
       <span className="absolute left-0 top-0 h-[2px] w-10 bg-primary/60" />
       <span className="absolute inset-x-3 top-1/2 h-px bg-border" />
       <div className="relative flex flex-col items-center bg-[color-mix(in_oklab,var(--muted)_25%,var(--card))] px-3">

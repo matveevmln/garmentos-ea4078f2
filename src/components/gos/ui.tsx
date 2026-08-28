@@ -26,7 +26,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "surface-card rounded-[6px]",
+        "surface-card rounded-[10px]",
         padded && "p-4 md:p-5",
         className,
       )}
@@ -50,9 +50,8 @@ export function CardHeader({
   return (
     <div className={cn("flex items-center justify-between gap-3", className)}>
       <div className="flex min-w-0 items-baseline gap-2.5">
-        <span className="h-[9px] w-[2px] shrink-0 self-center bg-primary" />
-        <h2 className="editorial truncate text-[14px]">{title}</h2>
-        {hint ? <span className="num shrink-0 text-[11px] text-muted-foreground">{hint}</span> : null}
+        <h2 className="truncate font-display text-[14px] font-semibold tracking-[-0.01em]">{title}</h2>
+        {hint ? <span className="shrink-0 text-[12px] text-muted-foreground">{hint}</span> : null}
       </div>
       {action}
     </div>
@@ -62,6 +61,7 @@ export function CardHeader({
 export function SectionLabel({ children }: { children: ReactNode }) {
   return <div className="eyebrow">{children}</div>;
 }
+
 
 
 /* ---------- Button ---------- */
@@ -124,7 +124,7 @@ export function IconButton({
       title={label}
       onClick={onClick}
       className={cn(
-        "inline-flex h-9 w-9 items-center justify-center rounded-[6px] border border-transparent text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 outline-none",
+        "inline-flex h-9 w-9 items-center justify-center rounded-[8px] border border-transparent text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 outline-none",
         className,
       )}
     >
@@ -180,10 +180,11 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-[3px] border px-1.5 py-[3px] text-[10px] font-semibold uppercase tracking-[0.08em] whitespace-nowrap",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[4px] text-[11.5px] font-medium whitespace-nowrap",
         toneStyles[t],
         className,
       )}
+
     >
       <span className={cn("h-1.5 w-1.5 rounded-full", dotStyles[t])} />
       {status}
@@ -249,20 +250,20 @@ export function PageHeader({
   actions?: ReactNode | undefined;
 }) {
   return (
-    <header className="mb-5 md:mb-7">
+    <header className="mb-5 md:mb-6">
       {breadcrumbs}
-      <div className="mt-2 flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
+      <div className="mt-1.5 flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="editorial text-[26px] md:text-[38px]">{title}</h1>
+          <h1 className="font-display text-[22px] font-semibold tracking-[-0.02em] md:text-[26px]">{title}</h1>
           {subtitle ? (
-            <p className="mt-2 max-w-[68ch] text-[13px] leading-[1.55] text-muted-foreground">{subtitle}</p>
+            <p className="mt-1 max-w-[68ch] text-[13px] leading-[1.5] text-muted-foreground">{subtitle}</p>
           ) : null}
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
       </div>
-      <span className="block h-[2px] w-11 bg-primary" />
     </header>
   );
+
 
 }
 
@@ -289,7 +290,7 @@ export function SearchField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-10 w-full rounded-[6px] border border-border bg-card pl-8 pr-3 text-[13px] outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-ring/20 md:h-9"
+        className="h-10 w-full rounded-[10px] border border-border bg-card pl-8 pr-3 text-[13px] outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-ring/20 md:h-9"
       />
     </div>
   );
@@ -312,7 +313,7 @@ export function FilterChips({
           type="button"
           onClick={() => onChange(o)}
           className={cn(
-            "h-9 rounded-[6px] border px-2.5 text-[12px] font-medium transition-colors md:h-8",
+            "h-9 rounded-[10px] border px-2.5 text-[12px] font-medium transition-colors md:h-8",
             value === o
               ? "border-primary/30 bg-primary/[0.08] text-primary"
               : "border-border bg-card text-muted-foreground hover:text-foreground",
@@ -333,36 +334,37 @@ export function MetricStrip({
   items: { label: string; value: string; tone?: "danger" | "warning" }[];
 }) {
   return (
-    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[6px] border border-border bg-border lg:grid-cols-4">
-      {items.map((m, i) => (
+    <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
+      {items.map((m) => (
         <div
           key={m.label}
-          className="group relative bg-card px-4 pb-4 pt-4 transition-colors hover:bg-[color-mix(in_oklab,var(--primary)_3%,var(--card))]"
+          className="surface-card group flex flex-col rounded-[10px] px-4 py-4 transition-shadow hover:shadow-[0_2px_8px_color-mix(in_oklab,var(--foreground)_7%,transparent)]"
         >
-          <span
-            className={cn(
-              "absolute left-0 top-0 h-[2px] transition-all duration-300",
-              "w-8 group-hover:w-full",
-              m.tone === "danger" ? "bg-danger" : m.tone === "warning" ? "bg-warning" : i === 0 ? "bg-primary" : "bg-border",
-            )}
-          />
-          <div className="flex items-baseline justify-between gap-2">
-            <div className="eyebrow text-[10px]">{m.label}</div>
-            <div className="micro opacity-45">{String(i + 1).padStart(2, "0")}</div>
-          </div>
+          <div className="text-[12px] leading-tight text-muted-foreground">{m.label}</div>
           <div
             className={cn(
-              "num mt-3 text-[34px] leading-none font-semibold tracking-[-0.035em] md:text-[40px]",
+              "num mt-3 text-[30px] leading-none font-semibold tracking-[-0.03em]",
               m.tone === "danger" && "text-danger",
               m.tone === "warning" && "text-warning",
             )}
           >
             {m.value}
           </div>
+          <span
+            className={cn(
+              "mt-4 block h-px w-full",
+              m.tone === "danger"
+                ? "bg-danger/25"
+                : m.tone === "warning"
+                  ? "bg-warning/30"
+                  : "bg-border",
+            )}
+          />
         </div>
       ))}
     </div>
   );
+
 
 }
 
@@ -386,7 +388,7 @@ export function AttentionList({
           >
             <span
               className={cn(
-                "mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[6px]",
+                "mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-[8px]",
                 it.tone === "danger"
                   ? "bg-danger/[0.08] text-danger"
                   : "bg-warning/[0.08] text-warning",
@@ -425,16 +427,16 @@ export function DataTable({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("surface-card overflow-hidden rounded-[6px]", className)}>
+    <div className={cn("surface-card overflow-hidden rounded-[10px]", className)}>
       <table className="w-full border-collapse text-[13px]">
         <thead>
-          <tr className="border-b border-border bg-[color-mix(in_oklab,var(--foreground)_3%,var(--card))]">
+          <tr className="border-b border-border">
             {columns.map((c) => (
               <th
                 key={c.key}
                 style={c.width ? { width: c.width } : undefined}
                 className={cn(
-                  "micro h-10 px-3 font-medium text-muted-foreground",
+                  "h-11 px-4 text-[12px] font-normal text-muted-foreground",
                   c.align === "right" ? "text-right" : "text-left",
                 )}
               >
@@ -443,9 +445,10 @@ export function DataTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border [&>tr]:transition-colors [&>tr:hover]:bg-[color-mix(in_oklab,var(--primary)_4%,var(--card))]">
+        <tbody className="divide-y divide-border [&>tr]:transition-colors [&>tr:hover]:bg-muted">
           {children}
         </tbody>
+
       </table>
     </div>
   );
@@ -464,7 +467,7 @@ export function Td({
   return (
     <td
       className={cn(
-        "h-12 px-3 align-middle",
+        "h-[52px] px-4 align-middle",
         align === "right" && "text-right",
         className,
       )}
@@ -485,7 +488,7 @@ export function MobileListItem({
     <button
       type="button"
       onClick={onClick}
-      className="w-full rounded-[6px] border border-border bg-card p-3.5 text-left transition-colors active:bg-muted/50"
+      className="w-full rounded-[10px] border border-border bg-card p-3.5 text-left transition-colors active:bg-muted/50"
     >
       {children}
     </button>
@@ -507,7 +510,7 @@ export function Accordion({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="rounded-[6px] border border-border bg-card">
+    <div className="rounded-[10px] border border-border bg-card">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -587,11 +590,11 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-[6px] border border-dashed border-border bg-card/60 text-center",
+        "flex flex-col items-center justify-center rounded-[10px] border border-dashed border-border bg-card/60 text-center",
         compact ? "px-5 py-10" : "px-6 py-16",
       )}
     >
-      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[6px] border border-border bg-muted/50 text-muted-foreground">
+      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[8px] border border-border bg-muted/50 text-muted-foreground">
         {icon ?? <IconInbox size={18} />}
       </span>
       <h3 className="text-[14px] font-semibold">{title}</h3>
@@ -606,8 +609,8 @@ export function EmptyState({
 export function LoadingState() {
   return (
     <div className="space-y-2.5" aria-busy="true">
-      <div className="h-9 w-1/3 animate-pulse rounded-[6px] bg-muted" />
-      <div className="rounded-[6px] border border-border bg-card p-3">
+      <div className="h-9 w-1/3 animate-pulse rounded-[10px] bg-muted" />
+      <div className="rounded-[10px] border border-border bg-card p-3">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="flex items-center gap-3 border-b border-border py-3 last:border-0">
             <div className="h-3 w-10 animate-pulse rounded-[4px] bg-muted" />
@@ -623,8 +626,8 @@ export function LoadingState() {
 
 export function ErrorState({ onRetry }: { onRetry?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[6px] border border-danger/20 bg-danger/[0.03] px-6 py-12 text-center">
-      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[6px] border border-danger/20 bg-danger/[0.08] text-danger">
+    <div className="flex flex-col items-center justify-center rounded-[10px] border border-danger/20 bg-danger/[0.03] px-6 py-12 text-center">
+      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[8px] border border-danger/20 bg-danger/[0.08] text-danger">
         <IconAlert size={18} />
       </span>
       <h3 className="text-[14px] font-semibold">Не удалось загрузить данные</h3>
@@ -642,8 +645,8 @@ export function ErrorState({ onRetry }: { onRetry?: () => void }) {
 
 export function AccessDeniedState() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[6px] border border-border bg-card px-6 py-12 text-center">
-      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[6px] border border-border bg-muted/60 text-muted-foreground">
+    <div className="flex flex-col items-center justify-center rounded-[10px] border border-border bg-card px-6 py-12 text-center">
+      <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[8px] border border-border bg-muted/60 text-muted-foreground">
         <IconLock size={18} />
       </span>
       <h3 className="text-[14px] font-semibold">Нет прав доступа</h3>
