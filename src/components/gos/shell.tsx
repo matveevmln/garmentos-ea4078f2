@@ -229,7 +229,7 @@ export function AppShell({
   const [closing, setClosing] = useState(false);
   // Смещение панели во время жеста: null — жест не активен.
   const [dragX, setDragX] = useState<number | null>(null);
-  const gesture = useRef<{ startX: number; startY: number; active: boolean; from: "edge" | "panel" } | null>(null);
+  const gesture = useRef<{ startX: number; startY: number; active: boolean; from: "edge" | "panel"; offset: number } | null>(null);
   const PANEL_W = 300;
 
   const closeNav = useCallback(() => {
@@ -252,8 +252,13 @@ export function AppShell({
   const startGesture = (e: React.TouchEvent, from: "edge" | "panel") => {
     const t = e.touches[0];
     if (!t) return;
-    gesture.current = { startX: t.clientX, startY: t.clientY, active: false, from, offset: -panelWidth() };
-    if (from === "panel") gesture.current.offset = 0;
+    gesture.current = {
+      startX: t.clientX,
+      startY: t.clientY,
+      active: false,
+      from,
+      offset: from === "panel" ? 0 : -panelWidth(),
+    };
 
     const move = (ev: TouchEvent) => {
       const g = gesture.current;
@@ -331,9 +336,6 @@ export function AppShell({
         <div
           aria-hidden="true"
           onTouchStart={onEdgeStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          onTouchCancel={onTouchEnd}
           className="fixed left-0 top-0 bottom-[56px] z-40 w-5 touch-pan-y md:hidden"
         />
       ) : null}
@@ -343,9 +345,6 @@ export function AppShell({
         <div
           className="fixed inset-0 z-50 md:hidden"
           onTouchStart={onPanelStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          onTouchCancel={onTouchEnd}
         >
           <div
             className={cn(
