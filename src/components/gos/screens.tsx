@@ -108,8 +108,9 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
                       <Td className="w-[72px]">
                         <span className="t-value font-semibold">#{b.id}</span>
                       </Td>
-                      <Td className="t-object whitespace-nowrap">{b.model}</Td>
-                      <Td className="t-secondary whitespace-nowrap">{b.workshop}</Td>
+                      <Td className="t-object max-w-[170px] truncate">{b.model}</Td>
+                      <Td className="t-secondary max-w-[110px] truncate">{b.workshop}</Td>
+
                       <Td align="right" className="t-value w-[104px] whitespace-nowrap text-muted-foreground">
                         {formatQty(b.qty)} шт
                       </Td>
