@@ -236,6 +236,8 @@ export function AppShell({
     lastT: number;
     velocity: number;
     width: number;
+    raf: number;
+    pendingX: number | null;
   } | null>(null);
   const edgeRef = useRef<HTMLDivElement | null>(null);
   const layerRef = useRef<HTMLDivElement | null>(null);
@@ -257,10 +259,15 @@ export function AppShell({
     backdrop.style.opacity = "1";
   };
 
-  const applyDrag = (x: number) => {
+  const applyDrag = (x: number, width: number) => {
     const panel = panelRef.current;
+    const backdrop = backdropRef.current;
     if (!panel) return;
     panel.style.transform = `translate3d(${x}px,0,0)`;
+    if (backdrop) {
+      const progress = Math.max(0, Math.min(1, (x + width) / width));
+      backdrop.style.opacity = String(progress);
+    }
   };
 
   const clearDrag = () => {
@@ -298,6 +305,8 @@ export function AppShell({
       lastT: performance.now(),
       velocity: 0,
       width: w,
+      raf: 0,
+      pendingX: null,
     };
 
     const move = (ev: TouchEvent) => {
@@ -320,7 +329,11 @@ export function AppShell({
       if (ev.cancelable) ev.preventDefault();
       const now = performance.now();
       const dt = now - g.lastT;
-      if (dt > 0) g.velocity = (p.clientX - g.lastX) / dt;
+      if (dt > 0) {
+        const v = (p.clientX - g.lastX) / dt;
+        // EMA-сглаживание скорости — устойчивое распознавание flick без дёрганий
+        g.velocity = g.velocity * 0.7 + v * 0.3;
+      }
       g.lastX = p.clientX;
       g.lastT = now;
       const next =
@@ -328,7 +341,15 @@ export function AppShell({
           ? Math.min(0, -g.width + Math.max(0, dx))
           : Math.max(-g.width, Math.min(0, dx));
       g.offset = next;
-      applyDrag(next);
+      // Батчинг через rAF: один transform-апдейт на кадр, движение без рывков
+      g.pendingX = next;
+      if (!g.raf) {
+        g.raf = requestAnimationFrame(() => {
+          const gg = gesture.current;
+          if (gg && gg.pendingX !== null) applyDrag(gg.pendingX, gg.width);
+          if (gg) gg.raf = 0;
+        });
+      }
     };
 
     const end = () => {
@@ -337,20 +358,26 @@ export function AppShell({
       window.removeEventListener("touchcancel", end);
       const g = gesture.current;
       gesture.current = null;
-      if (!g || !g.active) return;
+      if (!g) return;
+      if (g.raf) cancelAnimationFrame(g.raf);
+      if (!g.active) return;
       const dist = g.offset + g.width; // сколько панели вытянуто
-      const flickOpen = g.velocity > 0.5 && dist > 40;
-      const flickClose = g.velocity < -0.5;
+      const flickOpen = g.velocity > 0.4 && dist > 40;
+      const flickClose = g.velocity < -0.4;
       const open = flickOpen || (!flickClose && g.offset > -g.width / 2);
       const panel = panelRef.current;
       const backdrop = backdropRef.current;
       const layer = layerRef.current;
+      // Длительность доводки зависит от оставшегося пути: короткий путь — короткая анимация
+      const remain = open ? -g.offset : g.offset + g.width;
+      const ms = Math.round(Math.min(300, Math.max(160, 120 + (remain / g.width) * 180)));
+      const ease = "cubic-bezier(0.25, 0.46, 0.45, 0.94)";
       if (panel) {
-        panel.style.transition = "transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1)";
+        panel.style.transition = `transform ${ms}ms ${ease}`;
         panel.style.transform = open ? "translate3d(0,0,0)" : `translate3d(${-g.width}px,0,0)`;
       }
       if (backdrop) {
-        backdrop.style.transition = "opacity 180ms ease-out";
+        backdrop.style.transition = `opacity ${ms}ms ease-out`;
         backdrop.style.opacity = open ? "1" : "0";
       }
       if (layer) {
@@ -358,7 +385,7 @@ export function AppShell({
         layer.style.visibility = "visible";
       }
       setMobileNavOpen(open);
-      window.setTimeout(clearDrag, 210);
+      window.setTimeout(clearDrag, ms + 20);
     };
 
     window.addEventListener("touchmove", move, { passive: false });
@@ -420,7 +447,7 @@ export function AppShell({
         <div
           ref={backdropRef}
           className={cn(
-            "absolute inset-0 bg-foreground/45 transition-opacity duration-200 ease-out",
+            "absolute inset-0 bg-foreground/45 transition-opacity duration-300 ease-out",
             mobileNavOpen ? "opacity-100" : "opacity-0",
           )}
           onClick={closeNav}
@@ -428,7 +455,7 @@ export function AppShell({
         <div
           ref={panelRef}
           className={cn(
-            "elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar transition-transform duration-200 ease-out will-change-transform",
+            "elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] will-change-transform",
             mobileNavOpen ? "[transform:translate3d(0,0,0)]" : "[transform:translate3d(-100%,0,0)]",
           )}
           style={{ touchAction: "pan-y" }}
