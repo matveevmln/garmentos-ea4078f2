@@ -67,12 +67,14 @@ function NavGroup({
   active,
   onNavigate,
   collapsed,
+  mobile = false,
 }: {
   label: string;
   items: NavItem[];
   active: ScreenKey;
   onNavigate: (k: ScreenKey) => void;
   collapsed: boolean;
+  mobile?: boolean;
 }) {
   return (
     <div className={cn("px-2", mobile && "px-3")}>
