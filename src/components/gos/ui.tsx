@@ -334,17 +334,24 @@ export function MetricStrip({
   return (
     <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[6px] border border-border bg-border lg:grid-cols-4">
       {items.map((m, i) => (
-        <div key={m.label} className="relative bg-card px-4 pb-3.5 pt-4">
+        <div
+          key={m.label}
+          className="group relative bg-card px-4 pb-4 pt-4 transition-colors hover:bg-[color-mix(in_oklab,var(--primary)_3%,var(--card))]"
+        >
           <span
             className={cn(
-              "absolute left-0 top-0 h-[2px] w-8",
+              "absolute left-0 top-0 h-[2px] transition-all duration-300",
+              "w-8 group-hover:w-full",
               m.tone === "danger" ? "bg-danger" : m.tone === "warning" ? "bg-warning" : i === 0 ? "bg-primary" : "bg-border",
             )}
           />
-          <div className="eyebrow text-[10px]">{m.label}</div>
+          <div className="flex items-baseline justify-between gap-2">
+            <div className="eyebrow text-[10px]">{m.label}</div>
+            <div className="micro opacity-45">{String(i + 1).padStart(2, "0")}</div>
+          </div>
           <div
             className={cn(
-              "num mt-2 text-[30px] leading-none font-semibold tracking-[-0.02em]",
+              "num mt-3 text-[34px] leading-none font-semibold tracking-[-0.035em] md:text-[40px]",
               m.tone === "danger" && "text-danger",
               m.tone === "warning" && "text-warning",
             )}
@@ -355,6 +362,7 @@ export function MetricStrip({
       ))}
     </div>
   );
+
 }
 
 /* ---------- Attention ---------- */
