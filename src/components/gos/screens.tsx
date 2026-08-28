@@ -62,13 +62,13 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
 
       <MetricStrip items={dashboardMetrics} />
 
-      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+      <div className="stagger mt-5 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
         <div className="space-y-4">
-          <Card padded={false} className="overflow-hidden">
-            <div className="flex items-center justify-between gap-3 bg-sidebar px-4 py-3.5 text-sidebar-foreground md:px-5">
+          <Card padded={false} className="elev-2 overflow-hidden">
+            <div className="flex items-center justify-between gap-3 bg-sidebar bg-[radial-gradient(120%_180%_at_0%_0%,color-mix(in_oklab,var(--sidebar-primary)_26%,transparent)_0%,transparent_62%)] px-4 py-4 text-sidebar-foreground md:px-5">
               <div className="flex items-baseline gap-2.5">
-                <h2 className="font-display text-[14px] font-semibold tracking-[-0.01em]">Требует внимания</h2>
-                <span className="text-[12px] text-sidebar-foreground/50">2 позиции</span>
+                <h2 className="font-display text-[16px] font-semibold tracking-[-0.018em]">Требует внимания</h2>
+                <span className="t-meta text-sidebar-foreground/55">2 позиции</span>
               </div>
             </div>
             <div className="px-4 md:px-5">
@@ -106,7 +106,7 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
                     <tr
                       key={b.id}
                       onClick={() => onOpenBatch(b.id)}
-                      className="cursor-pointer transition-colors hover:bg-muted/40"
+                      className="group cursor-pointer transition-colors duration-200 hover:bg-primary/[0.045]"
                     >
                       <Td className="!pl-4 !pr-2">
                         <span className="t-id font-semibold text-foreground">#{b.id}</span>

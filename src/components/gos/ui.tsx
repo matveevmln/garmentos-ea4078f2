@@ -27,7 +27,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "surface-card surface-grad rounded-[10px] transition-shadow duration-200",
+        "surface-card surface-grad rounded-[12px] transition-[box-shadow,border-color] duration-200 hover:elev-2",
         padded && "p-4 md:p-5",
         className,
       )}
@@ -51,7 +51,7 @@ export function CardHeader({
   return (
     <div className={cn("flex items-center justify-between gap-3", className)}>
       <div className="flex min-w-0 items-baseline gap-2.5">
-        <h2 className="t-section truncate">{title}</h2>
+        <h2 className="t-section truncate text-[16px]">{title}</h2>
         {hint ? <span className="t-meta shrink-0">{hint}</span> : null}
 
       </div>
@@ -342,18 +342,18 @@ export function PageHeader({
   actions?: ReactNode | undefined;
 }) {
   return (
-    <header className="mb-5 md:mb-6">
+    <header className="anim-rise mb-5 md:mb-6">
       {breadcrumbs}
-      <div className="mt-1.5 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-1.5 flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="t-page md:text-[31px]">{title}</h1>
+          <h1 className="t-page md:t-display md:text-[38px]">{title}</h1>
           {subtitle ? (
-            <p className="t-secondary mt-1.5 max-w-[68ch]">{subtitle}</p>
+            <p className="t-secondary mt-2 max-w-[68ch]">{subtitle}</p>
           ) : null}
-
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
       </div>
+      <span className="mt-4 block h-px w-full bg-[linear-gradient(90deg,color-mix(in_oklab,var(--primary)_55%,transparent)_0%,var(--border)_18%,transparent_86%)]" />
     </header>
   );
 
@@ -421,45 +421,88 @@ export function FilterChips({
 
 /* ---------- Metrics ---------- */
 
+/** Мягкий счётчик: анимирует только целые числа, уважает prefers-reduced-motion. */
+export function CountUp({ value, className }: { value: string; className?: string | undefined }) {
+  const target = Number(value);
+  const numeric = value.trim() !== "" && Number.isFinite(target);
+  const [shown, setShown] = useState(numeric ? 0 : null);
+
+  useEffect(() => {
+    if (!numeric) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || target === 0) {
+      setShown(target);
+      return;
+    }
+    const duration = 620;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setShown(Math.round(target * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [numeric, target]);
+
+  return <span className={className}>{numeric ? (shown ?? 0) : value}</span>;
+}
+
 export function MetricStrip({
   items,
 }: {
   items: { label: string; value: string; tone?: "danger" | "warning" }[];
 }) {
   return (
-    <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
+    <div className="stagger grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
       {items.map((m) => (
         <div
           key={m.label}
-          className="surface-card surface-grad group flex flex-col rounded-[10px] px-4 py-4 transition-shadow duration-200 hover:elev-2"
+          className={cn(
+            "surface-card hairline-accent lift group relative flex flex-col overflow-hidden rounded-[12px] px-4 py-4 md:px-5 md:py-5",
+            m.tone ? "accent-surface" : "surface-grad",
+            "hover:elev-3 hover:border-primary/25",
+          )}
         >
-          <div className="t-meta uppercase tracking-[0.06em]">{m.label}</div>
-          <div
+          <div className="t-meta flex items-center gap-1.5 uppercase tracking-[0.08em]">
+            <span
+              className={cn(
+                "h-1.5 w-1.5 rounded-full transition-transform duration-200 group-hover:scale-125",
+                m.tone === "danger"
+                  ? "bg-danger"
+                  : m.tone === "warning"
+                    ? "bg-warning"
+                    : "bg-primary/55",
+              )}
+            />
+            <span className="truncate">{m.label}</span>
+          </div>
+
+          <CountUp
+            value={m.value}
             className={cn(
-              "t-figure mt-3.5 text-[32px]",
+              "t-figure mt-4 text-[38px] md:text-[46px]",
               m.tone === "danger" && "text-danger",
               m.tone === "warning" && "text-warning",
             )}
-          >
-            {m.value}
-          </div>
+          />
 
           <span
             className={cn(
-              "mt-4 block h-px w-full",
+              "mt-4 block h-[2px] w-10 rounded-full transition-all duration-300 group-hover:w-16",
               m.tone === "danger"
-                ? "bg-danger/25"
+                ? "bg-danger/45"
                 : m.tone === "warning"
-                  ? "bg-warning/30"
-                  : "bg-border",
+                  ? "bg-warning/50"
+                  : "bg-primary/40",
             )}
           />
         </div>
       ))}
     </div>
   );
-
-
 }
 
 /* ---------- Attention ---------- */
