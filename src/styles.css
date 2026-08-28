@@ -165,7 +165,9 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -173,8 +175,9 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
+
 
   ::selection {
     background: color-mix(in oklab, var(--primary) 18%, transparent);
