@@ -50,8 +50,9 @@ export function CardHeader({
   return (
     <div className={cn("flex items-center justify-between gap-3", className)}>
       <div className="flex min-w-0 items-baseline gap-2.5">
-        <h2 className="truncate font-display text-[14px] font-semibold tracking-[-0.01em]">{title}</h2>
-        {hint ? <span className="shrink-0 text-[12px] text-muted-foreground">{hint}</span> : null}
+        <h2 className="t-section truncate">{title}</h2>
+        {hint ? <span className="t-meta shrink-0">{hint}</span> : null}
+
       </div>
       {action}
     </div>
