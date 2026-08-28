@@ -236,6 +236,8 @@ export function AppShell({
     lastT: number;
     velocity: number;
     width: number;
+    raf: number;
+    pendingX: number | null;
   } | null>(null);
   const edgeRef = useRef<HTMLDivElement | null>(null);
   const layerRef = useRef<HTMLDivElement | null>(null);
