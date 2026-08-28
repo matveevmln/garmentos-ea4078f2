@@ -96,7 +96,7 @@ function NavGroup({
                 onClick={() => onNavigate(it.key)}
                 title={it.label}
                 className={cn(
-                  "group relative flex w-full items-center gap-3 rounded-[8px] pl-3 pr-2 transition-colors duration-150",
+                  "interactive group relative flex w-full items-center gap-3 rounded-[8px] pl-3 pr-2",
                   mobile ? "min-h-[48px] py-3 text-[15px]" : "py-2.5 text-[13.5px]",
                   collapsed && "justify-center px-0",
                   isActive
@@ -106,8 +106,8 @@ function NavGroup({
               >
                 <span
                   className={cn(
-                    "absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full transition-colors",
-                    isActive ? "bg-sidebar-primary" : "bg-transparent",
+                    "absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full bg-sidebar-primary transition-[opacity,transform] duration-200",
+                    isActive ? "scale-y-100 opacity-100" : "scale-y-50 opacity-0",
                   )}
                 />
                 <span className={cn("transition-colors", isActive ? "text-sidebar-primary" : "text-current")}>
@@ -242,13 +242,13 @@ export function AppShell({
       {/* Mobile nav drawer */}
       {mobileNavOpen ? (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-foreground/45 backdrop-blur-[2px]" onClick={() => setMobileNavOpen(false)} />
-          <div className="relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar shadow-[0_16px_48px_rgb(0_0_0/0.28)]">
+          <div className="anim-overlay absolute inset-0 bg-foreground/45 backdrop-blur-[2px]" onClick={() => setMobileNavOpen(false)} />
+          <div className="anim-panel-left elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar">
             <button
               type="button"
               aria-label="Закрыть меню"
               onClick={() => setMobileNavOpen(false)}
-              className="absolute right-2 top-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-[8px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+              className="interactive absolute right-2 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-[8px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
             >
               <IconClose size={18} />
             </button>
@@ -259,7 +259,7 @@ export function AppShell({
 
       <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[64px]" : "md:pl-[260px]")}>
         {/* TopBar */}
-        <header className="sticky top-0 z-20 flex h-[60px] items-center gap-2 border-b border-border bg-card/92 px-3 backdrop-blur-md md:px-8">
+        <header className="sticky top-0 z-20 flex h-[60px] items-center gap-2 border-b border-border bg-card/92 px-3 shadow-[0_1px_0_0_color-mix(in_oklab,var(--foreground)_4%,transparent)] backdrop-blur-md md:px-8">
           <IconButton label="Меню" className="md:hidden" onClick={() => setMobileNavOpen(true)}>
             <IconMenu size={18} />
           </IconButton>
@@ -276,10 +276,10 @@ export function AppShell({
               type="button"
               onClick={() => go("states")}
               className={cn(
-                "inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium transition-colors",
+                "interactive inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium",
                 active === "states"
-                  ? "border-primary/30 bg-primary/[0.08] text-primary"
-                  : "border-border bg-card text-muted-foreground hover:text-foreground",
+                  ? "border-primary/35 bg-primary/[0.10] text-primary shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_45%,transparent)]"
+                  : "border-border bg-card text-muted-foreground hover:border-primary/25 hover:bg-muted hover:text-foreground",
               )}
             >
               <IconStates size={14} />
@@ -297,7 +297,7 @@ export function AppShell({
       </div>
 
       {/* Mobile bottom navigation */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card/97 backdrop-blur md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-card/97 pb-[env(safe-area-inset-bottom)] shadow-[0_-2px_12px_color-mix(in_oklab,var(--foreground)_7%,transparent)] backdrop-blur md:hidden">
         {MOBILE_NAV.map((it) => {
           const Icon = it.icon;
           const isActive = active === it.key || (it.key === "batches" && active === "passport");
@@ -307,14 +307,14 @@ export function AppShell({
               type="button"
               onClick={() => go(it.key)}
               className={cn(
-                "relative flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] transition-colors",
+                "interactive relative flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px]",
                 isActive ? "font-semibold text-primary" : "text-muted-foreground",
               )}
             >
               <span
                 className={cn(
-                  "absolute inset-x-4 top-0 h-[2px] rounded-b-[2px]",
-                  isActive ? "bg-primary" : "bg-transparent",
+                  "absolute inset-x-4 top-0 h-[2px] rounded-b-[2px] bg-primary transition-[opacity,transform] duration-200",
+                  isActive ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0",
                 )}
               />
               <Icon size={18} />
@@ -325,7 +325,7 @@ export function AppShell({
         <button
           type="button"
           onClick={() => setMobileNavOpen(true)}
-          className="flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground"
+          className="interactive flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground"
         >
           <IconMenu size={18} />
           Ещё

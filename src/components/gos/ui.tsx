@@ -26,7 +26,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "surface-card rounded-[10px]",
+        "surface-card surface-grad rounded-[10px] transition-shadow duration-200",
         padded && "p-4 md:p-5",
         className,
       )}
@@ -90,7 +90,7 @@ export function Button({
       type="button"
       onClick={onClick}
       className={cn(
-        "relative inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        "interactive relative inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
         size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3.5 text-[13px]",
         variant === "primary" &&
           "bg-foreground text-background shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_75%,transparent)] hover:bg-foreground/88",
@@ -125,7 +125,7 @@ export function IconButton({
       title={label}
       onClick={onClick}
       className={cn(
-        "inline-flex h-9 w-9 items-center justify-center rounded-[8px] border border-transparent text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 outline-none",
+        "interactive inline-flex h-9 w-9 items-center justify-center rounded-[8px] border border-transparent text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 outline-none",
         className,
       )}
     >
@@ -181,7 +181,7 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[4px] text-[11.5px] font-medium whitespace-nowrap",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[4px] text-[11.5px] font-medium whitespace-nowrap transition-colors duration-200",
         toneStyles[t],
         className,
       )}
@@ -292,7 +292,7 @@ export function SearchField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-10 w-full rounded-[10px] border border-border bg-card pl-8 pr-3 text-[13px] outline-none transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-ring/20 md:h-9"
+        className="h-10 w-full rounded-[10px] border border-border bg-card pl-8 pr-3 text-[13px] outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-muted-foreground focus:border-primary/40 focus:ring-2 focus:ring-ring/20 md:h-9"
       />
     </div>
   );
@@ -315,10 +315,10 @@ export function FilterChips({
           type="button"
           onClick={() => onChange(o)}
           className={cn(
-            "h-9 rounded-[10px] border px-2.5 text-[12px] font-medium transition-colors md:h-8",
+            "interactive h-9 rounded-[10px] border px-2.5 text-[12px] font-medium md:h-8",
             value === o
-              ? "border-primary/30 bg-primary/[0.08] text-primary"
-              : "border-border bg-card text-muted-foreground hover:text-foreground",
+              ? "border-primary/35 bg-primary/[0.10] text-primary shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_45%,transparent)]"
+              : "border-border bg-card text-muted-foreground hover:border-primary/25 hover:bg-muted hover:text-foreground",
           )}
         >
           {o}
@@ -340,7 +340,7 @@ export function MetricStrip({
       {items.map((m) => (
         <div
           key={m.label}
-          className="surface-card group flex flex-col rounded-[10px] px-4 py-4 transition-shadow hover:shadow-[0_2px_8px_color-mix(in_oklab,var(--foreground)_7%,transparent)]"
+          className="surface-card surface-grad group flex flex-col rounded-[10px] px-4 py-4 transition-shadow duration-200 hover:elev-2"
         >
           <div className="t-meta uppercase tracking-[0.06em]">{m.label}</div>
           <div
@@ -387,7 +387,7 @@ export function AttentionList({
           <button
             type="button"
             onClick={() => onSelect?.(it.id)}
-            className="flex w-full items-start gap-3 py-3 text-left transition-colors hover:bg-muted/40"
+            className="interactive -mx-2 flex w-full items-start gap-3 rounded-[8px] px-2 py-3 text-left hover:bg-muted/50"
           >
             <span
               className={cn(
@@ -431,7 +431,7 @@ export function DataTable({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("surface-card overflow-hidden rounded-[10px]", className)}>
+    <div className={cn("surface-card surface-grad overflow-hidden rounded-[10px]", className)}>
       <table className="w-full border-collapse text-[13px]">
         <thead>
           <tr className="border-b border-border">
@@ -450,7 +450,7 @@ export function DataTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border [&>tr]:transition-colors [&>tr:hover]:bg-muted">
+        <tbody className="divide-y divide-border [&>tr]:cursor-pointer [&>tr]:transition-colors [&>tr]:duration-150 [&>tr:hover]:bg-muted">
           {children}
         </tbody>
 
@@ -493,7 +493,7 @@ export function MobileListItem({
     <button
       type="button"
       onClick={onClick}
-      className="w-full rounded-[10px] border border-border bg-card p-3.5 text-left transition-colors active:bg-muted/50"
+      className="interactive elev-1 w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/25 active:bg-muted/50"
     >
       {children}
     </button>
@@ -515,12 +515,12 @@ export function Accordion({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="rounded-[10px] border border-border bg-card">
+    <div className="rounded-[10px] border border-border bg-card transition-shadow duration-200">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="flex min-h-[44px] w-full items-center justify-between gap-3 px-4 py-3 text-left"
+        className="interactive flex min-h-[44px] w-full items-center justify-between gap-3 rounded-[10px] px-4 py-3 text-left hover:bg-muted/45"
       >
         <span className="flex items-baseline gap-2">
           <span className="text-[13px] font-semibold">{title}</span>
@@ -528,10 +528,17 @@ export function Accordion({
         </span>
         <IconChevronDown
           size={16}
-          className={cn("shrink-0 text-muted-foreground transition-transform", open && "rotate-180")}
+          className={cn(
+            "shrink-0 text-muted-foreground transition-transform duration-200",
+            open && "rotate-180",
+          )}
         />
       </button>
-      {open ? <div className="border-t border-border px-4 py-4">{children}</div> : null}
+      <div className={cn("collapsible", open && "collapsible-open")}>
+        <div>
+          <div className="border-t border-border px-4 py-4">{children}</div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -560,11 +567,12 @@ export function Drawer({
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-stretch sm:justify-end">
       <div
-        className="absolute inset-0 bg-foreground/25"
+        className="anim-overlay absolute inset-0 bg-foreground/35 backdrop-blur-[2px]"
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative flex max-h-[85vh] w-full flex-col rounded-t-[12px] border border-border bg-card shadow-[0_16px_48px_rgb(0_0_0/0.18)] sm:max-h-none sm:h-full sm:w-[420px] sm:rounded-none sm:rounded-l-[8px]">
+      <div className="anim-sheet elev-4 relative flex max-h-[85vh] w-full flex-col rounded-t-[14px] border border-border bg-card sm:anim-panel sm:h-full sm:max-h-none sm:w-[420px] sm:rounded-none sm:rounded-l-[10px]">
+        <span className="mx-auto mt-2 block h-1 w-9 rounded-full bg-border sm:hidden" aria-hidden="true" />
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h3 className="text-[13px] font-semibold">{title}</h3>
           <IconButton label="Закрыть" onClick={onClose}>
@@ -614,14 +622,14 @@ export function EmptyState({
 export function LoadingState() {
   return (
     <div className="space-y-2.5" aria-busy="true">
-      <div className="h-9 w-1/3 animate-pulse rounded-[10px] bg-muted" />
+      <div className="h-9 w-1/3 skeleton rounded-[10px]" />
       <div className="rounded-[10px] border border-border bg-card p-3">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="flex items-center gap-3 border-b border-border py-3 last:border-0">
-            <div className="h-3 w-10 animate-pulse rounded-[4px] bg-muted" />
-            <div className="h-3 flex-1 animate-pulse rounded-[4px] bg-muted" />
-            <div className="h-3 w-16 animate-pulse rounded-[4px] bg-muted" />
-            <div className="h-3 w-20 animate-pulse rounded-[4px] bg-muted" />
+            <div className="h-3 w-10 skeleton rounded-[4px]" />
+            <div className="h-3 flex-1 skeleton rounded-[4px]" />
+            <div className="h-3 w-16 skeleton rounded-[4px]" />
+            <div className="h-3 w-20 skeleton rounded-[4px]" />
           </div>
         ))}
       </div>

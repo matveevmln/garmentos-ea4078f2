@@ -436,7 +436,7 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
       />
 
       {/* 1. Идентичность */}
-      <section className="flex flex-wrap items-center gap-x-8 gap-y-4 rounded-[10px] bg-sidebar px-4 py-4 text-sidebar-foreground md:px-5">
+      <section className="elev-2 flex flex-wrap items-center gap-x-8 gap-y-4 rounded-[10px] bg-sidebar bg-[linear-gradient(180deg,color-mix(in_oklab,var(--sidebar-primary)_9%,transparent)_0%,transparent_60%)] px-4 py-4 text-sidebar-foreground md:px-5">
         <div className="flex items-center gap-3">
           <span className="num inline-flex h-9 items-center rounded-[4px] border border-sidebar-border bg-sidebar-accent px-2.5 text-[16px] font-semibold text-sidebar-foreground">
             #{p.id}
@@ -531,17 +531,23 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
                 type="button"
                 onClick={() => setTab(t.key)}
                 className={cn(
-                  "relative -mb-px h-9 rounded-t-[6px] px-3 text-[13px] transition-colors",
+                  "interactive relative -mb-px h-9 rounded-t-[6px] px-3 text-[13px]",
                   tab === t.key
-                    ? "border-b-2 border-primary font-medium text-foreground"
-                    : "text-muted-foreground hover:text-foreground",
+                    ? "font-medium text-foreground"
+                    : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
                 )}
               >
                 {t.label}
+                <span
+                  className={cn(
+                    "absolute inset-x-2 -bottom-px h-[2px] rounded-full bg-primary transition-[opacity,transform] duration-200",
+                    tab === t.key ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0",
+                  )}
+                />
               </button>
             ))}
           </div>
-          <div className="p-5">{detail(tab)}</div>
+          <div key={tab} className="anim-content p-5">{detail(tab)}</div>
         </Card>
       </div>
 
