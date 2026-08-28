@@ -179,7 +179,7 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-[4px] border px-1.5 py-[3px] text-[11px] font-medium whitespace-nowrap",
+        "inline-flex items-center gap-1.5 rounded-[3px] border px-1.5 py-[3px] text-[10px] font-semibold uppercase tracking-[0.08em] whitespace-nowrap",
         toneStyles[t],
         className,
       )}
@@ -188,6 +188,7 @@ export function StatusBadge({
       {status}
     </span>
   );
+
 }
 
 export function VersionBadge({ label }: { label: string }) {
