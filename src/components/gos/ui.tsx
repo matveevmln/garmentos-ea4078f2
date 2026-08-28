@@ -342,18 +342,18 @@ export function PageHeader({
   actions?: ReactNode | undefined;
 }) {
   return (
-    <header className="mb-5 md:mb-6">
+    <header className="anim-rise mb-5 md:mb-6">
       {breadcrumbs}
-      <div className="mt-1.5 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-1.5 flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="t-page md:text-[31px]">{title}</h1>
+          <h1 className="t-page md:t-display md:text-[38px]">{title}</h1>
           {subtitle ? (
-            <p className="t-secondary mt-1.5 max-w-[68ch]">{subtitle}</p>
+            <p className="t-secondary mt-2 max-w-[68ch]">{subtitle}</p>
           ) : null}
-
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
       </div>
+      <span className="mt-4 block h-px w-full bg-[linear-gradient(90deg,color-mix(in_oklab,var(--primary)_55%,transparent)_0%,var(--border)_18%,transparent_86%)]" />
     </header>
   );
 
