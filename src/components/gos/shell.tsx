@@ -206,7 +206,7 @@ export function AppShell({
       {/* Sidebar — desktop */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-30 hidden border-r border-border bg-card transition-[width] duration-200 md:block",
+          "fixed inset-y-0 left-0 z-30 hidden border-r border-border bg-[color-mix(in_oklab,var(--card)_92%,var(--background))] transition-[width] duration-200 md:block",
           collapsed ? "w-[56px]" : "w-[240px]",
         )}
       >
@@ -216,14 +216,14 @@ export function AppShell({
       {/* Mobile nav drawer */}
       {mobileNavOpen ? (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-foreground/25" onClick={() => setMobileNavOpen(false)} />
-          <div className="relative h-full w-[264px] border-r border-border bg-card shadow-[0_16px_48px_rgb(0_0_0/0.18)]">
-            <div className="absolute right-2 top-2">
+          <div className="absolute inset-0 bg-foreground/35 backdrop-blur-[2px]" onClick={() => setMobileNavOpen(false)} />
+          <div className="relative flex h-full w-[300px] max-w-[86vw] flex-col border-r border-border bg-card shadow-[0_16px_48px_rgb(0_0_0/0.18)]">
+            <div className="absolute right-2 top-3 z-10">
               <IconButton label="Закрыть меню" onClick={() => setMobileNavOpen(false)}>
-                <IconClose size={16} />
+                <IconClose size={18} />
               </IconButton>
             </div>
-            <SidebarBody active={active} onNavigate={go} collapsed={false} />
+            <SidebarBody active={active} onNavigate={go} collapsed={false} mobile />
           </div>
         </div>
       ) : null}
