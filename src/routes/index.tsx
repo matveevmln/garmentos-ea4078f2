@@ -55,6 +55,7 @@ function GarmentOS() {
 
   return (
     <AppShell active={screen} onNavigate={setScreen} topbarTitle={SCREEN_TITLES[screen]}>
+      <div key={screen} className="anim-content">
       {screen === "home" ? <HomeScreen onOpenBatch={openBatch} /> : null}
       {screen === "batches" ? <BatchesScreen onOpenBatch={openBatch} /> : null}
       {screen === "passport" ? <PassportScreen onBack={() => setScreen("batches")} /> : null}
@@ -87,6 +88,7 @@ function GarmentOS() {
           description="Единый реестр документов пока не сформирован. Документы по партиям доступны в паспорте соответствующей партии."
         />
       ) : null}
+      </div>
     </AppShell>
   );
 }
