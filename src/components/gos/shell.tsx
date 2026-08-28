@@ -438,7 +438,7 @@ export function AppShell({
   };
 
   return (
-    <div className="min-h-screen w-full bg-background text-foreground">
+    <div className="ambient-field isolate min-h-screen w-full bg-background text-foreground">
       {/* Sidebar — desktop */}
       <aside
         className={cn(
