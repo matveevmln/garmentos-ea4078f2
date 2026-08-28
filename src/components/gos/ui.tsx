@@ -327,15 +327,19 @@ export function MetricStrip({
   items: { label: string; value: string; tone?: "danger" | "warning" }[];
 }) {
   return (
-    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[8px] border border-border bg-border shadow-[0_1px_2px_rgb(0_0_0/0.04)] lg:grid-cols-4">
-      {items.map((m) => (
-        <div key={m.label} className="bg-card px-4 py-3.5">
-          <div className="text-[11px] uppercase tracking-[0.06em] text-muted-foreground">
-            {m.label}
-          </div>
+    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[8px] border border-border bg-border lg:grid-cols-4">
+      {items.map((m, i) => (
+        <div key={m.label} className="relative bg-card px-4 pb-3.5 pt-4">
+          <span
+            className={cn(
+              "absolute left-0 top-0 h-[2px] w-8",
+              m.tone === "danger" ? "bg-danger" : m.tone === "warning" ? "bg-warning" : i === 0 ? "bg-primary" : "bg-border",
+            )}
+          />
+          <div className="eyebrow text-[10px]">{m.label}</div>
           <div
             className={cn(
-              "num mt-1.5 text-[28px] leading-none font-semibold",
+              "num mt-2 text-[30px] leading-none font-semibold tracking-[-0.02em]",
               m.tone === "danger" && "text-danger",
               m.tone === "warning" && "text-warning",
             )}
