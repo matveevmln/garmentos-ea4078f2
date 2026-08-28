@@ -226,9 +226,6 @@ export function AppShell({
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [closing, setClosing] = useState(false);
-  // Смещение панели во время жеста: null — жест не активен.
-  const [dragX, setDragX] = useState<number | null>(null);
   const gesture = useRef<{
     startX: number;
     startY: number;
@@ -238,27 +235,51 @@ export function AppShell({
     lastX: number;
     lastT: number;
     velocity: number;
+    width: number;
   } | null>(null);
   const edgeRef = useRef<HTMLDivElement | null>(null);
+  const layerRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const backdropRef = useRef<HTMLDivElement | null>(null);
   const PANEL_W = 300;
 
+  // Панель смонтирована всегда: жест не ждёт монтирования и идёт за пальцем.
+  const applyDrag = (x: number, w: number) => {
+    const panel = panelRef.current;
+    const backdrop = backdropRef.current;
+    const layer = layerRef.current;
+    if (!panel || !backdrop || !layer) return;
+    layer.style.pointerEvents = "auto";
+    layer.style.visibility = "visible";
+    panel.style.transition = "none";
+    backdrop.style.transition = "none";
+    panel.style.transform = `translate3d(${x}px,0,0)`;
+    backdrop.style.opacity = String(Math.max(0, Math.min(1, 1 + x / w)));
+  };
+
+  const clearDrag = () => {
+    const panel = panelRef.current;
+    const backdrop = backdropRef.current;
+    const layer = layerRef.current;
+    if (panel) {
+      panel.style.transition = "";
+      panel.style.transform = "";
+    }
+    if (backdrop) {
+      backdrop.style.transition = "";
+      backdrop.style.opacity = "";
+    }
+    if (layer) {
+      layer.style.pointerEvents = "";
+      layer.style.visibility = "";
+    }
+  };
+
   const closeNav = useCallback(() => {
-    setDragX(null);
-    setClosing(true);
+    clearDrag();
+    setMobileNavOpen(false);
   }, []);
 
-  useEffect(() => {
-    if (!closing) return;
-    const t = window.setTimeout(() => {
-      setClosing(false);
-      setMobileNavOpen(false);
-    }, 200);
-    return () => window.clearTimeout(t);
-  }, [closing]);
-
-  const panelWidth = () => panelWidthSafe(PANEL_W);
-
-  // Жест ведём на window: зона у края может размонтироваться в процессе свайпа.
   const startGesture = useCallback((t: { clientX: number; clientY: number }, from: "edge" | "panel") => {
     const w = panelWidthSafe(PANEL_W);
     gesture.current = {
@@ -270,6 +291,7 @@ export function AppShell({
       lastX: t.clientX,
       lastT: performance.now(),
       velocity: 0,
+      width: w,
     };
 
     const move = (ev: TouchEvent) => {
@@ -279,22 +301,15 @@ export function AppShell({
       const dx = p.clientX - g.startX;
       const dy = p.clientY - g.startY;
       if (!g.active) {
-        // Порог минимальный: жест должен подхватываться практически сразу.
-        if (Math.abs(dx) < 3) return;
+        if (Math.abs(dx) < 2) return;
         if (Math.abs(dy) > Math.abs(dx)) {
-          // Вертикальный скролл — отдаём странице.
           gesture.current = null;
           window.removeEventListener("touchmove", move);
           return;
         }
         if (g.from === "edge" && dx <= 0) return;
         g.active = true;
-        if (g.from === "edge") {
-          setClosing(false);
-          setMobileNavOpen(true);
-        }
       }
-      // Перехватываем горизонтальный жест, чтобы браузер не сделал history.back().
       if (ev.cancelable) ev.preventDefault();
       const now = performance.now();
       const dt = now - g.lastT;
@@ -303,10 +318,10 @@ export function AppShell({
       g.lastT = now;
       const next =
         g.from === "edge"
-          ? Math.min(0, -w + Math.max(0, dx))
-          : Math.max(-w, Math.min(0, dx));
+          ? Math.min(0, -g.width + Math.max(0, dx))
+          : Math.max(-g.width, Math.min(0, dx));
       g.offset = next;
-      setDragX(next);
+      applyDrag(next, g.width);
     };
 
     const end = () => {
@@ -315,48 +330,33 @@ export function AppShell({
       window.removeEventListener("touchcancel", end);
       const g = gesture.current;
       gesture.current = null;
-      if (!g || !g.active) {
-        setDragX(null);
-        return;
-      }
-      const flickOpen = g.velocity > 0.35;
-      const flickClose = g.velocity < -0.35;
-      const passed = g.offset > -w / 2;
-      const open = flickOpen || (!flickClose && passed);
-      if (open) {
-        setDragX(null);
-        setClosing(false);
-        setMobileNavOpen(true);
-      } else {
-        closeNav();
-      }
+      if (!g || !g.active) return;
+      const open = g.velocity > 0.3 || (g.velocity > -0.3 && g.offset > -g.width / 2);
+      clearDrag();
+      setMobileNavOpen(open);
     };
 
     window.addEventListener("touchmove", move, { passive: false });
     window.addEventListener("touchend", end);
     window.addEventListener("touchcancel", end);
-  }, [closeNav]);
+  }, []);
 
-  // Нативный non-passive listener на edge-зоне: даёт право отменить back-жест.
+  // Нативный non-passive listener: перехватываем жест раньше браузерного «назад».
   useEffect(() => {
     const el = edgeRef.current;
     if (!el) return;
     const onStart = (e: TouchEvent) => {
       const t = e.touches[0];
-      if (!t) return;
-      startGesture(t, "edge");
+      if (t) startGesture(t, "edge");
     };
     el.addEventListener("touchstart", onStart, { passive: false });
     return () => el.removeEventListener("touchstart", onStart);
-  }, [startGesture, mobileNavOpen]);
+  }, [startGesture]);
 
   const onPanelStart = (e: React.TouchEvent) => {
     const t = e.touches[0];
     if (t) startGesture(t, "panel");
   };
-
-  const dragging = dragX !== null;
-  const progress = dragging ? 1 + dragX / panelWidthSafe(PANEL_W) : 1;
 
   const go = (k: ScreenKey) => {
     onNavigate(k);
@@ -376,48 +376,50 @@ export function AppShell({
       </aside>
 
       {/* Зона edge-swipe: открытие меню свайпом от левого края */}
-      {!mobileNavOpen ? (
+      <div
+        ref={edgeRef}
+        aria-hidden="true"
+        style={{ touchAction: "pan-y" }}
+        className={cn("fixed left-0 top-0 bottom-[56px] z-40 w-6 md:hidden", mobileNavOpen && "hidden")}
+      />
+
+      {/* Mobile nav drawer — всегда в DOM, состояние через transform */}
+      <div
+        ref={layerRef}
+        className={cn(
+          "fixed inset-0 z-50 md:hidden",
+          mobileNavOpen ? "visible" : "pointer-events-none invisible",
+        )}
+        onTouchStart={mobileNavOpen ? onPanelStart : undefined}
+      >
         <div
-          ref={edgeRef}
-          aria-hidden="true"
-          style={{ touchAction: "pan-y" }}
-          className="fixed left-0 top-0 bottom-[56px] z-40 w-6 md:hidden"
+          ref={backdropRef}
+          className={cn(
+            "absolute inset-0 bg-foreground/45 transition-opacity duration-200 ease-out",
+            mobileNavOpen ? "opacity-100" : "opacity-0",
+          )}
+          onClick={closeNav}
         />
-      ) : null}
-
-
-      {/* Mobile nav drawer */}
-      {mobileNavOpen ? (
         <div
-          className="fixed inset-0 z-50 md:hidden"
-          onTouchStart={onPanelStart}
+          ref={panelRef}
+          className={cn(
+            "elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar transition-transform duration-200 ease-out will-change-transform",
+            mobileNavOpen ? "translate-x-0" : "-translate-x-full",
+          )}
+          style={{ touchAction: "pan-y" }}
         >
-          <div
-            className={cn(
-              "absolute inset-0 bg-foreground/45 backdrop-blur-[2px]",
-              !dragging && (closing ? "anim-overlay-out" : "anim-overlay"),
-            )}
-            style={dragging ? { opacity: Math.max(0, Math.min(1, progress)) } : undefined}
+          <button
+            type="button"
+            aria-label="Закрыть меню"
             onClick={closeNav}
-          />
-          <div
-            className={cn(
-              "elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar touch-pan-y",
-              !dragging && (closing ? "anim-panel-left-out" : "anim-panel-left-full"),
-            )}
-            style={dragging ? { transform: `translateX(${dragX}px)` } : undefined}
+            className="interactive absolute right-2 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-[8px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
           >
-            <button
-              type="button"
-              aria-label="Закрыть меню"
-              onClick={closeNav}
-              className="interactive absolute right-2 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-[8px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
-            >
-              <IconClose size={18} />
-            </button>
-            <SidebarBody active={active} onNavigate={go} collapsed={false} mobile />
-          </div>
+            <IconClose size={18} />
+          </button>
+          <SidebarBody active={active} onNavigate={go} collapsed={false} mobile />
         </div>
+      </div>
+
       ) : null}
 
       <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[64px]" : "md:pl-[260px]")}>
