@@ -87,12 +87,12 @@ export function Button({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-[6px] font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
-        size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3 text-[13px]",
+        "inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3.5 text-[13px]",
         variant === "primary" &&
-          "bg-primary text-primary-foreground hover:bg-primary/90",
+          "bg-foreground text-background hover:bg-foreground/88",
         variant === "secondary" &&
-          "border border-border bg-card text-foreground hover:bg-muted",
+          "border border-input bg-card text-foreground hover:border-foreground/25 hover:bg-muted",
         variant === "ghost" && "text-muted-foreground hover:bg-muted hover:text-foreground",
         className,
       )}
