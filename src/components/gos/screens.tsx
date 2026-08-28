@@ -105,17 +105,18 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
                       onClick={() => onOpenBatch(b.id)}
                       className="cursor-pointer transition-colors hover:bg-muted/40"
                     >
-                      <Td className="w-[68px]">
-                        <span className="num font-medium">#{b.id}</span>
+                      <Td className="w-[72px]">
+                        <span className="t-value font-semibold">#{b.id}</span>
                       </Td>
-                      <Td className="whitespace-nowrap">{b.model}</Td>
-                      <Td className="whitespace-nowrap text-muted-foreground">{b.workshop}</Td>
-                      <Td align="right" className="num w-[104px] whitespace-nowrap text-muted-foreground">
+                      <Td className="t-object whitespace-nowrap">{b.model}</Td>
+                      <Td className="t-secondary whitespace-nowrap">{b.workshop}</Td>
+                      <Td align="right" className="t-value w-[104px] whitespace-nowrap text-muted-foreground">
                         {formatQty(b.qty)} шт
                       </Td>
-                      <Td align="right" className="num w-[132px] whitespace-nowrap text-muted-foreground">
+                      <Td align="right" className="t-value w-[132px] whitespace-nowrap text-muted-foreground">
                         {b.due ? `до ${b.due}` : "—"}
                       </Td>
+
                       <Td align="right" className="w-[172px]">
                         <StatusBadge status={b.status} />
                       </Td>
