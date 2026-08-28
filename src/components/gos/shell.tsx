@@ -259,7 +259,7 @@ export function AppShell({
   const panelWidth = () => panelWidthSafe(PANEL_W);
 
   // Жест ведём на window: зона у края может размонтироваться в процессе свайпа.
-  const startGesture = useCallback((t: Touch, from: "edge" | "panel") => {
+  const startGesture = useCallback((t: { clientX: number; clientY: number }, from: "edge" | "panel") => {
     const w = panelWidthSafe(PANEL_W);
     gesture.current = {
       startX: t.clientX,
