@@ -89,15 +89,16 @@ export function Button({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        "relative inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
         size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3.5 text-[13px]",
         variant === "primary" &&
-          "bg-foreground text-background hover:bg-foreground/88",
+          "bg-foreground text-background shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_75%,transparent)] hover:bg-foreground/88",
         variant === "secondary" &&
-          "border border-input bg-card text-foreground hover:border-foreground/25 hover:bg-muted",
+          "border border-input bg-card text-foreground hover:border-primary/35 hover:bg-muted",
         variant === "ghost" && "text-muted-foreground hover:bg-muted hover:text-foreground",
         className,
       )}
+
     >
       {icon}
       {children}
