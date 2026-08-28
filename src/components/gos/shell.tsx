@@ -158,12 +158,11 @@ function SidebarBody({
 
 
       <nav className="flex-1 overflow-y-auto pb-4">
-        <div className="pt-2">
-          <NavGroup label="Производство" items={NAV_PRIMARY} active={active} onNavigate={onNavigate} collapsed={collapsed} />
+        <div className="pt-1">
+          <NavGroup label="Производство" items={NAV_PRIMARY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
         </div>
-        <NavGroup label="Снабжение" items={NAV_SUPPLY} active={active} onNavigate={onNavigate} collapsed={collapsed} />
-        <NavGroup label="Учёт" items={NAV_OFFICE} active={active} onNavigate={onNavigate} collapsed={collapsed} />
-        
+        <NavGroup label="Снабжение" items={NAV_SUPPLY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
+        <NavGroup label="Учёт" items={NAV_OFFICE} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
       </nav>
 
       <div className={cn("border-t border-border p-3", collapsed && "px-0 text-center")}>
