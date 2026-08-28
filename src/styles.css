@@ -492,10 +492,7 @@
 
 /* Оверлей верхнего уровня: диалоги, палитра команд, popover */
 @utility elev-overlay {
-  box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent),
-    0 12px 24px -8px color-mix(in oklab, var(--foreground) 14%, transparent),
-    0 36px 72px -24px color-mix(in oklab, var(--foreground) 28%, transparent);
+  box-shadow: var(--shadow-overlay);
 }
 
 @keyframes gos-dialog-in {
