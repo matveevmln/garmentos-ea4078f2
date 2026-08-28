@@ -26,7 +26,7 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-[8px] border border-border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.04)]",
+        "rounded-[6px] border border-border bg-card",
         padded && "p-4 md:p-5",
         className,
       )}
