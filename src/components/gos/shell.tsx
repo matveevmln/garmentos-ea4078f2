@@ -16,8 +16,10 @@ import {
   IconWarehouse,
   IconWorkshop,
   IconClose,
+  IconSearch,
 } from "./icons";
 import { IconButton } from "./ui";
+import { CommandPalette, type PaletteItem } from "./palette";
 
 export type ScreenKey =
   | "home"
@@ -52,6 +54,14 @@ export const NAV_SUPPLY: NavItem[] = [
 export const NAV_OFFICE: NavItem[] = [
   { key: "documents", label: "Документы", icon: IconDocument },
   { key: "finance", label: "Финансы", icon: IconFinance },
+];
+
+const PALETTE_ITEMS: PaletteItem[] = [
+  ...NAV_PRIMARY.map((i) => ({ key: i.key, label: i.label, group: "Производство" })),
+  ...NAV_SUPPLY.map((i) => ({ key: i.key, label: i.label, group: "Снабжение" })),
+  ...NAV_OFFICE.map((i) => ({ key: i.key, label: i.label, group: "Учёт" })),
+  { key: "passport" as ScreenKey, label: "Паспорт партии #158", group: "Производство", hint: "158 лана промода" },
+  { key: "states" as ScreenKey, label: "Состояния интерфейса", group: "Прототип" },
 ];
 
 const MOBILE_NAV: NavItem[] = [
@@ -96,7 +106,7 @@ function NavGroup({
                 onClick={() => onNavigate(it.key)}
                 title={it.label}
                 className={cn(
-                  "interactive group relative flex w-full items-center gap-3 rounded-[8px] pl-3 pr-2",
+                  "interactive focus-ring group relative flex w-full items-center gap-3 rounded-[8px] pl-3 pr-2",
                   mobile ? "min-h-[48px] py-3 text-[15px]" : "py-2.5 text-[13.5px]",
                   collapsed && "justify-center px-0",
                   isActive
@@ -226,6 +236,7 @@ export function AppShell({
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const gesture = useRef<{
     startX: number;
     startY: number;
@@ -410,6 +421,17 @@ export function AppShell({
     if (t) startGesture(t, "panel");
   };
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   const go = (k: ScreenKey) => {
     onNavigate(k);
     closeNav();
@@ -490,9 +512,21 @@ export function AppShell({
           <span className="ml-auto flex items-center gap-2 text-[11px] text-muted-foreground">
             <button
               type="button"
+              onClick={() => setPaletteOpen(true)}
+              className="interactive focus-ring hidden h-9 items-center gap-2 rounded-full border border-border bg-card px-3 text-[12px] text-muted-foreground hover:border-primary/25 hover:bg-muted hover:text-foreground lg:inline-flex"
+            >
+              <IconSearch size={14} />
+              Быстрый переход
+              <kbd className="micro rounded-[4px] border border-border px-1.5 py-1">⌘K</kbd>
+            </button>
+            <IconButton label="Быстрый переход" className="lg:hidden" onClick={() => setPaletteOpen(true)}>
+              <IconSearch size={16} />
+            </IconButton>
+            <button
+              type="button"
               onClick={() => go("states")}
               className={cn(
-                "interactive inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium",
+                "interactive focus-ring inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium",
                 active === "states"
                   ? "border-primary/35 bg-primary/[0.10] text-primary shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_45%,transparent)]"
                   : "border-border bg-card text-muted-foreground hover:border-primary/25 hover:bg-muted hover:text-foreground",
@@ -523,7 +557,7 @@ export function AppShell({
               type="button"
               onClick={() => go(it.key)}
               className={cn(
-                "interactive relative flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px]",
+                "interactive focus-ring relative flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px]",
                 isActive ? "font-semibold text-primary" : "text-muted-foreground",
               )}
             >
@@ -541,12 +575,19 @@ export function AppShell({
         <button
           type="button"
           onClick={() => setMobileNavOpen(true)}
-          className="interactive flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground"
+          className="interactive focus-ring flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground"
         >
           <IconMenu size={18} />
           Ещё
         </button>
       </nav>
+
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        items={PALETTE_ITEMS}
+        onSelect={(k) => onNavigate(k)}
+      />
     </div>
   );
 }

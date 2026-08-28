@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import {
   IconAlert,
@@ -7,6 +7,7 @@ import {
   IconClose,
   IconInbox,
   IconLock,
+  IconMore,
   IconRefresh,
   IconSearch,
 } from "./icons";
@@ -75,7 +76,25 @@ type ButtonProps = {
   className?: string | undefined;
   icon?: ReactNode | undefined;
   type?: "button" | undefined;
+  disabled?: boolean | undefined;
+  loading?: boolean | undefined;
 };
+
+function Spinner({ size = 14 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      className="animate-spin"
+    >
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeOpacity="0.25" strokeWidth="2" />
+      <path d="M14 8a6 6 0 0 0-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export function Button({
   children,
@@ -84,24 +103,30 @@ export function Button({
   onClick,
   className,
   icon,
+  disabled,
+  loading,
 }: ButtonProps) {
+  const inert = disabled || loading;
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={inert ? undefined : onClick}
+      disabled={inert}
+      aria-busy={loading || undefined}
       className={cn(
-        "interactive relative inline-flex items-center justify-center gap-1.5 rounded-[4px] font-medium tracking-[-0.005em] outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        "interactive focus-ring relative inline-flex items-center justify-center gap-1.5 rounded-[6px] font-medium tracking-[-0.005em]",
         size === "sm" ? "h-8 px-2.5 text-[12px]" : "h-9 px-3.5 text-[13px]",
         variant === "primary" &&
-          "bg-foreground text-background shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_75%,transparent)] hover:bg-foreground/88",
+          "bg-foreground text-background shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_75%,transparent)] hover:bg-foreground/88 active:bg-foreground/95",
         variant === "secondary" &&
-          "border border-input bg-card text-foreground hover:border-primary/35 hover:bg-muted",
+          "border border-input bg-card text-foreground hover:border-primary/35 hover:bg-muted active:bg-muted",
         variant === "ghost" && "text-muted-foreground hover:bg-muted hover:text-foreground",
+        inert && "pointer-events-none opacity-45 shadow-none",
         className,
       )}
 
     >
-      {icon}
+      {loading ? <Spinner size={size === "sm" ? 12 : 14} /> : icon}
       {children}
     </button>
   );
@@ -112,11 +137,13 @@ export function IconButton({
   onClick,
   label,
   className,
+  active,
 }: {
   children: ReactNode;
   onClick?: (() => void) | undefined;
   label: string;
   className?: string | undefined;
+  active?: boolean | undefined;
 }) {
   return (
     <button
@@ -125,7 +152,8 @@ export function IconButton({
       title={label}
       onClick={onClick}
       className={cn(
-        "interactive inline-flex h-9 w-9 items-center justify-center rounded-[8px] border border-transparent text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 outline-none",
+        "interactive focus-ring inline-flex h-11 w-11 items-center justify-center rounded-[8px] border border-transparent text-muted-foreground hover:bg-muted hover:text-foreground active:bg-muted md:h-9 md:w-9",
+        active && "border-primary/25 bg-primary/[0.08] text-primary",
         className,
       )}
     >
@@ -133,6 +161,69 @@ export function IconButton({
     </button>
   );
 }
+
+/* ---------- Контекстное меню «•••» ---------- */
+
+export function ContextMenu({
+  items,
+  label = "Действия",
+  className,
+}: {
+  items: { label: string; onSelect?: () => void; disabled?: boolean }[];
+  label?: string | undefined;
+  className?: string | undefined;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", onDoc);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className={cn("relative", className)}>
+      <IconButton
+        label={label}
+        active={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <IconMore size={16} />
+      </IconButton>
+      {open ? (
+        <div className="anim-pop elev-overlay absolute right-0 top-[calc(100%+6px)] z-40 min-w-[210px] overflow-hidden rounded-[10px] border border-border bg-popover py-1">
+          {items.map((it) => (
+            <button
+              key={it.label}
+              type="button"
+              disabled={it.disabled}
+              onClick={() => {
+                setOpen(false);
+                it.onSelect?.();
+              }}
+              className={cn(
+                "flex w-full items-center px-3 py-2.5 text-left text-[13px] transition-colors duration-150 hover:bg-muted",
+                it.disabled && "pointer-events-none opacity-45",
+              )}
+            >
+              {it.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 
 /* ---------- StatusBadge ---------- */
 
@@ -226,7 +317,7 @@ export function Breadcrumbs({
             <button
               type="button"
               onClick={it.onClick}
-              className="rounded-[4px] transition-colors hover:text-foreground"
+              className="focus-ring rounded-[4px] transition-colors hover:text-foreground"
             >
               {it.label}
             </button>
@@ -315,7 +406,7 @@ export function FilterChips({
           type="button"
           onClick={() => onChange(o)}
           className={cn(
-            "interactive h-9 rounded-[10px] border px-2.5 text-[12px] font-medium md:h-8",
+            "interactive focus-ring h-9 rounded-[10px] border px-2.5 text-[12px] font-medium md:h-8",
             value === o
               ? "border-primary/35 bg-primary/[0.10] text-primary shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_45%,transparent)]"
               : "border-border bg-card text-muted-foreground hover:border-primary/25 hover:bg-muted hover:text-foreground",
@@ -387,7 +478,7 @@ export function AttentionList({
           <button
             type="button"
             onClick={() => onSelect?.(it.id)}
-            className="interactive -mx-2 flex w-full items-start gap-3 rounded-[8px] px-2 py-3 text-left hover:bg-muted/50"
+            className="interactive focus-ring -mx-2 flex w-full items-start gap-3 rounded-[8px] px-2 py-3 text-left hover:bg-muted/50 active:bg-muted"
           >
             <span
               className={cn(
@@ -493,7 +584,7 @@ export function MobileListItem({
     <button
       type="button"
       onClick={onClick}
-      className="interactive elev-1 w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/25 active:bg-muted/50"
+      className="interactive focus-ring elev-1 min-h-[56px] w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/25 active:bg-muted/50"
     >
       {children}
     </button>
@@ -520,7 +611,7 @@ export function Accordion({
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="interactive flex min-h-[44px] w-full items-center justify-between gap-3 rounded-[10px] px-4 py-3 text-left hover:bg-muted/45"
+        className="interactive focus-ring flex min-h-[48px] w-full items-center justify-between gap-3 rounded-[10px] px-4 py-3 text-left hover:bg-muted/45 active:bg-muted/60"
       >
         <span className="flex items-baseline gap-2">
           <span className="text-[13px] font-semibold">{title}</span>

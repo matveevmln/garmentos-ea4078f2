@@ -21,6 +21,7 @@ import {
   Button,
   Card,
   CardHeader,
+  ContextMenu,
   DataTable,
   Drawer,
   EmptyState,
@@ -108,7 +109,7 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
                       className="cursor-pointer transition-colors hover:bg-muted/40"
                     >
                       <Td className="!pl-4 !pr-2">
-                        <span className="t-value font-semibold">#{b.id}</span>
+                        <span className="t-id font-semibold text-foreground">#{b.id}</span>
                       </Td>
                       <Td className="t-object !px-2 truncate">{b.model}</Td>
                       <Td className="t-secondary !px-2 truncate">{b.workshop}</Td>
@@ -137,7 +138,7 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
                 <MobileListItem key={b.id} onClick={() => onOpenBatch(b.id)}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="num text-[12px] text-muted-foreground">#{b.id}</div>
+                      <div className="t-id text-[12px] text-muted-foreground">#{b.id}</div>
                       <div className="mt-0.5 text-[13px] font-medium">{b.model}</div>
                       <div className="mt-1 text-[12px] text-muted-foreground">{b.workshop}</div>
                     </div>
@@ -277,7 +278,7 @@ export function BatchesScreen({ onOpenBatch }: { onOpenBatch: (id: string) => vo
                   <Td>
                     <StatusBadge status={b.status} />
                   </Td>
-                  <Td align="right" className={cn("num", b.amount === null && "text-muted-foreground")}>
+                  <Td align="right" className={cn("t-amount", b.amount === null && "font-normal text-muted-foreground")}>
                     {b.amount === null ? "не определена" : formatMoney(b.amount)}
                   </Td>
                   <Td align="right">
@@ -305,7 +306,7 @@ export function BatchesScreen({ onOpenBatch }: { onOpenBatch: (id: string) => vo
               <MobileListItem key={b.id} onClick={() => onOpenBatch(b.id)}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="num text-[12px] text-muted-foreground">#{b.id}</div>
+                    <div className="t-id text-[12px] text-muted-foreground">#{b.id}</div>
                     <div className="mt-0.5 text-[13px] font-medium">{b.model}</div>
                   </div>
                   <StatusBadge status={b.status} />
@@ -316,7 +317,7 @@ export function BatchesScreen({ onOpenBatch }: { onOpenBatch: (id: string) => vo
                   <dt className="text-muted-foreground">Количество</dt>
                   <dd className="text-right">{formatQty(b.qty)} шт</dd>
                   <dt className="text-muted-foreground">Сумма</dt>
-                  <dd className="text-right">{b.amount === null ? "не определена" : formatMoney(b.amount)}</dd>
+                  <dd className={cn("text-right", b.amount === null ? "t-secondary" : "t-amount")}>{b.amount === null ? "не определена" : formatMoney(b.amount)}</dd>
                   <dt className="text-muted-foreground">Срок</dt>
                   <dd className={cn("text-right", b.overdueDays && "text-danger")}>
                     {b.due ?? "срока нет"}
@@ -431,6 +432,13 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
             <Button variant="primary" onClick={() => setSheet("invoice")}>
               Счёт к оплате
             </Button>
+            <ContextMenu
+              label="Действия по партии"
+              items={[
+                { label: "Открыть счёт по партии", onSelect: () => setSheet("invoice") },
+                { label: "Вернуться к списку партий", onSelect: onBack },
+              ]}
+            />
           </>
         }
       />
@@ -651,7 +659,7 @@ export function MaterialsScreen() {
           {materials.map((m) => (
             <tr key={m.code} className="transition-colors hover:bg-muted/40">
               <Td className="font-medium">{m.name}</Td>
-              <Td className="num text-muted-foreground">{m.code}</Td>
+              <Td className="t-id text-muted-foreground">{m.code}</Td>
               <Td className="text-muted-foreground">{m.kind}</Td>
               <Td className="num text-muted-foreground">{m.unit}</Td>
               <Td className="text-muted-foreground">{m.supplier}</Td>
@@ -735,7 +743,7 @@ export function PurchasesScreen() {
           <MobileListItem key={p.id}>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="num text-[13px] font-medium">{p.id}</div>
+                <div className="t-id text-[13px] font-semibold text-foreground">{p.id}</div>
                 <div className="mt-0.5 text-[12px] text-muted-foreground">{p.supplier}</div>
               </div>
               <StatusBadge status={p.status} />
