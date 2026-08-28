@@ -248,19 +248,21 @@ export function PageHeader({
   actions?: ReactNode | undefined;
 }) {
   return (
-    <header className="mb-4 flex flex-col gap-2 md:mb-5">
+    <header className="mb-5 md:mb-7">
       {breadcrumbs}
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="editorial text-[22px] md:text-[32px]">{title}</h1>
+      <div className="mt-2 flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
+        <div className="min-w-0">
+          <h1 className="editorial text-[26px] md:text-[38px]">{title}</h1>
           {subtitle ? (
-            <p className="mt-1.5 max-w-[68ch] text-[13px] leading-[1.5] text-muted-foreground">{subtitle}</p>
+            <p className="mt-2 max-w-[68ch] text-[13px] leading-[1.55] text-muted-foreground">{subtitle}</p>
           ) : null}
         </div>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
       </div>
+      <span className="block h-[2px] w-11 bg-primary" />
     </header>
   );
+
 }
 
 /* ---------- Search & filters ---------- */
