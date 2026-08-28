@@ -447,7 +447,7 @@ export function AppShell({
         <div
           ref={backdropRef}
           className={cn(
-            "absolute inset-0 bg-foreground/45 transition-opacity duration-200 ease-out",
+            "absolute inset-0 bg-foreground/45 transition-opacity duration-300 ease-out",
             mobileNavOpen ? "opacity-100" : "opacity-0",
           )}
           onClick={closeNav}
@@ -455,7 +455,7 @@ export function AppShell({
         <div
           ref={panelRef}
           className={cn(
-            "elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar transition-transform duration-200 ease-out will-change-transform",
+            "elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] will-change-transform",
             mobileNavOpen ? "[transform:translate3d(0,0,0)]" : "[transform:translate3d(-100%,0,0)]",
           )}
           style={{ touchAction: "pan-y" }}
