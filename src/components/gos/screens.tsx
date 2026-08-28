@@ -539,9 +539,9 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
             value={p.attention.amount}
             sub={`${p.money.restShare} · ${p.money.restDue}`}
             tone="warning"
-            className="rounded-[8px] border border-border"
+            className="rounded-[6px] border border-border"
           />
-          <div className="divide-y divide-border rounded-[8px] border border-border px-3">
+          <div className="divide-y divide-border rounded-[6px] border border-border px-3">
             <div className="flex items-center justify-between py-2.5 text-[13px]">
               <span className="text-muted-foreground">Сумма партии</span>
               <span className="num">{p.money.total}</span>
@@ -555,7 +555,7 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
               <span className="num font-medium">{p.money.rest}</span>
             </div>
           </div>
-          <div className="divide-y divide-border rounded-[8px] border border-border px-3">
+          <div className="divide-y divide-border rounded-[6px] border border-border px-3">
             {p.documents.map((d) => (
               <DocumentRow key={d.title} title={d.title} version={d.version} format={d.format} date={d.date} />
             ))}
