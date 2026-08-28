@@ -21,6 +21,7 @@ import {
   Button,
   Card,
   CardHeader,
+  ContextMenu,
   DataTable,
   Drawer,
   EmptyState,
@@ -431,6 +432,13 @@ export function PassportScreen({ onBack }: { onBack: () => void }) {
             <Button variant="primary" onClick={() => setSheet("invoice")}>
               Счёт к оплате
             </Button>
+            <ContextMenu
+              label="Действия по партии"
+              items={[
+                { label: "Открыть счёт по партии", onSelect: () => setSheet("invoice") },
+                { label: "Вернуться к списку партий", onSelect: onBack },
+              ]}
+            />
           </>
         }
       />
