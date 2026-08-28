@@ -400,17 +400,18 @@ export function AttentionList({
               <IconAlert size={14} />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block text-[13px] font-medium">{it.title}</span>
-              <span className="mt-0.5 block text-[12px] text-muted-foreground">{it.sub}</span>
+              <span className="t-object block">{it.title}</span>
+              <span className="t-meta mt-1 block">{it.sub}</span>
             </span>
             <span
               className={cn(
-                "num shrink-0 text-[13px] font-medium",
+                "t-value shrink-0 text-[13.5px] font-semibold",
                 it.tone === "danger" ? "text-danger" : "text-warning",
               )}
             >
               {it.meta}
             </span>
+
           </button>
         </li>
       ))}
