@@ -19,9 +19,9 @@ export function Card({
   children,
   padded = true,
 }: {
-  className?: string;
+  className?: string | undefined;
   children: ReactNode;
-  padded?: boolean;
+  padded?: boolean | undefined;
 }) {
   return (
     <section
@@ -43,9 +43,9 @@ export function CardHeader({
   className,
 }: {
   title: string;
-  hint?: ReactNode;
-  action?: ReactNode;
-  className?: string;
+  hint?: ReactNode | undefined;
+  action?: ReactNode | undefined;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("flex items-baseline justify-between gap-3", className)}>
@@ -70,12 +70,12 @@ export function SectionLabel({ children }: { children: ReactNode }) {
 
 type ButtonProps = {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
-  size?: "sm" | "md";
-  onClick?: () => void;
-  className?: string;
-  icon?: ReactNode;
-  type?: "button";
+  variant?: "primary" | "secondary" | "ghost" | undefined;
+  size?: "sm" | "md" | undefined;
+  onClick?: () => void | undefined;
+  className?: string | undefined;
+  icon?: ReactNode | undefined;
+  type?: "button" | undefined;
 };
 
 export function Button({
@@ -114,9 +114,9 @@ export function IconButton({
   className,
 }: {
   children: ReactNode;
-  onClick?: () => void;
+  onClick?: () => void | undefined;
   label: string;
-  className?: string;
+  className?: string | undefined;
 }) {
   return (
     <button
@@ -174,8 +174,8 @@ export function StatusBadge({
   className,
 }: {
   status: BatchStatus | string;
-  tone?: keyof typeof toneStyles;
-  className?: string;
+  tone?: keyof typeof toneStyles | undefined;
+  className?: string | undefined;
 }) {
   const t = tone ?? statusTone[status] ?? "neutral";
   return (
@@ -244,9 +244,9 @@ export function PageHeader({
   actions,
 }: {
   title: string;
-  subtitle?: ReactNode;
-  breadcrumbs?: ReactNode;
-  actions?: ReactNode;
+  subtitle?: ReactNode | undefined;
+  breadcrumbs?: ReactNode | undefined;
+  actions?: ReactNode | undefined;
 }) {
   return (
     <header className="mb-4 flex flex-col gap-2 md:mb-5">
@@ -274,8 +274,8 @@ export function SearchField({
 }: {
   value: string;
   onChange: (v: string) => void;
-  placeholder?: string;
-  className?: string;
+  placeholder?: string | undefined;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("relative", className)}>
@@ -359,7 +359,7 @@ export function AttentionList({
   onSelect,
 }: {
   items: { id: string; tone: "danger" | "warning"; title: string; meta: string; sub: string }[];
-  onSelect?: (id: string) => void;
+  onSelect?: (id: string) => void | undefined;
 }) {
   return (
     <ul className="divide-y divide-border">
@@ -408,7 +408,7 @@ export function DataTable({
 }: {
   columns: { key: string; label: string; align?: "left" | "right"; width?: string }[];
   children: ReactNode;
-  className?: string;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("overflow-hidden rounded-[8px] border border-border bg-card shadow-[0_1px_2px_rgb(0_0_0/0.04)]", className)}>
@@ -441,8 +441,8 @@ export function Td({
   className,
 }: {
   children: ReactNode;
-  align?: "left" | "right";
-  className?: string;
+  align?: "left" | "right" | undefined;
+  className?: string | undefined;
 }) {
   return (
     <td
@@ -461,7 +461,7 @@ export function MobileListItem({
   onClick,
   children,
 }: {
-  onClick?: () => void;
+  onClick?: () => void | undefined;
   children: ReactNode;
 }) {
   return (
@@ -484,8 +484,8 @@ export function Accordion({
   children,
 }: {
   title: string;
-  hint?: ReactNode;
-  defaultOpen?: boolean;
+  hint?: ReactNode | undefined;
+  defaultOpen?: boolean | undefined;
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -563,9 +563,9 @@ export function EmptyState({
 }: {
   title: string;
   description: string;
-  icon?: ReactNode;
-  action?: ReactNode;
-  compact?: boolean;
+  icon?: ReactNode | undefined;
+  action?: ReactNode | undefined;
+  compact?: boolean | undefined;
 }) {
   return (
     <div
