@@ -88,12 +88,13 @@ export function HomeScreen({ onOpenBatch }: { onOpenBatch: (id: string) => void 
               <table className="w-full table-fixed border-collapse text-[13px]">
                 <thead>
                   <tr className="border-t border-border text-left text-[11.5px] uppercase tracking-[0.06em] text-muted-foreground">
-                    <th className="h-10 w-[76px] px-4 font-medium">№</th>
-                    <th className="h-10 px-4 font-medium">Модель</th>
-                    <th className="h-10 w-[112px] px-4 font-medium">Цех</th>
-                    <th className="h-10 w-[104px] px-4 text-right font-medium">Кол-во</th>
-                    <th className="h-10 w-[136px] px-4 text-right font-medium">Срок</th>
-                    <th className="h-10 w-[176px] px-4 text-right font-medium">Статус</th>
+                    <th className="h-10 w-[60px] pl-4 pr-2 font-medium">№</th>
+                    <th className="h-10 px-2 font-medium">Модель</th>
+                    <th className="h-10 w-[96px] px-2 font-medium">Цех</th>
+                    <th className="h-10 w-[88px] px-2 text-right font-medium">Кол-во</th>
+                    <th className="h-10 w-[116px] px-2 text-right font-medium">Срок</th>
+                    <th className="h-10 w-[152px] pl-2 pr-4 text-right font-medium">Статус</th>
+
 
                   </tr>
                 </thead>
