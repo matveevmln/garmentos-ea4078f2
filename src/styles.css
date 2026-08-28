@@ -118,7 +118,55 @@
   --sidebar-accent-foreground: oklch(0.98 0.003 80);
   --sidebar-border: oklch(0.28 0.005 60);
   --sidebar-ring: oklch(0.72 0.135 60);
+
+  /* ====== Токены: радиусы ====== */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 12px;
+  --r-2xl: 16px;
+  --r-pill: 999px;
+
+  /* ====== Токены: движение ====== */
+  --dur-1: 120ms;   /* мгновенная реакция: press, цвет */
+  --dur-2: 180ms;   /* hover / focus */
+  --dur-3: 240ms;   /* раскрытие, появление */
+  --dur-4: 320ms;   /* панели, drawer */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 0.7, 0.4);
+  --ease-emphasis: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* ====== Токены: тени ====== */
+  --shadow-1:
+    0 1px 2px color-mix(in oklab, var(--foreground) 5%, transparent),
+    0 1px 1px color-mix(in oklab, var(--foreground) 3%, transparent);
+  --shadow-2:
+    0 2px 4px color-mix(in oklab, var(--foreground) 6%, transparent),
+    0 8px 20px -8px color-mix(in oklab, var(--foreground) 12%, transparent);
+  --shadow-3:
+    0 4px 10px color-mix(in oklab, var(--foreground) 8%, transparent),
+    0 18px 42px -12px color-mix(in oklab, var(--foreground) 20%, transparent);
+  --shadow-4:
+    0 8px 18px color-mix(in oklab, var(--foreground) 10%, transparent),
+    0 32px 64px -16px color-mix(in oklab, var(--foreground) 26%, transparent);
+  --shadow-overlay:
+    0 0 0 1px color-mix(in oklab, var(--foreground) 7%, transparent),
+    0 12px 24px -8px color-mix(in oklab, var(--foreground) 14%, transparent),
+    0 36px 72px -24px color-mix(in oklab, var(--foreground) 28%, transparent);
+
+  /* ====== Токены: фокус ====== */
+  --focus-color: color-mix(in oklab, var(--primary) 48%, transparent);
+  --focus-halo: color-mix(in oklab, var(--primary) 12%, transparent);
+  --focus-offset-color: var(--card);
+  --focus-width: 2px;
+
+  /* ====== Токены: стекло ====== */
+  --glass-bg: color-mix(in oklab, var(--card) 72%, transparent);
+  --glass-border: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --glass-blur: 18px;
 }
+
 
 
 .dark {
