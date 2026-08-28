@@ -424,16 +424,16 @@ export function DataTable({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-[6px] border border-border bg-card", className)}>
+    <div className={cn("surface-card overflow-hidden rounded-[6px]", className)}>
       <table className="w-full border-collapse text-[13px]">
         <thead>
-          <tr className="border-b border-border bg-muted/40">
+          <tr className="border-b border-border bg-[color-mix(in_oklab,var(--foreground)_3%,var(--card))]">
             {columns.map((c) => (
               <th
                 key={c.key}
                 style={c.width ? { width: c.width } : undefined}
                 className={cn(
-                  "h-9 px-3 text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground",
+                  "micro h-10 px-3 font-medium text-muted-foreground",
                   c.align === "right" ? "text-right" : "text-left",
                 )}
               >
@@ -442,10 +442,13 @@ export function DataTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border">{children}</tbody>
+        <tbody className="divide-y divide-border [&>tr]:transition-colors [&>tr:hover]:bg-[color-mix(in_oklab,var(--primary)_4%,var(--card))]">
+          {children}
+        </tbody>
       </table>
     </div>
   );
+
 }
 
 export function Td({
