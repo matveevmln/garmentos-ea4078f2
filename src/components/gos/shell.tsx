@@ -305,6 +305,8 @@ export function AppShell({
       lastT: performance.now(),
       velocity: 0,
       width: w,
+      raf: 0,
+      pendingX: null,
     };
 
     const move = (ev: TouchEvent) => {
