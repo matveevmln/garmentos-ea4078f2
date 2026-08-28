@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import {
   IconBatch,
@@ -208,6 +208,11 @@ function SidebarBody({
 
 }
 
+function panelWidthSafe(max: number) {
+  if (typeof window === "undefined") return max;
+  return Math.min(max, window.innerWidth * 0.86);
+}
+
 export function AppShell({
   active,
   onNavigate,
@@ -221,10 +226,97 @@ export function AppShell({
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
+  // Смещение панели во время жеста: null — жест не активен.
+  const [dragX, setDragX] = useState<number | null>(null);
+  const gesture = useRef<{ startX: number; startY: number; active: boolean; from: "edge" | "panel"; offset: number } | null>(null);
+  const PANEL_W = 300;
+
+  const closeNav = useCallback(() => {
+    setDragX(null);
+    setClosing(true);
+  }, []);
+
+  useEffect(() => {
+    if (!closing) return;
+    const t = window.setTimeout(() => {
+      setClosing(false);
+      setMobileNavOpen(false);
+    }, 200);
+    return () => window.clearTimeout(t);
+  }, [closing]);
+
+  const panelWidth = () => panelWidthSafe(PANEL_W);
+
+  // Жест ведём на window: зона у края может размонтироваться в процессе свайпа.
+  const startGesture = (e: React.TouchEvent, from: "edge" | "panel") => {
+    const t = e.touches[0];
+    if (!t) return;
+    gesture.current = {
+      startX: t.clientX,
+      startY: t.clientY,
+      active: false,
+      from,
+      offset: from === "panel" ? 0 : -panelWidth(),
+    };
+
+    const move = (ev: TouchEvent) => {
+      const g = gesture.current;
+      const p = ev.touches[0];
+      if (!g || !p) return;
+      const dx = p.clientX - g.startX;
+      const dy = p.clientY - g.startY;
+      if (!g.active) {
+        if (Math.abs(dy) > Math.abs(dx) || Math.abs(dx) < 8) return;
+        g.active = true;
+        if (g.from === "edge") {
+          setClosing(false);
+          setMobileNavOpen(true);
+        }
+      }
+      if (ev.cancelable) ev.preventDefault();
+      const w = panelWidth();
+      const next =
+        g.from === "edge"
+          ? Math.min(0, -w + Math.max(0, dx))
+          : Math.max(-w, Math.min(0, dx));
+      g.offset = next;
+      setDragX(next);
+    };
+
+    const end = () => {
+      window.removeEventListener("touchmove", move);
+      window.removeEventListener("touchend", end);
+      window.removeEventListener("touchcancel", end);
+      const g = gesture.current;
+      gesture.current = null;
+      if (!g || !g.active) {
+        setDragX(null);
+        return;
+      }
+      if (g.offset > -panelWidth() / 2) {
+        setDragX(null);
+        setClosing(false);
+        setMobileNavOpen(true);
+      } else {
+        closeNav();
+      }
+    };
+
+    window.addEventListener("touchmove", move, { passive: false });
+    window.addEventListener("touchend", end);
+    window.addEventListener("touchcancel", end);
+  };
+
+  const onEdgeStart = (e: React.TouchEvent) => startGesture(e, "edge");
+  const onPanelStart = (e: React.TouchEvent) => startGesture(e, "panel");
+
+  const dragging = dragX !== null;
+  const progress = dragging ? 1 + dragX / panelWidthSafe(PANEL_W) : 1;
 
   const go = (k: ScreenKey) => {
     onNavigate(k);
-    setMobileNavOpen(false);
+    closeNav();
   };
 
   return (
@@ -239,15 +331,40 @@ export function AppShell({
         <SidebarBody active={active} onNavigate={go} collapsed={collapsed} />
       </aside>
 
+      {/* Зона edge-swipe: открытие меню свайпом от левого края */}
+      {!mobileNavOpen ? (
+        <div
+          aria-hidden="true"
+          onTouchStart={onEdgeStart}
+          className="fixed left-0 top-0 bottom-[56px] z-40 w-5 touch-pan-y md:hidden"
+        />
+      ) : null}
+
       {/* Mobile nav drawer */}
       {mobileNavOpen ? (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div className="anim-overlay absolute inset-0 bg-foreground/45 backdrop-blur-[2px]" onClick={() => setMobileNavOpen(false)} />
-          <div className="anim-panel-left elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar">
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          onTouchStart={onPanelStart}
+        >
+          <div
+            className={cn(
+              "absolute inset-0 bg-foreground/45 backdrop-blur-[2px]",
+              !dragging && (closing ? "anim-overlay-out" : "anim-overlay"),
+            )}
+            style={dragging ? { opacity: Math.max(0, Math.min(1, progress)) } : undefined}
+            onClick={closeNav}
+          />
+          <div
+            className={cn(
+              "elev-4 relative flex h-full w-[300px] max-w-[86vw] flex-col bg-sidebar touch-pan-y",
+              !dragging && (closing ? "anim-panel-left-out" : "anim-panel-left-full"),
+            )}
+            style={dragging ? { transform: `translateX(${dragX}px)` } : undefined}
+          >
             <button
               type="button"
               aria-label="Закрыть меню"
-              onClick={() => setMobileNavOpen(false)}
+              onClick={closeNav}
               className="interactive absolute right-2 top-4 z-10 inline-flex h-11 w-11 items-center justify-center rounded-[8px] text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
             >
               <IconClose size={18} />
@@ -260,7 +377,7 @@ export function AppShell({
       <div className={cn("flex min-h-screen flex-col transition-[padding] duration-200", collapsed ? "md:pl-[64px]" : "md:pl-[260px]")}>
         {/* TopBar */}
         <header className="sticky top-0 z-20 flex h-[60px] items-center gap-2 border-b border-border bg-card/92 px-3 shadow-[0_1px_0_0_color-mix(in_oklab,var(--foreground)_4%,transparent)] backdrop-blur-md md:px-8">
-          <IconButton label="Меню" className="md:hidden" onClick={() => setMobileNavOpen(true)}>
+          <IconButton label="Меню" className="md:hidden" onClick={() => { setClosing(false); setDragX(null); setMobileNavOpen(true); }}>
             <IconMenu size={18} />
           </IconButton>
           <IconButton
