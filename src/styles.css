@@ -501,7 +501,7 @@
 }
 
 @utility anim-dialog {
-  animation: gos-dialog-in 180ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-dialog-in var(--dur-2) var(--ease-out) both;
 }
 
 
@@ -568,27 +568,27 @@
 }
 
 @utility anim-content {
-  animation: gos-content-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-content-in var(--dur-3) var(--ease-out) both;
 }
 
 @utility anim-overlay {
-  animation: gos-overlay-in 180ms ease-out both;
+  animation: gos-overlay-in var(--dur-2) var(--ease-out) both;
 }
 
 @utility anim-sheet {
-  animation: gos-sheet-up 240ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-sheet-up var(--dur-4) var(--ease-out) both;
 }
 
 @utility anim-panel {
-  animation: gos-panel-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-panel-in var(--dur-3) var(--ease-out) both;
 }
 
 @utility anim-panel-left {
-  animation: gos-panel-in-left 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: gos-panel-in-left var(--dur-3) var(--ease-out) both;
 }
 
 @utility anim-pop {
-  animation: gos-pop-in 150ms ease-out both;
+  animation: gos-pop-in var(--dur-2) var(--ease-out) both;
 }
 
 /* Сдержанный skeleton shimmer */
@@ -608,7 +608,7 @@
 @utility collapsible {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: grid-template-rows var(--dur-3) var(--ease-out);
 
   & > * {
     overflow: hidden;
@@ -715,16 +715,18 @@
 /* Подъём карточки при наведении */
 @utility lift {
   transition:
-    transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1),
-    box-shadow 200ms ease,
-    border-color 200ms ease;
+    transform var(--dur-3) var(--ease-out),
+    box-shadow var(--dur-3) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out);
 
   &:hover {
     transform: translateY(-2px);
+    box-shadow: var(--shadow-3);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.997);
+    box-shadow: var(--shadow-1);
   }
 }
 
@@ -809,9 +811,9 @@
 
 /* Стеклянная панель: полупрозрачность + размытие подложки */
 @utility glass-bar {
-  background: color-mix(in oklab, var(--card) 74%, transparent);
-  backdrop-filter: blur(18px) saturate(150%);
-  border-color: color-mix(in oklab, var(--border) 80%, transparent);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+  border-color: var(--glass-border);
 }
 
 /* Ambient-свет внутри тёмного рельса */
@@ -854,7 +856,10 @@
 
 /* Мягкий световой ореол интерактивного элемента при наведении */
 @utility hover-halo {
-  transition: box-shadow 200ms ease, border-color 200ms ease, background-color 200ms ease;
+  transition:
+    box-shadow var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out),
+    background-color var(--dur-2) var(--ease-out);
 
   &:hover {
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 8%, transparent);
