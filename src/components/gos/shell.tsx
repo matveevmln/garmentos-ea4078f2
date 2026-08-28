@@ -106,7 +106,7 @@ function NavGroup({
                 onClick={() => onNavigate(it.key)}
                 title={it.label}
                 className={cn(
-                  "interactive group relative flex w-full items-center gap-3 rounded-[8px] pl-3 pr-2",
+                  "interactive focus-ring group relative flex w-full items-center gap-3 rounded-[8px] pl-3 pr-2",
                   mobile ? "min-h-[48px] py-3 text-[15px]" : "py-2.5 text-[13.5px]",
                   collapsed && "justify-center px-0",
                   isActive
@@ -526,7 +526,7 @@ export function AppShell({
               type="button"
               onClick={() => go("states")}
               className={cn(
-                "interactive inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium",
+                "interactive focus-ring inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium",
                 active === "states"
                   ? "border-primary/35 bg-primary/[0.10] text-primary shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_45%,transparent)]"
                   : "border-border bg-card text-muted-foreground hover:border-primary/25 hover:bg-muted hover:text-foreground",
@@ -557,7 +557,7 @@ export function AppShell({
               type="button"
               onClick={() => go(it.key)}
               className={cn(
-                "interactive relative flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px]",
+                "interactive focus-ring relative flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px]",
                 isActive ? "font-semibold text-primary" : "text-muted-foreground",
               )}
             >
@@ -575,7 +575,7 @@ export function AppShell({
         <button
           type="button"
           onClick={() => setMobileNavOpen(true)}
-          className="interactive flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground"
+          className="interactive focus-ring flex min-h-[56px] flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground"
         >
           <IconMenu size={18} />
           Ещё

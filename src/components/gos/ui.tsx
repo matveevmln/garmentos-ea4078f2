@@ -317,7 +317,7 @@ export function Breadcrumbs({
             <button
               type="button"
               onClick={it.onClick}
-              className="rounded-[4px] transition-colors hover:text-foreground"
+              className="focus-ring rounded-[4px] transition-colors hover:text-foreground"
             >
               {it.label}
             </button>
@@ -406,7 +406,7 @@ export function FilterChips({
           type="button"
           onClick={() => onChange(o)}
           className={cn(
-            "interactive h-9 rounded-[10px] border px-2.5 text-[12px] font-medium md:h-8",
+            "interactive focus-ring h-9 rounded-[10px] border px-2.5 text-[12px] font-medium md:h-8",
             value === o
               ? "border-primary/35 bg-primary/[0.10] text-primary shadow-[inset_0_-2px_0_0_color-mix(in_oklab,var(--primary)_45%,transparent)]"
               : "border-border bg-card text-muted-foreground hover:border-primary/25 hover:bg-muted hover:text-foreground",
@@ -478,7 +478,7 @@ export function AttentionList({
           <button
             type="button"
             onClick={() => onSelect?.(it.id)}
-            className="interactive -mx-2 flex w-full items-start gap-3 rounded-[8px] px-2 py-3 text-left hover:bg-muted/50"
+            className="interactive focus-ring -mx-2 flex w-full items-start gap-3 rounded-[8px] px-2 py-3 text-left hover:bg-muted/50 active:bg-muted"
           >
             <span
               className={cn(
@@ -584,7 +584,7 @@ export function MobileListItem({
     <button
       type="button"
       onClick={onClick}
-      className="interactive elev-1 w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/25 active:bg-muted/50"
+      className="interactive focus-ring elev-1 min-h-[56px] w-full rounded-[10px] border border-border bg-card p-3.5 text-left hover:border-primary/25 active:bg-muted/50"
     >
       {children}
     </button>
@@ -611,7 +611,7 @@ export function Accordion({
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="interactive flex min-h-[44px] w-full items-center justify-between gap-3 rounded-[10px] px-4 py-3 text-left hover:bg-muted/45"
+        className="interactive focus-ring flex min-h-[48px] w-full items-center justify-between gap-3 rounded-[10px] px-4 py-3 text-left hover:bg-muted/45 active:bg-muted/60"
       >
         <span className="flex items-baseline gap-2">
           <span className="text-[13px] font-semibold">{title}</span>
