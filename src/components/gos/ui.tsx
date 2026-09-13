@@ -237,8 +237,8 @@ const statusTone: Record<string, "neutral" | "info" | "accent" | "success" | "wa
   Получена: "success",
   Отправлена: "accent",
   Актуальная: "success",
-  "BOM утверждён": "success",
-  "BOM черновик": "neutral",
+  "Спецификация утверждена": "success",
+  "Спецификация — черновик": "neutral",
 };
 
 const toneStyles: Record<string, string> = {

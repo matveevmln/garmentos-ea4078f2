@@ -224,7 +224,7 @@ export type ProductionBatch = Batch & {
 
 export const productionBatches: ProductionBatch[] = [
   {
-    ...batches[0],
+    id: "158", model: "Платье «Лана»", workshop: "Промода", qty: 3000, status: "В производстве", amount: 2880000, due: "28.08.2026",
     number: "ПР-2026-0023",
     specification: "СП-012 · версия 2",
     modelCode: "DR-LANA",
@@ -234,7 +234,7 @@ export const productionBatches: ProductionBatch[] = [
     ],
   },
   {
-    ...batches[1],
+    id: "157", model: "Костюм «Лира»", workshop: "Ак-Сай", qty: 1800, status: "Размещён", amount: 1542600, due: "25.08.2026",
     number: "ПР-2026-0022",
     specification: "СП-011 · версия 1",
     modelCode: "ST-LIRA",
@@ -245,7 +245,7 @@ export const productionBatches: ProductionBatch[] = [
     ],
   },
   {
-    ...batches[2],
+    id: "156", model: "Платье «Миа»", workshop: "Швей-Цех", qty: 2500, status: "В производстве", amount: 2145750, due: "30.08.2026",
     number: "ПР-2026-0021",
     specification: "СП-010 · актуальная",
     modelCode: "DR-MIA",
@@ -255,7 +255,7 @@ export const productionBatches: ProductionBatch[] = [
     ],
   },
   {
-    ...batches[3],
+    id: "155", model: "Платье «Эми»", workshop: "Промода", qty: 1200, status: "Готово к отгрузке", amount: 918240, due: "20.08.2026", overdueDays: 3,
     number: "ПР-2026-0020",
     specification: "СП-009 · актуальная",
     modelCode: "DR-EMI",
