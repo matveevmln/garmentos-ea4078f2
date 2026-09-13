@@ -201,10 +201,75 @@ export const passport158 = {
 /* ---------- Модели ---------- */
 
 export const models = [
-  { name: "Платье «Лана»", code: "DR-LANA", sku: 6, bom: "BOM утверждён" as const },
-  { name: "Платье «Миа»", code: "DR-MIA", sku: 9, bom: "BOM утверждён" as const },
-  { name: "Костюм «Лира»", code: "ST-LIRA", sku: 6, bom: "BOM утверждён" as const },
-  { name: "Топ «Софт»", code: "TP-SOFT", sku: 8, bom: "BOM черновик" as const },
+  { name: "Платье «Лана»", code: "DR-LANA", sku: 6, bom: "Спецификация утверждена" as const },
+  { name: "Платье «Миа»", code: "DR-MIA", sku: 9, bom: "Спецификация утверждена" as const },
+  { name: "Костюм «Лира»", code: "ST-LIRA", sku: 6, bom: "Спецификация утверждена" as const },
+  { name: "Топ «Софт»", code: "TP-SOFT", sku: 8, bom: "Спецификация — черновик" as const },
+];
+
+export type SizeBreakdown = { size: string; qty: number };
+export type ColorBreakdown = {
+  name: string;
+  tone: "powder" | "graphite" | "wine" | "ivory" | "sage";
+  total: number;
+  sizes: SizeBreakdown[];
+};
+
+export type ProductionBatch = Batch & {
+  number: string;
+  specification: string;
+  modelCode: string;
+  colors: ColorBreakdown[];
+};
+
+export const productionBatches: ProductionBatch[] = [
+  {
+    id: "158", model: "Платье «Лана»", workshop: "Промода", qty: 3000, status: "В производстве", amount: 2880000, due: "28.08.2026",
+    number: "ПР-2026-0023",
+    specification: "СП-012 · версия 2",
+    modelCode: "DR-LANA",
+    colors: [
+      { name: "Пудровый", tone: "powder", total: 1500, sizes: [{ size: "42", qty: 400 }, { size: "44", qty: 600 }, { size: "46", qty: 500 }] },
+      { name: "Графит", tone: "graphite", total: 1500, sizes: [{ size: "42", qty: 400 }, { size: "44", qty: 650 }, { size: "46", qty: 450 }] },
+    ],
+  },
+  {
+    id: "157", model: "Костюм «Лира»", workshop: "Ак-Сай", qty: 1800, status: "Размещён", amount: 1542600, due: "25.08.2026",
+    number: "ПР-2026-0022",
+    specification: "СП-011 · версия 1",
+    modelCode: "ST-LIRA",
+    colors: [
+      { name: "Графит", tone: "graphite", total: 900, sizes: [{ size: "42", qty: 220 }, { size: "44", qty: 360 }, { size: "46", qty: 320 }] },
+      { name: "Молочный", tone: "ivory", total: 500, sizes: [{ size: "42", qty: 120 }, { size: "44", qty: 200 }, { size: "46", qty: 180 }] },
+      { name: "Шалфей", tone: "sage", total: 400, sizes: [{ size: "42", qty: 100 }, { size: "44", qty: 160 }, { size: "46", qty: 140 }] },
+    ],
+  },
+  {
+    id: "156", model: "Платье «Миа»", workshop: "Швей-Цех", qty: 2500, status: "В производстве", amount: 2145750, due: "30.08.2026",
+    number: "ПР-2026-0021",
+    specification: "СП-010 · актуальная",
+    modelCode: "DR-MIA",
+    colors: [
+      { name: "Бордовый", tone: "wine", total: 1300, sizes: [{ size: "42", qty: 350 }, { size: "44", qty: 500 }, { size: "46", qty: 450 }] },
+      { name: "Графит", tone: "graphite", total: 1200, sizes: [{ size: "42", qty: 300 }, { size: "44", qty: 480 }, { size: "46", qty: 420 }] },
+    ],
+  },
+  {
+    id: "155", model: "Платье «Эми»", workshop: "Промода", qty: 1200, status: "Готово к отгрузке", amount: 918240, due: "20.08.2026", overdueDays: 3,
+    number: "ПР-2026-0020",
+    specification: "СП-009 · актуальная",
+    modelCode: "DR-EMI",
+    colors: [
+      { name: "Молочный", tone: "ivory", total: 1200, sizes: [{ size: "42", qty: 300 }, { size: "44", qty: 480 }, { size: "46", qty: 420 }] },
+    ],
+  },
+];
+
+export const modelProduction = [
+  { code: "DR-LANA", category: "Платья", status: "В производстве", produced: 6400, batches: 5, active: 2, colors: 4, sizes: 6 },
+  { code: "DR-MIA", category: "Платья", status: "В производстве", produced: 4200, batches: 3, active: 1, colors: 3, sizes: 9 },
+  { code: "ST-LIRA", category: "Костюмы", status: "Спецификация утверждена", produced: 2800, batches: 2, active: 1, colors: 3, sizes: 6 },
+  { code: "TP-SOFT", category: "Трикотаж", status: "Спецификация — черновик", produced: 3200, batches: 1, active: 0, colors: 2, sizes: 8 },
 ];
 
 /* ---------- Материалы ---------- */

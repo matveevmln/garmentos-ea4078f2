@@ -5,15 +5,10 @@ import {
   IconDocument,
   IconFinance,
   IconHome,
-  IconMaterial,
   IconMenu,
   IconModel,
   IconPanel,
-  IconPurchase,
   IconStates,
-  IconSupplier,
-  IconUser,
-  IconWarehouse,
   IconWorkshop,
   IconClose,
   IconSearch,
@@ -26,6 +21,7 @@ export type ScreenKey =
   | "batches"
   | "passport"
   | "models"
+  | "modelDetail"
   | "workshops"
   | "materials"
   | "purchases"
@@ -39,36 +35,28 @@ type NavItem = { key: ScreenKey; label: string; icon: (p: { size?: number }) => 
 
 export const NAV_PRIMARY: NavItem[] = [
   { key: "home", label: "Главная", icon: IconHome },
-  { key: "batches", label: "Партии", icon: IconBatch },
   { key: "models", label: "Модели", icon: IconModel },
+  { key: "documents", label: "Спецификации", icon: IconDocument },
+  { key: "batches", label: "Заказы", icon: IconBatch },
+];
+
+export const NAV_MORE: NavItem[] = [
   { key: "workshops", label: "Цеха", icon: IconWorkshop },
-];
-
-export const NAV_SUPPLY: NavItem[] = [
-  { key: "materials", label: "Материалы", icon: IconMaterial },
-  { key: "purchases", label: "Закупки", icon: IconPurchase },
-  { key: "warehouses", label: "Склады", icon: IconWarehouse },
-  { key: "suppliers", label: "Поставщики", icon: IconSupplier },
-];
-
-export const NAV_OFFICE: NavItem[] = [
-  { key: "documents", label: "Документы", icon: IconDocument },
   { key: "finance", label: "Финансы", icon: IconFinance },
 ];
 
 const PALETTE_ITEMS: PaletteItem[] = [
   ...NAV_PRIMARY.map((i) => ({ key: i.key, label: i.label, group: "Производство" })),
-  ...NAV_SUPPLY.map((i) => ({ key: i.key, label: i.label, group: "Снабжение" })),
-  ...NAV_OFFICE.map((i) => ({ key: i.key, label: i.label, group: "Учёт" })),
+  ...NAV_MORE.map((i) => ({ key: i.key, label: i.label, group: "Ещё" })),
   { key: "passport" as ScreenKey, label: "Паспорт партии #158", group: "Производство", hint: "158 лана промода" },
   { key: "states" as ScreenKey, label: "Состояния интерфейса", group: "Прототип" },
 ];
 
 const MOBILE_NAV: NavItem[] = [
   { key: "home", label: "Главная", icon: IconHome },
-  { key: "batches", label: "Партии", icon: IconBatch },
   { key: "models", label: "Модели", icon: IconModel },
-  { key: "materials", label: "Материалы", icon: IconMaterial },
+  { key: "documents", label: "Спецификации", icon: IconDocument },
+  { key: "batches", label: "Заказы", icon: IconBatch },
 ];
 
 function NavGroup({
@@ -196,8 +184,7 @@ function SidebarBody({
 
       <nav className="flex-1 overflow-y-auto pb-4">
         <NavGroup label="Производство" items={NAV_PRIMARY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
-        <NavGroup label="Снабжение" items={NAV_SUPPLY} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
-        <NavGroup label="Учёт" items={NAV_OFFICE} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
+        <NavGroup label="Ещё" items={NAV_MORE} active={active} onNavigate={onNavigate} collapsed={collapsed} mobile={mobile} />
       </nav>
 
       <div className={cn("border-t border-sidebar-border/60 p-4", collapsed && "px-0 text-center")}>
@@ -508,7 +495,7 @@ export function AppShell({
           >
             <IconPanel size={16} />
           </IconButton>
-          <span className="truncate font-display text-[13.5px] font-medium tracking-[-0.01em]">{topbarTitle}</span>
+          <span className="truncate font-display text-[13.5px] font-medium">{topbarTitle}</span>
           <span className="ml-auto flex items-center gap-2 text-[11px] text-muted-foreground">
             <button
               type="button"

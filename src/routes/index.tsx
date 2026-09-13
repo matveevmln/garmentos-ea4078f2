@@ -2,20 +2,18 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, type ScreenKey } from "@/components/gos/shell";
 import {
-  BatchesScreen,
   FinanceScreen,
-  HomeScreen,
   MaterialsScreen,
-  ModelsScreen,
   PassportScreen,
   PurchasesScreen,
   SectionEmptyScreen,
   StatesScreen,
 } from "@/components/gos/screens";
+import { ModelDetail, ProductionBatches, ProductionHome, ProductionModels } from "@/components/gos/production-lab";
 
 const TITLE = "GarmentOS — операционная система бренда одежды";
 const DESCRIPTION =
-  "GarmentOS — рабочая среда владельца бренда одежды: партии в подрядных цехах, паспорт партии, модели, материалы, закупки и финансы в одном интерфейсе.";
+  "GarmentOS — production-first система бренда одежды: модели, спецификации и производственные партии в одном интерфейсе.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,21 +31,23 @@ export const Route = createFileRoute("/")({
 
 const SCREEN_TITLES: Record<ScreenKey, string> = {
   home: "Главная",
-  batches: "Партии",
+  batches: "Заказы",
   passport: "Паспорт партии #158",
   models: "Модели",
+  modelDetail: "Модель",
   workshops: "Цеха",
   materials: "Материалы",
   purchases: "Закупки",
   warehouses: "Склады",
   suppliers: "Поставщики",
-  documents: "Документы",
+  documents: "Спецификации",
   finance: "Финансы",
   states: "Состояния интерфейса",
 };
 
 function GarmentOS() {
   const [screen, setScreen] = useState<ScreenKey>("home");
+  const [modelCode, setModelCode] = useState("DR-LANA");
 
   const openBatch = (id: string) => {
     setScreen(id === "158" ? "passport" : "batches");
@@ -56,10 +56,11 @@ function GarmentOS() {
   return (
     <AppShell active={screen} onNavigate={setScreen} topbarTitle={SCREEN_TITLES[screen]}>
       <div key={screen} className="anim-content">
-      {screen === "home" ? <HomeScreen onOpenBatch={openBatch} /> : null}
-      {screen === "batches" ? <BatchesScreen onOpenBatch={openBatch} /> : null}
+      {screen === "home" ? <ProductionHome onOpenBatch={openBatch} onNavigate={setScreen} /> : null}
+      {screen === "batches" ? <ProductionBatches onOpenBatch={openBatch} /> : null}
       {screen === "passport" ? <PassportScreen onBack={() => setScreen("batches")} /> : null}
-      {screen === "models" ? <ModelsScreen /> : null}
+      {screen === "models" ? <ProductionModels onOpenModel={(code) => { setModelCode(code); setScreen("modelDetail"); }} /> : null}
+      {screen === "modelDetail" ? <ModelDetail code={modelCode} onBack={() => setScreen("models")} onOpenBatch={openBatch} /> : null}
       {screen === "materials" ? <MaterialsScreen /> : null}
       {screen === "purchases" ? <PurchasesScreen /> : null}
       {screen === "finance" ? <FinanceScreen /> : null}
@@ -84,8 +85,8 @@ function GarmentOS() {
       ) : null}
       {screen === "documents" ? (
         <SectionEmptyScreen
-          title="Документы"
-          description="Единый реестр документов пока не сформирован. Документы по партиям доступны в паспорте соответствующей партии."
+          title="Спецификации"
+          description="В реестре появятся утверждённые спецификации и нормы расхода материалов по моделям."
         />
       ) : null}
       </div>

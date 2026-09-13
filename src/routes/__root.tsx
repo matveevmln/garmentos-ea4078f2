@@ -78,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "GarmentOS" },
-      { name: "description", content: "Операционная система бренда одежды: партии, цеха, материалы и финансы." },
+      { name: "description", content: "Production-first система бренда одежды: модели, спецификации и производственные партии." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
