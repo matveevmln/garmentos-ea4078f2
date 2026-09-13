@@ -175,6 +175,10 @@
   --batch-shell: oklch(0.989 0.003 250);
   --batch-line: oklch(0.91 0.008 250);
   --batch-size: oklch(0.56 0.035 250);
+  --alt-batch-ink: oklch(0.19 0.012 55);
+  --alt-batch-paper: oklch(0.985 0.006 82);
+  --alt-batch-copper: oklch(0.64 0.145 48);
+  --alt-batch-track: oklch(0.89 0.009 72);
 }
 
 
@@ -1011,6 +1015,35 @@
   background-image: radial-gradient(80% 160% at 0% 0%, color-mix(in oklab, var(--sidebar-primary) 18%, transparent), transparent 62%);
   box-shadow: var(--shadow-3);
 }
+
+@utility alt-batch-card {
+  background: var(--alt-batch-paper);
+  border: 1px solid color-mix(in oklab, var(--alt-batch-ink) 12%, transparent);
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--card) 80%, transparent) inset, 0 22px 48px -28px color-mix(in oklab, var(--alt-batch-ink) 48%, transparent);
+  transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease-out);
+  &:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--alt-batch-copper) 35%, transparent); box-shadow: 0 28px 58px -30px color-mix(in oklab, var(--alt-batch-ink) 55%, transparent); }
+}
+
+.alt-batch-hero { background: radial-gradient(80% 140% at 100% 0%, color-mix(in oklab, var(--alt-batch-copper) 22%, transparent), transparent 62%), var(--alt-batch-ink); }
+.alt-batch-hero::after { content: ""; position: absolute; inset: 0; opacity: 0.12; pointer-events: none; background-image: repeating-linear-gradient(90deg, transparent 0 9px, color-mix(in oklab, var(--card) 28%, transparent) 10px); mask-image: linear-gradient(90deg, transparent, black 72%); }
+.alt-batch-hero > .grid > div:first-child { width: 68px; height: 78px; border-radius: 10px; border-color: color-mix(in oklab, var(--card) 22%, transparent); box-shadow: 0 12px 26px -14px color-mix(in oklab, var(--alt-batch-ink) 80%, transparent); }
+.alt-batch-kicker, .alt-batch-label { display: block; font-size: 9px; font-weight: 600; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.08em; }
+.alt-batch-kicker { color: color-mix(in oklab, var(--sidebar-foreground) 50%, transparent); }
+.alt-batch-label { color: var(--muted-foreground); }
+.alt-batch-status { background: color-mix(in oklab, var(--card) 10%, transparent); border-color: color-mix(in oklab, var(--card) 14%, transparent); color: var(--sidebar-foreground); }
+.alt-batch-body { background: var(--alt-batch-paper); }
+.alt-batch-quantity { color: var(--alt-batch-ink); font-size: 38px; font-weight: 600; line-height: 0.94; letter-spacing: -0.045em; }
+.alt-batch-swatch { box-shadow: 0 1px 4px color-mix(in oklab, var(--alt-batch-ink) 22%, transparent); }
+.alt-completion { border: 1px solid var(--border); background: color-mix(in oklab, var(--card) 68%, transparent); box-shadow: var(--shadow-1); transition: border-color var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out); }
+.alt-completion:hover { border-color: color-mix(in oklab, var(--alt-batch-copper) 38%, var(--border)); }
+.alt-completion:active { transform: scale(0.985); }
+.alt-toggle { background: var(--alt-batch-track); box-shadow: inset 0 1px 2px color-mix(in oklab, var(--alt-batch-ink) 14%, transparent); transition: background-color var(--dur-2) var(--ease-out); }
+.alt-toggle > span { background: var(--card); box-shadow: 0 2px 6px color-mix(in oklab, var(--alt-batch-ink) 25%, transparent); transition: transform var(--dur-3) var(--ease-emphasis); }
+.alt-toggle.is-on { background: var(--success); }
+.alt-toggle.is-on > span { transform: translateX(22px); }
+.alt-batch-expand { background: color-mix(in oklab, var(--alt-batch-copper) 5%, var(--alt-batch-paper)); color: var(--alt-batch-ink); transition: background-color var(--dur-2) var(--ease-out), color var(--dur-2) var(--ease-out); }
+.alt-batch-expand:hover { background: color-mix(in oklab, var(--alt-batch-copper) 11%, var(--alt-batch-paper)); color: var(--primary); }
+@media (max-width: 480px) { .alt-batch-card:hover { transform: none; } .alt-batch-quantity { font-size: 36px; } }
 
 
 /* Фокус внутри тёмного рельса: подложка и цвет от токенов сайдбара */
