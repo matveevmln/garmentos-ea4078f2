@@ -37,7 +37,7 @@ const toneClass: Record<ColorBreakdown["tone"], string> = {
 
 function ModelThumb({ code, name, large = false }: { code: string; name: string; large?: boolean }) {
   return (
-    <div className={cn("shrink-0 overflow-hidden border border-border bg-muted", large ? "h-28 w-24 rounded-[16px] sm:h-36 sm:w-28" : "h-[72px] w-[62px] rounded-[12px]") }>
+    <div className={cn("shrink-0 overflow-hidden border border-border bg-muted", large ? "h-28 w-24 rounded-[16px] sm:h-36 sm:w-28" : "h-[68px] w-[58px] rounded-[10px]") }>
       <img src={modelImages[code] ?? lanaImage} alt={name} width={768} height={768} loading="lazy" className="h-full w-full object-cover" />
     </div>
   );
@@ -45,26 +45,26 @@ function ModelThumb({ code, name, large = false }: { code: string; name: string;
 
 function SizePill({ size, qty }: { size: string; qty: number }) {
   return (
-    <span className="inline-grid h-8 grid-cols-[auto_auto] overflow-hidden rounded-[8px] border border-border bg-card text-[12px] shadow-[var(--shadow-1)]">
-      <span className="num grid min-w-10 place-items-center bg-muted px-2 text-muted-foreground">{size}</span>
-      <span className="num grid min-w-10 place-items-center px-2 font-semibold text-foreground">{qty}</span>
+    <span className="size-pill inline-grid h-9 grid-cols-[auto_auto] overflow-hidden rounded-[8px] border border-border bg-card text-[12px]">
+      <span className="num grid min-w-11 place-items-center bg-muted px-2.5 font-medium text-muted-foreground">{size}</span>
+      <span className="num grid min-w-11 place-items-center px-2.5 font-semibold text-foreground">{qty}</span>
     </span>
   );
 }
 
 export function Breakdown({ colors }: { colors: ColorBreakdown[] }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {colors.map((color) => (
-        <section key={color.name} className="rounded-[12px] border border-border bg-background/45 p-3">
+        <section key={color.name} className="breakdown-color rounded-[12px] border border-border p-3.5">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <div className="flex min-w-0 items-center gap-2">
-              <span className={cn("h-3 w-3 shrink-0 rounded-full border border-foreground/10", toneClass[color.tone])} />
-              <h4 className="truncate text-[13px] font-semibold">{color.name}</h4>
+              <span className={cn("swatch-dot h-3.5 w-3.5 shrink-0 rounded-full border border-foreground/10", toneClass[color.tone])} />
+              <h4 className="truncate text-[14px] font-semibold">{color.name}</h4>
             </div>
-            <span className="num rounded-full bg-card px-2 py-1 text-[11px] font-medium text-muted-foreground shadow-[var(--shadow-1)]">{formatQty(color.total)} шт</span>
+            <span className="num rounded-[6px] border border-border bg-card px-2.5 py-1.5 text-[11px] font-semibold text-foreground shadow-[var(--shadow-1)]">{formatQty(color.total)} шт.</span>
           </div>
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
+          <div className="mt-3 flex flex-wrap gap-2">
             {color.sizes.map((item) => <SizePill key={item.size} {...item} />)}
           </div>
         </section>
@@ -76,47 +76,60 @@ export function Breakdown({ colors }: { colors: ColorBreakdown[] }) {
 export function BatchCard({ batch, onOpen }: { batch: ProductionBatch; onOpen?: (id: string) => void }) {
   const [expanded, setExpanded] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [completed, setCompleted] = useState(batch.status === "Принято");
   const inSheet = batch.colors.length >= 3;
   const toggleBreakdown = () => inSheet ? setSheetOpen(true) : setExpanded((value) => !value);
 
   return (
     <article className="surface-card batch-card overflow-hidden rounded-[16px]">
-      <div className="p-3.5 sm:p-4">
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-3">
+      <div className="batch-card__top p-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+          <button type="button" onClick={() => onOpen?.(batch.id)} className="focus-ring min-w-0 rounded-[6px] text-left">
+            <span className="t-id block text-[11px] font-medium text-primary">{batch.number}</span>
+            <span className="mt-1.5 block truncate text-[17px] font-semibold leading-tight">{batch.model}</span>
+          </button>
+          <StatusBadge status={batch.status} className="shrink-0 max-[390px]:px-2" />
+        </div>
+
+        <div className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] gap-3">
           <ModelThumb code={batch.modelCode} name={batch.model} />
-          <div className="min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <button type="button" onClick={() => onOpen?.(batch.id)} className="focus-ring min-w-0 rounded-[6px] text-left">
-                <span className="t-id block text-[11px] text-primary">{batch.number}</span>
-                <span className="mt-1 block truncate text-[15px] font-semibold">{batch.model}</span>
-              </button>
-              <StatusBadge status={batch.status} className="shrink-0 max-[390px]:px-2" />
+          <div className="min-w-0 self-center">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+              <div className="min-w-0">
+                <span className="eyebrow block text-[9px]">Спецификация</span>
+                <strong className="num mt-1 block truncate text-[12px] font-medium">{batch.specification}</strong>
+              </div>
+              <div className="min-w-0 text-right">
+                <span className="eyebrow block text-[9px]">Цех</span>
+                <strong className="mt-1 block truncate text-[12px] font-medium">{batch.workshop}</strong>
+              </div>
             </div>
-            <dl className="mt-2 grid grid-cols-[auto_minmax(0,1fr)] gap-x-2 gap-y-1 text-[11.5px]">
-              <dt className="text-muted-foreground">Спецификация</dt><dd className="num truncate text-right">{batch.specification}</dd>
-              <dt className="text-muted-foreground">Цех</dt><dd className="truncate text-right">{batch.workshop}</dd>
-            </dl>
+            <div className="mt-3 flex items-center gap-1.5 border-t border-border/70 pt-2.5">
+              {batch.colors.slice(0, 3).map((color) => <span key={color.name} className={cn("swatch-dot h-2.5 w-2.5 rounded-full border border-foreground/10", toneClass[color.tone])} title={color.name} />)}
+              <span className="t-meta ml-1 truncate">{batch.colors.map((color) => color.name).join(" · ")}</span>
+            </div>
           </div>
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border border-border bg-border">
-          <div className="bg-card px-3 py-2.5"><span className="eyebrow text-[9px]">Срок</span><strong className={cn("num mt-1 block text-[13px]", batch.overdueDays && "text-danger")}>{batch.due ?? "не назначен"}</strong></div>
-          <div className="bg-card px-3 py-2.5 text-right"><span className="eyebrow text-[9px]">Всего</span><strong className="num mt-1 block text-[18px]">{formatQty(batch.qty)} <small className="text-[11px] font-normal text-muted-foreground">шт</small></strong></div>
-        </div>
-
-        <div className="mt-3 flex items-center gap-1.5">
-          {batch.colors.slice(0, 3).map((color) => <span key={color.name} className={cn("h-2.5 w-2.5 rounded-full border border-foreground/10", toneClass[color.tone])} title={color.name} />)}
-          <span className="t-meta ml-1">{batch.colors.map((color) => color.name).join(" · ")}</span>
+        <div className="batch-metrics mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-[11px] border border-border bg-border">
+          <div className="bg-card px-3 py-3"><span className="eyebrow text-[9px]">Срок</span><strong className={cn("num mt-1.5 block text-[13px]", batch.overdueDays && "text-danger")}>{batch.due ?? "не назначен"}</strong></div>
+          <div className="bg-card px-3 py-3 text-right"><span className="eyebrow text-[9px]">Всего единиц</span><strong className="num mt-1 block text-[21px] leading-none">{formatQty(batch.qty)} <small className="text-[10px] font-normal text-muted-foreground">шт.</small></strong></div>
         </div>
       </div>
 
-      <button type="button" onClick={toggleBreakdown} aria-expanded={inSheet ? sheetOpen : expanded} className="interactive focus-ring flex min-h-12 w-full items-center justify-center gap-2 border-t border-border bg-muted/30 px-4 text-[12.5px] font-medium text-primary hover:bg-primary/[0.06]">
-        {expanded && !inSheet ? "Скрыть раскладку" : "Показать раскладку"}
-        <IconChevronDown size={15} className={cn("transition-transform duration-200", expanded && !inSheet && "rotate-180", inSheet && "-rotate-90")} />
-      </button>
+      <div className="batch-card__actions grid grid-cols-[auto_minmax(0,1fr)] items-center border-t border-border">
+        <button type="button" role="switch" aria-checked={completed} aria-label="Завершён" onClick={() => setCompleted((value) => !value)} className="completion-toggle focus-ring group flex min-h-12 items-center gap-2 border-r border-border px-3.5 text-[10px] font-semibold uppercase text-muted-foreground">
+          <span className={cn("toggle-track relative h-5 w-9 rounded-full", completed && "is-on")}><span className="absolute left-[3px] top-[3px] h-3.5 w-3.5 rounded-full bg-card shadow-[var(--shadow-1)]" /></span>
+          <span>Завершён</span>
+        </button>
+        <button type="button" onClick={toggleBreakdown} aria-expanded={inSheet ? sheetOpen : expanded} className="interactive focus-ring flex min-h-12 min-w-0 items-center justify-end gap-2 px-3.5 text-[12.5px] font-medium text-primary hover:bg-primary/[0.06]">
+          <span className="truncate">{expanded && !inSheet ? "Скрыть раскладку" : "Показать раскладку"}</span>
+          <IconChevronDown size={15} className={cn("shrink-0 transition-transform duration-200", expanded && !inSheet && "rotate-180", inSheet && "-rotate-90")} />
+        </button>
+      </div>
       {!inSheet ? <div className={cn("collapsible", expanded && "collapsible-open")}><div><div className="border-t border-border p-3.5"><Breakdown colors={batch.colors} /></div></div></div> : null}
       <Drawer open={sheetOpen} onClose={() => setSheetOpen(false)} title={`${batch.number} · раскладка`}>
-        <div className="mb-4 flex items-center gap-3"><ModelThumb code={batch.modelCode} name={batch.model} /><div><div className="t-object">{batch.model}</div><div className="num mt-1 text-[12px] text-muted-foreground">{formatQty(batch.qty)} изделий · {batch.colors.length} цвета</div></div></div>
+        <div className="batch-sheet-summary mb-4 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-[12px] border border-border p-3"><ModelThumb code={batch.modelCode} name={batch.model} /><div className="min-w-0"><div className="t-object truncate">{batch.model}</div><div className="mt-1 text-[11px] text-muted-foreground">{batch.colors.length} цвета</div></div><div className="text-right"><span className="eyebrow text-[9px]">Итого</span><strong className="num mt-1 block text-[20px] leading-none">{formatQty(batch.qty)}</strong></div></div>
         <Breakdown colors={batch.colors} />
       </Drawer>
     </article>
