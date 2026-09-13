@@ -165,6 +165,12 @@
   --glass-bg: color-mix(in oklab, var(--card) 72%, transparent);
   --glass-border: color-mix(in oklab, var(--foreground) 8%, transparent);
   --glass-blur: 18px;
+
+  --swatch-powder: oklch(0.78 0.055 22);
+  --swatch-graphite: oklch(0.36 0.009 250);
+  --swatch-wine: oklch(0.38 0.12 20);
+  --swatch-ivory: oklch(0.94 0.018 83);
+  --swatch-sage: oklch(0.68 0.055 145);
 }
 
 
@@ -864,6 +870,47 @@
   &:hover {
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 8%, transparent);
   }
+}
+
+@utility bg-swatch-powder { background: var(--swatch-powder); }
+@utility bg-swatch-graphite { background: var(--swatch-graphite); }
+@utility bg-swatch-wine { background: var(--swatch-wine); }
+@utility bg-swatch-ivory { background: var(--swatch-ivory); }
+@utility bg-swatch-sage { background: var(--swatch-sage); }
+
+@utility batch-card {
+  box-shadow: var(--shadow-1);
+  transition: border-color var(--dur-2) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), transform var(--dur-2) var(--ease-out);
+  &:hover { border-color: color-mix(in oklab, var(--primary) 22%, var(--border)); box-shadow: var(--shadow-2); }
+}
+
+@utility model-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-1);
+  transition: border-color var(--dur-2) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), transform var(--dur-2) var(--ease-out);
+  &:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--primary) 25%, var(--border)); box-shadow: var(--shadow-3); }
+}
+
+@utility quick-action {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--card);
+  padding: 10px 12px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  transition: color var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out);
+  &:hover { color: var(--foreground); border-color: color-mix(in oklab, var(--primary) 30%, var(--border)); background: color-mix(in oklab, var(--primary) 5%, var(--card)); }
+  &:focus-visible { outline: 2px solid var(--focus-color); outline-offset: 2px; }
+}
+
+@utility production-summary {
+  background-image: radial-gradient(80% 160% at 0% 0%, color-mix(in oklab, var(--sidebar-primary) 18%, transparent), transparent 62%);
+  box-shadow: var(--shadow-3);
 }
 
 
