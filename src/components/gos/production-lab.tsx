@@ -131,8 +131,56 @@ export function BatchCard({ batch, onOpen }: { batch: ProductionBatch; onOpen?: 
   );
 }
 
+export function AlternativeBatchCard({ batch, onOpen }: { batch: ProductionBatch; onOpen?: (id: string) => void }) {
+  const [expanded, setExpanded] = useState(false);
+  const [completed, setCompleted] = useState(batch.status === "Принято");
+
+  return (
+    <article className="alt-batch-card overflow-hidden rounded-[16px]">
+      <div className="alt-batch-hero relative overflow-hidden p-4 pb-5">
+        <div className="relative z-[1] flex items-start justify-between gap-3">
+          <button type="button" onClick={() => onOpen?.(batch.id)} className="focus-ring min-w-0 rounded-[6px] text-left">
+            <span className="alt-batch-kicker">Производственная партия</span>
+            <strong className="num mt-1.5 block truncate text-[18px] font-semibold text-sidebar-foreground">{batch.number}</strong>
+          </button>
+          <StatusBadge status={batch.status} className="alt-batch-status shrink-0" />
+        </div>
+        <div className="relative z-[1] mt-5 grid grid-cols-[68px_minmax(0,1fr)] items-end gap-3">
+          <ModelThumb code={batch.modelCode} name={batch.model} />
+          <div className="min-w-0">
+            <h3 className="truncate text-[19px] font-semibold leading-tight text-sidebar-foreground">{batch.model}</h3>
+            <p className="mt-1.5 truncate text-[11px] text-sidebar-foreground/55">{batch.specification} · {batch.workshop}</p>
+          </div>
+        </div>
+      </div>
+      <div className="alt-batch-body p-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+          <div><span className="alt-batch-label">Объём партии</span><div className="mt-1 flex items-end gap-2"><strong className="num alt-batch-quantity">{formatQty(batch.qty)}</strong><span className="pb-1.5 text-[11px] font-medium text-muted-foreground">изделий</span></div></div>
+          <div className="pb-1 text-right"><span className="alt-batch-label">Срок</span><strong className={cn("num mt-1.5 block text-[13px]", batch.overdueDays && "text-danger")}>{batch.due ?? "не назначен"}</strong></div>
+        </div>
+        <div className="mt-4 flex items-center justify-between border-y border-border py-3">
+          <div className="flex min-w-0 items-center gap-2.5"><div className="flex -space-x-1.5">{batch.colors.map((color) => <span key={color.name} className={cn("alt-batch-swatch h-[18px] w-[18px] rounded-full border-2 border-card", toneClass[color.tone])} title={color.name} />)}</div><span className="truncate text-[11px] text-muted-foreground">{batch.colors.map((color) => color.name).join(" · ")}</span></div>
+          <span className="num ml-3 shrink-0 text-[11px] font-semibold">{batch.colors.length} цвета</span>
+        </div>
+        <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <div><span className="alt-batch-label">Контроль партии</span><strong className={cn("mt-1 block text-[12px] font-semibold", completed ? "text-success" : "text-foreground")}>{completed ? "Партия завершена" : "Ожидает завершения"}</strong></div>
+          <button type="button" role="switch" aria-checked={completed} aria-label="Завершён" onClick={() => setCompleted((value) => !value)} className="alt-completion focus-ring flex min-h-11 items-center gap-2.5 rounded-[10px] px-2.5">
+            <span className={cn("alt-toggle relative h-[28px] w-[50px] rounded-full", completed && "is-on")}><span className="absolute left-[4px] top-[4px] h-5 w-5 rounded-full" /></span><span className={cn("text-[10px] font-bold uppercase", completed ? "text-success" : "text-muted-foreground")}>Завершён</span>
+          </button>
+        </div>
+      </div>
+      <button type="button" onClick={() => setExpanded((value) => !value)} aria-expanded={expanded} className="alt-batch-expand focus-ring flex min-h-[54px] w-full items-center justify-between border-t border-border px-4 text-[12px] font-semibold">
+        <span>{expanded ? "Скрыть размерную сетку" : "Цвета и размеры"}</span><span className="flex items-center gap-2 text-muted-foreground"><span className="num text-[10px]">{batch.colors.reduce((sum, color) => sum + color.sizes.length, 0)} поз.</span><IconChevronDown size={17} className={cn("transition-transform duration-200", expanded && "rotate-180")} /></span>
+      </button>
+      <div className={cn("collapsible", expanded && "collapsible-open")}><div><Breakdown colors={batch.colors} /></div></div>
+    </article>
+  );
+}
+
 export function ProductionHome({ onOpenBatch, onNavigate }: { onOpenBatch: (id: string) => void; onNavigate: (key: "models" | "documents" | "batches") => void }) {
   const inWork = productionBatches.filter((batch) => batch.status === "В производстве").reduce((sum, batch) => sum + batch.qty, 0);
+  const featuredBatch = productionBatches[0];
+  if (!featuredBatch) return null;
   return (
     <div className="mx-auto max-w-[1400px]">
       <PageHeader title="Производство" subtitle="Оперативная картина по моделям и партиям" breadcrumbs={<Breadcrumbs items={[{ label: "GarmentOS" }, { label: "Главная" }]} />} />
@@ -144,7 +192,7 @@ export function ProductionHome({ onOpenBatch, onNavigate }: { onOpenBatch: (id: 
       </section>
 
       <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,.8fr)]">
-        <section><div className="mb-3 flex items-center justify-between"><div><h2 className="t-section">Активные партии</h2><p className="t-meta mt-1">Сначала ближайшие сроки и отклонения</p></div><Button variant="ghost" size="sm" onClick={() => onNavigate("batches")}>Все партии</Button></div><div className="grid gap-3 lg:grid-cols-2">{productionBatches.map((batch) => <BatchCard key={batch.id} batch={batch} onOpen={onOpenBatch} />)}</div></section>
+        <section><div className="mb-3 flex items-center justify-between"><div><h2 className="t-section">Активные партии</h2><p className="t-meta mt-1">Сначала ближайшие сроки и отклонения</p></div><Button variant="ghost" size="sm" onClick={() => onNavigate("batches")}>Все партии</Button></div><div className="grid gap-3 lg:grid-cols-2"><div><div className="mb-2 flex items-center gap-2"><span className="h-px flex-1 bg-border" /><span className="eyebrow text-[8px]">Текущая</span></div><BatchCard batch={featuredBatch} onOpen={onOpenBatch} /></div><div><div className="mb-2 flex items-center gap-2"><span className="h-px flex-1 bg-border" /><span className="eyebrow text-[8px] text-primary">Альтернатива</span></div><AlternativeBatchCard batch={featuredBatch} onOpen={onOpenBatch} /></div>{productionBatches.slice(1).map((batch) => <BatchCard key={batch.id} batch={batch} onOpen={onOpenBatch} />)}</div></section>
         <aside className="space-y-4">
           <Card padded={false} className="overflow-hidden"><div className="flex items-center gap-2 bg-sidebar px-4 py-3.5 text-sidebar-foreground"><IconAlert size={15} className="text-sidebar-primary" /><CardHeader title="Требует внимания" hint="2" /></div><div className="px-4"><AttentionList items={attentionItems} onSelect={(id) => onOpenBatch(id === "a1" ? "155" : "158")} /></div></Card>
           <Card><CardHeader title="Быстрые действия" /><div className="mt-3 grid grid-cols-2 gap-2"><button onClick={() => onNavigate("models")} className="quick-action"><IconModel size={18} /><span>Модели</span></button><button onClick={() => onNavigate("documents")} className="quick-action"><IconDocument size={18} /><span>Спецификации</span></button><button onClick={() => onNavigate("batches")} className="quick-action col-span-2"><IconBatch size={18} /><span>Все производственные партии</span></button></div></Card>
