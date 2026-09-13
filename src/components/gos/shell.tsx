@@ -9,7 +9,6 @@ import {
   IconModel,
   IconPanel,
   IconStates,
-  IconUser,
   IconWorkshop,
   IconClose,
   IconSearch,

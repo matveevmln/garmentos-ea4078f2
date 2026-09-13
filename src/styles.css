@@ -470,6 +470,13 @@
   box-shadow: var(--shadow-overlay);
 }
 
+@utility sheet-panel {
+  background: color-mix(in oklab, var(--card) 96%, transparent);
+  backdrop-filter: blur(22px) saturate(130%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-overlay);
+}
+
 
 /* Идентификатор: номер партии, артикул, код */
 @utility t-id {

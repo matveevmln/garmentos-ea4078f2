@@ -13,7 +13,7 @@ import { ModelDetail, ProductionBatches, ProductionHome, ProductionModels } from
 
 const TITLE = "GarmentOS — операционная система бренда одежды";
 const DESCRIPTION =
-  "GarmentOS — рабочая среда владельца бренда одежды: партии в подрядных цехах, паспорт партии, модели, материалы, закупки и финансы в одном интерфейсе.";
+  "GarmentOS — production-first система бренда одежды: модели, спецификации и производственные партии в одном интерфейсе.";
 
 export const Route = createFileRoute("/")({
   head: () => ({

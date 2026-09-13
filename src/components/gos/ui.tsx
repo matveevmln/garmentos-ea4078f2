@@ -705,7 +705,7 @@ export function Drawer({
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="anim-sheet glass-panel relative flex max-h-[85vh] w-full flex-col rounded-t-[14px] sm:anim-panel sm:h-full sm:max-h-none sm:w-[420px] sm:rounded-none sm:rounded-l-[10px]">
+       <div className="anim-sheet sheet-panel relative flex max-h-[88vh] w-full flex-col rounded-t-[16px] sm:anim-panel sm:h-full sm:max-h-none sm:w-[440px] sm:rounded-none sm:rounded-l-[12px]">
         <span className="mx-auto mt-2 block h-1 w-9 rounded-full bg-border sm:hidden" aria-hidden="true" />
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h3 className="text-[13px] font-semibold">{title}</h3>
