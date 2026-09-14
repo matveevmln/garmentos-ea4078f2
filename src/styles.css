@@ -1053,6 +1053,198 @@
 .alt-batch-expand:hover { background: color-mix(in oklab, var(--alt-batch-copper) 11%, var(--alt-batch-paper)); color: var(--primary); }
 @media (max-width: 480px) { .alt-batch-card:hover { transform: none; } .alt-batch-quantity { font-size: 36px; } }
 
+/* ====== Premium Model Card ====== */
+
+@utility premium-model-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--r-2xl);
+  background: var(--model-card-bg);
+  border: 1px solid var(--model-card-border);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, var(--model-card-fg) 7%, transparent) inset,
+    0 18px 46px -22px color-mix(in oklab, var(--model-card-ink) 55%, transparent);
+  transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease-out);
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--model-card-accent) 35%, var(--model-card-border));
+    box-shadow:
+      0 24px 56px -26px color-mix(in oklab, var(--model-card-ink) 65%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--model-card-accent) 18%, transparent);
+  }
+  &:active { transform: translateY(-1px) scale(0.995); }
+}
+
+.premium-model-image {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--model-card-ink);
+}
+
+.premium-model-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+
+.premium-model-card:hover .premium-model-image img { transform: scale(1.04); }
+
+.premium-model-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--model-card-ink) 42%, transparent) 0%, transparent 38%),
+    linear-gradient(180deg, transparent 48%, color-mix(in oklab, var(--model-card-bg) 92%, transparent) 100%);
+}
+
+.premium-model-image-badge {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 2;
+}
+
+.premium-model-status {
+  background: color-mix(in oklab, var(--model-card-accent) 12%, var(--model-card-bg)) !important;
+  border-color: color-mix(in oklab, var(--model-card-accent) 28%, var(--model-card-border)) !important;
+  color: var(--model-card-fg) !important;
+}
+
+.premium-model-status > span { background: var(--model-card-accent) !important; }
+
+.premium-model-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 14px;
+  color: var(--model-card-fg);
+}
+
+.premium-model-category {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--model-card-accent);
+}
+
+.premium-model-name {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.018em;
+  color: var(--model-card-fg);
+}
+
+.premium-model-article {
+  margin-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--model-card-muted);
+}
+
+.premium-model-colors {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  min-width: 0;
+}
+
+.premium-model-swatch {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid color-mix(in oklab, var(--model-card-fg) 14%, transparent);
+  box-shadow: 0 2px 5px color-mix(in oklab, var(--model-card-ink) 40%, transparent);
+}
+
+.premium-model-color-names {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11.5px;
+  color: var(--model-card-muted);
+}
+
+.premium-model-sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.premium-model-size {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 28px;
+  padding-inline: 8px;
+  border-radius: var(--r-sm);
+  background: color-mix(in oklab, var(--model-card-fg) 8%, transparent);
+  border: 1px solid color-mix(in oklab, var(--model-card-fg) 10%, transparent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--model-card-fg);
+}
+
+.premium-model-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--model-card-border);
+}
+
+.premium-model-metric-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--model-card-muted);
+}
+
+.premium-model-metric-value {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--model-card-fg);
+}
+
+@media (max-width: 480px) {
+  .premium-model-card { border-radius: 14px; }
+  .premium-model-body { padding: 12px; }
+  .premium-model-name { font-size: 17px; }
+  .premium-model-metrics { gap: 6px; padding-top: 12px; margin-top: 14px; }
+  .premium-model-metric-value { font-size: 15px; }
+}
+
+@media (max-width: 389px) {
+  .premium-model-metric-label { font-size: 8px; letter-spacing: 0.06em; }
+  .premium-model-metric-value { font-size: 14px; }
+}
+
 
 /* Фокус внутри тёмного рельса: подложка и цвет от токенов сайдбара */
 [data-rail] {
