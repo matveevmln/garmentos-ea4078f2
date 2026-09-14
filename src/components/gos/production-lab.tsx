@@ -15,7 +15,7 @@ import lanaImage from "@/assets/model-lana.jpg";
 import liraImage from "@/assets/model-lira.jpg";
 import miaImage from "@/assets/model-mia.jpg";
 import softImage from "@/assets/model-soft.jpg";
-import { IconAlert, IconBatch, IconChevronDown, IconChevronRight, IconDocument, IconModel } from "./icons";
+import { IconAlert, IconBatch, IconChevronDown, IconDocument, IconModel } from "./icons";
 import { AttentionList, Breadcrumbs, Button, Card, CardHeader, Drawer, PageHeader, StatusBadge } from "./ui";
 import { DocumentRow, Timeline } from "./blocks";
 
@@ -177,6 +177,107 @@ export function AlternativeBatchCard({ batch, onOpen }: { batch: ProductionBatch
   );
 }
 
+export function PremiumModelCard({
+  model,
+  stats,
+  onClick,
+}: {
+  model: (typeof models)[number];
+  stats: (typeof modelProduction)[number];
+  onClick?: () => void;
+}) {
+  const allColors = useMemo(() => {
+    const map = new Map<string, ColorBreakdown["tone"]>();
+    productionBatches
+      .filter((batch) => batch.modelCode === model.code)
+      .forEach((batch) => {
+        batch.colors.forEach((color) => {
+          if (!map.has(color.name)) map.set(color.name, color.tone);
+        });
+      });
+    return Array.from(map.entries()).map(([name, tone]) => ({ name, tone }));
+  }, [model.code]);
+
+  const allSizes = useMemo(() => {
+    const set = new Set<string>();
+    productionBatches
+      .filter((batch) => batch.modelCode === model.code)
+      .forEach((batch) => {
+        batch.colors.forEach((color) => {
+          color.sizes.forEach((size) => set.add(size.size));
+        });
+      });
+    return Array.from(set).sort((a, b) => Number(a) - Number(b));
+  }, [model.code]);
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="premium-model-card focus-ring anim-rise text-left"
+    >
+      <div className="premium-model-image">
+        <img
+          src={modelImages[model.code] ?? lanaImage}
+          alt={model.name}
+          width={768}
+          height={768}
+          loading="lazy"
+        />
+        <div className="premium-model-overlay" />
+        <div className="premium-model-image-badge">
+          <StatusBadge status={stats.status} className="premium-model-status" />
+        </div>
+      </div>
+      <div className="premium-model-body">
+        <span className="premium-model-category">{stats.category}</span>
+        <h3 className="premium-model-name">{model.name}</h3>
+        <p className="premium-model-article">{model.code}</p>
+
+        <div className="premium-model-colors">
+          {allColors.map((color) => (
+            <span
+              key={color.name}
+              className={cn("premium-model-swatch", toneClass[color.tone])}
+              title={color.name}
+            />
+          ))}
+          <span className="premium-model-color-names">
+            {allColors.map((color) => color.name).join(" · ")}
+          </span>
+        </div>
+
+        <div className="premium-model-sizes">
+          {allSizes.map((size) => (
+            <span key={size} className="premium-model-size">
+              {size}
+            </span>
+          ))}
+        </div>
+
+        <div className="premium-model-metrics">
+          <div>
+            <span className="premium-model-metric-label">Партий</span>
+            <strong className="premium-model-metric-value">{stats.batches}</strong>
+          </div>
+          <div>
+            <span className="premium-model-metric-label">Цветов</span>
+            <strong className="premium-model-metric-value">{allColors.length}</strong>
+          </div>
+          <div>
+            <span className="premium-model-metric-label">Размеров</span>
+            <strong className="premium-model-metric-value">{allSizes.length}</strong>
+          </div>
+          <div>
+            <span className="premium-model-metric-label">SKU</span>
+            <strong className="premium-model-metric-value">{model.sku}</strong>
+          </div>
+        </div>
+      </div>
+    </button>
+  );
+}
+
 export function ProductionHome({ onOpenBatch, onNavigate }: { onOpenBatch: (id: string) => void; onNavigate: (key: "models" | "documents" | "batches") => void }) {
   const inWork = productionBatches.filter((batch) => batch.status === "В производстве").reduce((sum, batch) => sum + batch.qty, 0);
   const featuredBatch = productionBatches[0];
@@ -210,8 +311,27 @@ export function ProductionBatches({ onOpenBatch }: { onOpenBatch: (id: string) =
 }
 
 export function ProductionModels({ onOpenModel }: { onOpenModel: (code: string) => void }) {
-  return <div className="mx-auto max-w-[1400px]"><PageHeader title="Модели" subtitle="Коллекция через призму производственной активности" breadcrumbs={<Breadcrumbs items={[{ label: "GarmentOS" }, { label: "Модели" }]} />} /><div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{models.map((model) => { const stats = modelProduction.find((item) => item.code === model.code); return <button key={model.code} onClick={() => onOpenModel(model.code)} className="model-card focus-ring group overflow-hidden rounded-[16px] text-left"><div className="aspect-[4/3] overflow-hidden bg-muted"><img src={modelImages[model.code]} alt={model.name} width={768} height={768} loading="lazy" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.025]" /></div><div className="p-4"><div className="flex items-start justify-between gap-2"><div><h2 className="text-[15px] font-semibold">{model.name}</h2><p className="t-id mt-1">{model.code}</p></div><IconChevronRight size={16} className="mt-1 text-muted-foreground transition-transform group-hover:translate-x-1" /></div><StatusBadge status={model.bom} className="mt-3" /><div className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border border-border bg-border"><div className="bg-card p-2.5"><span className="eyebrow text-[9px]">Партий</span><strong className="num mt-1 block text-[16px]">{stats?.batches ?? 0}</strong></div><div className="bg-card p-2.5"><span className="eyebrow text-[9px]">В работе</span><strong className="num mt-1 block text-[16px] text-primary">{stats?.active ?? 0}</strong></div></div></div></button>; })}</div></div>;
+  return (
+    <div className="mx-auto max-w-[1400px]">
+      <PageHeader title="Модели" subtitle="Коллекция через призму производственной активности" breadcrumbs={<Breadcrumbs items={[{ label: "GarmentOS" }, { label: "Модели" }]} />} />
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {models.map((model) => {
+          const stats = modelProduction.find((item) => item.code === model.code);
+          if (!stats) return null;
+          return (
+            <PremiumModelCard
+              key={model.code}
+              model={model}
+              stats={stats}
+              onClick={() => onOpenModel(model.code)}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
 }
+
 
 export function ModelDetail({ code, onBack, onOpenBatch }: { code: string; onBack: () => void; onOpenBatch: (id: string) => void }) {
   const model = models.find((item) => item.code === code);
