@@ -180,13 +180,15 @@
   --alt-batch-copper: oklch(0.64 0.145 48);
   --alt-batch-track: oklch(0.89 0.009 72);
 
-  /* Premium Model Card — тёплый тёмный production-ERP */
-  --model-card-bg: oklch(0.195 0.006 55);
-  --model-card-ink: oklch(0.155 0.009 55);
-  --model-card-fg: oklch(0.94 0.004 80);
-  --model-card-muted: oklch(0.62 0.008 70);
-  --model-card-border: oklch(0.30 0.006 55);
-  --model-card-accent: oklch(0.70 0.13 55);
+  /* Premium Model Card — воздушная светлая карточка с медным акцентом */
+  --model-card-bg: oklch(0.988 0.003 80);
+  --model-card-ink: oklch(0.22 0.006 60);
+  --model-card-fg: oklch(0.22 0.006 60);
+  --model-card-muted: oklch(0.55 0.008 66);
+  --model-card-border: oklch(0.91 0.004 80);
+  --model-card-accent: oklch(0.62 0.135 52);
+  --model-card-glow: color-mix(in oklab, var(--model-card-accent) 22%, transparent);
+  --model-card-halo: color-mix(in oklab, var(--model-card-accent) 10%, transparent);
 }
 
 
@@ -1053,7 +1055,7 @@
 .alt-batch-expand:hover { background: color-mix(in oklab, var(--alt-batch-copper) 11%, var(--alt-batch-paper)); color: var(--primary); }
 @media (max-width: 480px) { .alt-batch-card:hover { transform: none; } .alt-batch-quantity { font-size: 36px; } }
 
-/* ====== Premium Model Card ====== */
+/* ====== Premium Model Card — воздушная светлая версия ====== */
 
 @utility premium-model-card {
   position: relative;
@@ -1061,58 +1063,110 @@
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--r-2xl);
-  background: var(--model-card-bg);
+  background:
+    radial-gradient(120% 110% at 50% -10%, var(--model-card-halo) 0%, transparent 52%),
+    var(--model-card-bg);
   border: 1px solid var(--model-card-border);
   box-shadow:
-    0 1px 0 color-mix(in oklab, var(--model-card-fg) 7%, transparent) inset,
-    0 18px 46px -22px color-mix(in oklab, var(--model-card-ink) 55%, transparent);
+    0 1px 0 color-mix(in oklab, var(--card) 80%, transparent) inset,
+    0 14px 38px -22px color-mix(in oklab, var(--model-card-ink) 18%, transparent);
   transition: transform var(--dur-3) var(--ease-out), box-shadow var(--dur-3) var(--ease-out), border-color var(--dur-2) var(--ease-out);
   &:hover {
     transform: translateY(-3px);
-    border-color: color-mix(in oklab, var(--model-card-accent) 35%, var(--model-card-border));
+    border-color: color-mix(in oklab, var(--model-card-accent) 28%, var(--model-card-border));
     box-shadow:
-      0 24px 56px -26px color-mix(in oklab, var(--model-card-ink) 65%, transparent),
-      0 0 0 1px color-mix(in oklab, var(--model-card-accent) 18%, transparent);
+      0 24px 56px -26px color-mix(in oklab, var(--model-card-ink) 22%, transparent),
+      0 0 0 1px color-mix(in oklab, var(--model-card-accent) 14%, transparent);
   }
   &:active { transform: translateY(-1px) scale(0.995); }
+}
+
+.premium-model-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in oklab, var(--model-card-accent) 55%, transparent) 18%,
+    color-mix(in oklab, var(--model-card-accent) 16%, transparent) 52%,
+    transparent 100%
+  );
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 .premium-model-image {
   position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: var(--model-card-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 14px 0;
 }
 
-.premium-model-image img {
+.premium-model-glow {
+  position: absolute;
+  inset: 18%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, var(--model-card-glow) 0%, transparent 70%);
+  filter: blur(18px);
+  opacity: 0.75;
+  transition: opacity var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out);
+}
+
+.premium-model-card:hover .premium-model-glow {
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.premium-model-photo {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--model-card-border);
+  background: var(--card);
+  box-shadow:
+    0 8px 24px -10px color-mix(in oklab, var(--model-card-ink) 16%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--card) 80%, transparent) inset;
+}
+
+.premium-model-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform var(--dur-3) var(--ease-out);
 }
 
-.premium-model-card:hover .premium-model-image img { transform: scale(1.04); }
+.premium-model-card:hover .premium-model-photo img { transform: scale(1.04); }
 
 .premium-model-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(180deg, color-mix(in oklab, var(--model-card-ink) 42%, transparent) 0%, transparent 38%),
-    linear-gradient(180deg, transparent 48%, color-mix(in oklab, var(--model-card-bg) 92%, transparent) 100%);
+    linear-gradient(180deg, color-mix(in oklab, var(--model-card-ink) 10%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 62%, color-mix(in oklab, var(--model-card-bg) 92%, transparent) 100%);
 }
 
 .premium-model-image-badge {
   position: absolute;
-  left: 12px;
-  top: 12px;
+  left: 22px;
+  top: 22px;
   z-index: 2;
 }
 
 .premium-model-status {
-  background: color-mix(in oklab, var(--model-card-accent) 12%, var(--model-card-bg)) !important;
-  border-color: color-mix(in oklab, var(--model-card-accent) 28%, var(--model-card-border)) !important;
+  background: color-mix(in oklab, var(--model-card-accent) 10%, var(--model-card-bg)) !important;
+  border: 1px solid color-mix(in oklab, var(--model-card-accent) 38%, var(--model-card-border)) !important;
   color: var(--model-card-fg) !important;
+  box-shadow: 0 2px 8px -3px color-mix(in oklab, var(--model-card-accent) 30%, transparent);
 }
 
 .premium-model-status > span { background: var(--model-card-accent) !important; }
@@ -1166,8 +1220,10 @@
   width: 18px;
   height: 18px;
   border-radius: 999px;
-  border: 2px solid color-mix(in oklab, var(--model-card-fg) 14%, transparent);
-  box-shadow: 0 2px 5px color-mix(in oklab, var(--model-card-ink) 40%, transparent);
+  border: 1.5px solid color-mix(in oklab, var(--model-card-accent) 55%, transparent);
+  box-shadow:
+    0 0 0 2px var(--model-card-bg),
+    0 3px 8px -2px color-mix(in oklab, var(--model-card-ink) 18%, transparent);
 }
 
 .premium-model-color-names {
@@ -1195,12 +1251,17 @@
   height: 28px;
   padding-inline: 8px;
   border-radius: var(--r-sm);
-  background: color-mix(in oklab, var(--model-card-fg) 8%, transparent);
-  border: 1px solid color-mix(in oklab, var(--model-card-fg) 10%, transparent);
+  background: var(--card);
+  border: 1px solid color-mix(in oklab, var(--model-card-accent) 22%, var(--model-card-border));
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
   color: var(--model-card-fg);
+  transition: border-color var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out);
+}
+
+.premium-model-card:hover .premium-model-size {
+  border-color: color-mix(in oklab, var(--model-card-accent) 40%, var(--model-card-border));
 }
 
 .premium-model-metrics {
@@ -1234,6 +1295,9 @@
 
 @media (max-width: 480px) {
   .premium-model-card { border-radius: 14px; }
+  .premium-model-image { padding: 12px 12px 0; }
+  .premium-model-image-badge { left: 20px; top: 20px; }
+  .premium-model-glow { inset: 16%; filter: blur(14px); }
   .premium-model-body { padding: 12px; }
   .premium-model-name { font-size: 17px; }
   .premium-model-metrics { gap: 6px; padding-top: 12px; margin-top: 14px; }
