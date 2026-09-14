@@ -180,13 +180,15 @@
   --alt-batch-copper: oklch(0.64 0.145 48);
   --alt-batch-track: oklch(0.89 0.009 72);
 
-  /* Premium Model Card — тёплый тёмный production-ERP */
-  --model-card-bg: oklch(0.195 0.006 55);
-  --model-card-ink: oklch(0.155 0.009 55);
-  --model-card-fg: oklch(0.94 0.004 80);
-  --model-card-muted: oklch(0.62 0.008 70);
-  --model-card-border: oklch(0.30 0.006 55);
-  --model-card-accent: oklch(0.70 0.13 55);
+  /* Premium Model Card — воздушная светлая карточка с медным акцентом */
+  --model-card-bg: oklch(0.988 0.003 80);
+  --model-card-ink: oklch(0.22 0.006 60);
+  --model-card-fg: oklch(0.22 0.006 60);
+  --model-card-muted: oklch(0.55 0.008 66);
+  --model-card-border: oklch(0.91 0.004 80);
+  --model-card-accent: oklch(0.62 0.135 52);
+  --model-card-glow: color-mix(in oklab, var(--model-card-accent) 22%, transparent);
+  --model-card-halo: color-mix(in oklab, var(--model-card-accent) 10%, transparent);
 }
 
 
