@@ -15,7 +15,7 @@ import lanaImage from "@/assets/model-lana.jpg";
 import liraImage from "@/assets/model-lira.jpg";
 import miaImage from "@/assets/model-mia.jpg";
 import softImage from "@/assets/model-soft.jpg";
-import { IconAlert, IconBatch, IconChevronDown, IconChevronRight, IconDocument, IconModel } from "./icons";
+import { IconAlert, IconBatch, IconChevronDown, IconDocument, IconModel } from "./icons";
 import { AttentionList, Breadcrumbs, Button, Card, CardHeader, Drawer, PageHeader, StatusBadge } from "./ui";
 import { DocumentRow, Timeline } from "./blocks";
 
