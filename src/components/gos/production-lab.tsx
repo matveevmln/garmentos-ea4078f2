@@ -217,14 +217,17 @@ export function PremiumModelCard({
       className="premium-model-card focus-ring anim-rise text-left"
     >
       <div className="premium-model-image">
-        <img
-          src={modelImages[model.code] ?? lanaImage}
-          alt={model.name}
-          width={768}
-          height={768}
-          loading="lazy"
-        />
-        <div className="premium-model-overlay" />
+        <div className="premium-model-glow" aria-hidden="true" />
+        <div className="premium-model-photo">
+          <img
+            src={modelImages[model.code] ?? lanaImage}
+            alt={model.name}
+            width={768}
+            height={768}
+            loading="lazy"
+          />
+          <div className="premium-model-overlay" />
+        </div>
         <div className="premium-model-image-badge">
           <StatusBadge status={stats.status} className="premium-model-status" />
         </div>
